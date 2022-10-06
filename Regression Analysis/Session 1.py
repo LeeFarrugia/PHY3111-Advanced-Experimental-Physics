@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 xlist = []
 ylist = []
@@ -66,16 +67,40 @@ for i in range(len(xi)):
     yelist.append(ye)
 ye_array = np.array(yelist)
 
+radius = np.average(diameter_array)
+m_constant = (8*np.pi*(radius**2))/(9.81*(L_array[0]**3))
+c_constant = 4/(L_array[0]*9.81)
+
 coeffs, cov = np.polyfit(xi, ye_array, 1, cov=True)
 polyfunc = np.poly1d(coeffs)
 trendline = polyfunc(xi)
-print(ye_array, trendline)
 
+E = coeffs[0]/m_constant
+T0 = coeffs[1]/c_constant
+delta_E = np.sqrt(cov[0][0])
+delta_T0 = np.sqrt(cov[1][1])
+print(E, delta_E, T0, delta_T0)
+
+residual = trendline - ye_array
+
+plt.rcParams['font.family'] = 'STIXGeneral'
+plt.rcParams['mathtext.fontset'] = 'stix'
+plt.rcParams['font.size'] = 12
+plt.rcParams['font.weight'] = 'normal'
+
+plt.subplot(2,1,1)
+plt.scatter(xi, yi, color='k', label='Data Points')
+plt.plot(xi, trendline, color='k', label='Trendline')
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-plt.plot(xi, trendline)
-plt.scatter(xi, ye_array)
+plt.tight_layout()
+plt.legend()
 
-print(coeffs[0])
+plt.subplot(2,1,2)
+plt.scatter(xi, residual, color='k')
+plt.minorticks_on()
+plt.grid(visible=True, which='major', linestyle='-')
+plt.grid(visible=True, which='minor', linestyle='--')
+plt.tight_layout()
 plt.show()
