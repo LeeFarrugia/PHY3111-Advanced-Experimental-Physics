@@ -54,8 +54,8 @@ def beta_alpha_function(xi, xbar, yi, ybar):
     beta = numerator/denominator
     alpha = ybar - (beta*xbar)
     r = numerator/(np.sqrt(denominator*ydenominator))
-    delta_beta = (beta/(np.sqrt(len(xi)-2)))*((1/r**2)-1)
-    delta_alpha = delta_beta*((1/len(xi))*(sum(xi**2)))
+    delta_beta = (beta/(np.sqrt(len(xi)-2)))*(np.sqrt((1/r**2)-1))
+    delta_alpha = delta_beta*np.sqrt(((1/len(xi))*(sum(xi**2))))
     R = r**2
     return beta, alpha, delta_beta, delta_alpha, r, R
 
@@ -81,7 +81,7 @@ delta_E = np.sqrt(cov[0][0])
 delta_T0 = np.sqrt(cov[1][1])
 print(E, delta_E, T0, delta_T0)
 
-residual = trendline - ye_array
+residual = trendline - ybar
 
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
@@ -94,6 +94,8 @@ plt.plot(xi, trendline, color='k', label='Trendline')
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
+plt.xlabel('Strain')
+plt.ylabel('Stress')
 plt.tight_layout()
 plt.legend()
 
@@ -102,5 +104,7 @@ plt.scatter(xi, residual, color='k')
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
+plt.ylabel('Residuals')
+plt.xlabel('Strain')
 plt.tight_layout()
 plt.show()
