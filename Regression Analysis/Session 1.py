@@ -93,7 +93,9 @@ delta_T0 = np.sqrt(cov[1][1])
 print(E, delta_E, T0, delta_T0)
 
 # calculating the residuals
-residual = trendline - ybar
+residual = np.subtract(trendline,yi)
+
+f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, gridspec_kw={'height_ratios': [3, 1]}, figsize=(7.3, 10.7))
 
 # defining the font to be used
 plt.rcParams['font.family'] = 'STIXGeneral'
@@ -102,24 +104,22 @@ plt.rcParams['font.size'] = 12
 plt.rcParams['font.weight'] = 'normal'
 
 # plotting both graph as subplots
-plt.subplot(2,1,1)
-plt.scatter(xi, yi, color='k', label='Data Points')
-plt.plot(xi, trendline, color='k', label='Trendline')
-plt.minorticks_on()
-plt.grid(visible=True, which='major', linestyle='-')
-plt.grid(visible=True, which='minor', linestyle='--')
-plt.xlabel('Strain')
-plt.ylabel('Stress')
-plt.tight_layout()
-plt.legend()
+a0.scatter(xi, yi, color='k', label='Data Points')
+a0.plot(xi, trendline, color='k', label='Trendline')
+a0.minorticks_on()
+a0.grid(visible=True, which='major', linestyle='-')
+a0.grid(visible=True, which='minor', linestyle='--')
+a0.set_xlabel('Strain')
+a0.set_ylabel('Stress')
+a0.set_title('A graph of Stress vs Strain')
 
-plt.subplot(2,1,2)
-plt.scatter(xi, residual, color='k')
-plt.minorticks_on()
-plt.grid(visible=True, which='major', linestyle='-')
-plt.grid(visible=True, which='minor', linestyle='--')
-plt.ylabel('Residuals')
-plt.xlabel('Strain')
-plt.tight_layout()
-plt.savefig('Plot1.png', dpi=800)
-plt.show()
+a1.scatter(xi, residual, color='k')
+a1.minorticks_on()
+a1.grid(visible=True, which='major', linestyle='-')
+a1.grid(visible=True, which='minor', linestyle='--')
+a1.set_ylabel('Residuals')
+a1.set_xlabel('Strain')
+a1.set_title('A graph of Residuals vs Strain')
+f.tight_layout()
+f.savefig('Plot1.png', dpi=800)
+f.show()
