@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # creating the empty lists to be used
 xlist = []
@@ -32,7 +31,6 @@ for i in range(len(x1_array)-1):
 # calculating xi and xbar
 xi = np.array(xlist)**2
 xbar = np.mean(xi)
-print(xbar)
 
 # calculating yi and y bar
 for i in range(len(mass_array)-1):
@@ -41,7 +39,6 @@ for i in range(len(mass_array)-1):
 
 yi = np.array(ylist)
 ybar = np.mean(yi)
-print(ybar)
 
 # defining the function to calculate alpha, beta, coefficient of correlation and determination
 def beta_alpha_function(xi, xbar, yi, ybar):
@@ -90,10 +87,10 @@ E = coeffs[0]/m_constant
 T0 = coeffs[1]/c_constant
 delta_E = np.sqrt(cov[0][0])
 delta_T0 = np.sqrt(cov[1][1])
-print(E, delta_E, T0, delta_T0)
+print(f'the value of E is : {E}, with an error of: {delta_E}. The value of T0: {T0}, with and error of {delta_T0}')
 
 # calculating the residuals
-residual = np.subtract(trendline,yi)
+residual = np.subtract(yi,trendline)
 
 f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, gridspec_kw={'height_ratios': [3, 1]}, figsize=(7.3, 10.7))
 
