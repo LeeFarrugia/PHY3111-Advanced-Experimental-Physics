@@ -60,7 +60,7 @@ plt.close()
 y = np.log(value_3['Luminosity(L/Lo)'])
 x = np.log(value_3['Temperature/K'])
 
-x_a = x.array.reshape(-1,1)
+x_a = x.array.reshape(-1,1)  # type: ignore
 poly = pf(degree=30)
 poly_Lumen=poly.fit_transform(x_a)
 
@@ -70,7 +70,7 @@ y_pred = model.predict(poly_Lumen)
 
 rmse = np.sqrt(mean_squared_error(y, y_pred))
 print(f'The root mean square is: {rmse}')
-quit()
+
 
 plt.figure(figsize=(7.5, 10.5))
 plt.rcParams['font.family'] = 'STIXGeneral'
