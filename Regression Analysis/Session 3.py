@@ -27,16 +27,24 @@ for i in range(len(index_list)):
 
 data_sliced = [data.iloc[slice_list[even_a[i]]:slice_list[odd_a[i]]] for i in range(len(even_a)-1)]
 
-print(index_list[0:10])
-print(slice_list[0:10])
-print(len(slice_list))
-
 data_sliced = list(filter(lambda df: not df.empty, data_sliced))
 
 df = pd.DataFrame(columns=['z','n','t/s','A'])
 
 for i in range(len(data_sliced)):
     temp_df = pd.DataFrame(data_sliced[i], columns=['z', 'n', 't/s', 'A'])
-    df = pd.concat([df,temp_df])
+    df = pd.concat([df,temp_df]).reset_index(drop=True)
 
-df.to_clipboard()
+index_df = np.arange(0, len(df), 1)
+df.reset_index(drop=True).set_index(index_df, inplace=True)
+
+calcium_df = df[df['z']==20]
+calcium_df = df.iloc[5680:6080]
+calcium_df.reset_index(drop=True, inplace=True)
+
+half_array = np.arange(0,len(calcium_df),20)
+
+for z in range(len(calcium_df/20)):
+    for i in half_array:
+        a_2 = calcium_df.iloc[i:i+1]
+        
