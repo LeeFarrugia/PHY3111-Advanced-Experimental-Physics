@@ -1,3 +1,4 @@
+from matplotlib.colors import LogNorm
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -10,6 +11,13 @@ data = pd.read_csv('Q3__Isotope_Decay_Dataset.csv')
 index_list=[]
 slice_list=[]
 lst = []
+half_life_list = []
+z_list = []
+n_list = []
+new_list =[]
+new_z_list = []
+new_n_list = []
+
 even_a = np.arange(0,5922,2)
 odd_a = np.arange(1,5921,2)
 
@@ -56,7 +64,7 @@ plt.grid(visible=True, which='minor', linestyle='--')
 plt.tight_layout()
 
 plt.scatter(np.log(mean_t), np.log(mean_ua), color='k')
-plt.savefig('3Plot1.png', dpi=800)
+#plt.savefig('3Plot1.png', dpi=800)
 plt.close()
 
 calcium_df = df[df['z']==20]
@@ -109,6 +117,44 @@ a1.set_title(r'A graph of $log(A)$ vs Time')
 
 f.tight_layout()
 f.legend()
-f.savefig('3Plot2.png', dpi=800)
+#f.savefig('3Plot2.png', dpi=800)
 plt.close()
 
+df_t = df['t/s']
+df_a = df['A']
+
+selection_array = np.arange(0, len(df['t/s']), 20)
+
+for i in range(len(selection_array)-1):
+    da = df_a[selection_array[i]:selection_array[i+1]]
+    dt = df_t[selection_array[i]:selection_array[i+1]]
+    da0 = df_a[selection_array[i]]
+    da_da0 = da/da0
+    popt, pcov = curve_fit(fit_func, dt, da_da0)
+    half_life_list.append(popt[0])
+    z_list.append(df['z'][selection_array[i]])
+    n_list.append(df['n'][selection_array[i]])
+
+plotting_data = list(zip(z_list, n_list, half_life_list))
+
+results_df = pd.DataFrame({'Z':z_list, 'N': n_list, 'Half Life/s': half_life_list})
+plot_data = results_df.pivot(index='Z', columns='N',
+values='Half Life/s')
+
+ax = sns.heatmap(plot_data, square=True, norm=LogNorm())
+ax.invert_yaxis()
+
+for i in range(len(results_df)):
+    if results_df['Z'][i] == results_df['N'][i]:
+        new_list.append(i)
+
+print(new_list)
+
+for i in new_list:
+    new_z_list.append(z_list[i])
+    new_n_list.append(n_list[i])
+
+z_n = pd.DataFrame({'Z': new_z_list, 'N': new_n_list}) 
+plt.plot(z_n['N'], z_n['Z'], color='k')
+print(z_n)
+plt.show()
