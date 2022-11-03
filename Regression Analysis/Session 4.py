@@ -78,7 +78,7 @@ a3.legend()
 
 f.tight_layout()
 #f.savefig('4Plot1.png', dpi=800)
-#plt.show()
+plt.show()
 plt.close()
 
 io_rad = abs(popt_io[0])*138920000
