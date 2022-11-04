@@ -26,10 +26,12 @@ plt.rcParams['font.weight'] = 'normal'
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-plt.tight_layout()
 
 # plotting scatter plot for the data given
 plt.scatter((data['Temperature/K']), data['Luminosity(L/Lo)'], color='k')
+plt.ylabel('L/Lo')
+plt.xlabel('T/K')
+plt.title('A graph of Luminosity vs Temperature')
 plt.savefig('2Plot1.png', dpi=800)
 plt.close()
 
@@ -42,10 +44,13 @@ plt.rcParams['font.weight'] = 'normal'
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-plt.tight_layout()
+
 
 # plotting log of the data
 plt.scatter(np.log(data['Temperature/K']), np.log(data['Luminosity(L/Lo)']), color='k')
+plt.ylabel(r'$\log{L/Lo}$')
+plt.xlabel(r'$\log{T/K}$')
+plt.title(r'A graph of $\log{Luminosity}$ vs $\log{Temperature}$')
 plt.savefig('2Plot2.png', dpi=800)
 plt.close()
 
@@ -63,6 +68,9 @@ plt.tight_layout()
 # dropping the unwanted values
 value_3 = data.mask(data['Star type']!=3).dropna().reset_index()
 plt.scatter(np.log(value_3['Temperature/K']), np.log(value_3['Luminosity(L/Lo)']), color='k')
+plt.ylabel(r'$\log{L/Lo}$')
+plt.xlabel(r'$\log{T/K}$')
+plt.title(r'A graph of $\log{\mathrm{Luminosity}}$ vs $\log{\mathrm{Temperature}}$ for star type 3')
 plt.savefig('2Plot3.png', dpi=800)
 plt.close()
 
@@ -95,13 +103,15 @@ for i in freedoms:
     plt.minorticks_on()
     plt.grid(visible=True, which='major', linestyle='-')
     plt.grid(visible=True, which='minor', linestyle='--')
-    plt.tight_layout()
 
     plt.scatter(x, y, color='k')
     sort_axis = operator.itemgetter(0)
     sorted_zip = sorted(zip(x, y_pred), key=sort_axis)
     x, y_pred = zip(*sorted_zip)
     plt.plot(x, y_pred, color='k')
+    plt.xlabel(r'$\log{T/K}$')
+    plt.ylabel(r' Predicted Luminosity')
+    plt.title(f'A graph of Temperature vs Luminosity with degree {i}')
     plt.savefig(f'2Plot4_{i}.png', dpi=800)
     plt.close()
 
@@ -167,4 +177,4 @@ print(f'Theoretical stellar radius: {r_theoretical}')
 
 # calculating the experimental radii
 r_experimental = np.sqrt((L_data)/((4)*(pi)*(popt[0])*(T_data**4)))
-print(f'Theoretical stellar radius: {r_experimental}')
+print(f'Experimental stellar radius: {r_experimental}')
