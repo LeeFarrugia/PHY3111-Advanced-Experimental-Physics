@@ -85,9 +85,15 @@ trendline = polyfunc(xi)
 # calculating the young's modulus and T0
 E = coeffs[0]/m_constant
 T0 = coeffs[1]/c_constant
-delta_E = np.sqrt(cov[0][0])
-delta_T0 = np.sqrt(cov[1][1])
-print(f'the value of E is : {E}, with an error of: {delta_E}. The value of T0: {T0}, with and error of {delta_T0}')
+grad_error = np.sqrt(cov[0][0])
+inter_error = np.sqrt(cov[1][1])
+
+g = 9.81
+
+delta_E = np.sqrt(((((g*(L_array**3))/(8*np.pi*(r**2)))*(grad_error))**2)+((((3*(L_array**2)*coeffs[0]*g)/(8*np.pi*(r**2)))*(0.001))**2)+((((-2*coeffs[0]*g*(L_array**3))/(8*np.pi*(r**3)))*(1e-4))**2))
+delta_T0 = np.sqrt(((((L_array*g)/4)*(inter_error))**2)+((((coeffs[1]*g)/4)*(0.001))**2))
+
+print(f'The value of E is : {E}, with an error of: {delta_E}. The value of T0: {T0}, with and error of {delta_T0}')
 
 # calculating the residuals
 residual = np.subtract(yi,trendline)

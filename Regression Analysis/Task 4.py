@@ -155,7 +155,7 @@ jupiter_real_mass =1.898e27
 # finding the mass of jupiter
 jupiter_mass = (4*(np.pi**2)*grad)/G
 # finding the error of the mass of jupiter calculation
-delta_jupiter_mass = np.sqrt(((4*(np.pi**2))/G)*(grad_err))
+delta_jupiter_mass = np.sqrt((((4*(np.pi**2))/G)*(grad_err))**2)
 jupiter_precision = abs(((jupiter_mass/jupiter_real_mass)-1)*100)
 # displaying the results
 print(f'The mass of jupiter is: {jupiter_mass:.2E}kg ± {delta_jupiter_mass:.2E} an precision of {jupiter_precision:.2f}%')

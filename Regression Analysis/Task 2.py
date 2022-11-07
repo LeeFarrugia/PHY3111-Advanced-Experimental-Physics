@@ -1,3 +1,5 @@
+#Task 2
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -63,7 +65,6 @@ plt.rcParams['font.weight'] = 'normal'
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-plt.tight_layout()
 
 # dropping the unwanted values
 value_3 = data.mask(data['Star type']!=3).dropna().reset_index()
@@ -74,16 +75,17 @@ plt.title(r'A graph of $\log{\mathrm{Luminosity}}$ vs $\log{\mathrm{Temperature}
 plt.savefig('2Plot3.png', dpi=800)
 plt.close()
 
-# obtaining the log of the wanted data
-y = np.log(value_3['Luminosity(L/Lo)'])
-x = np.log(value_3['Temperature/K'])
-# reshaping the array
-x_a = x.array.reshape(-1,1)  # type: ignore
-
 # listing a number of the tried degree values
-freedoms = np.array([2, 10, 20, 30, 25, 15, 16, 17])
+degrees = np.array([2, 10, 20, 30, 25, 15, 16, 17])
 # creating a loop to test each degree until the smallest rmse is obtained and plotting each test
-for i in freedoms:
+
+for i in degrees:
+    # obtaining the log of the wanted data
+    y = np.log(value_3['Luminosity(L/Lo)'])
+    x = np.log(value_3['Temperature/K'])
+
+    # reshaping the array
+    x_a = x.array.reshape(-1,1)  # type: ignore
     poly = pf(degree=i)
     poly_Lumen=poly.fit_transform(x_a)
 
@@ -93,7 +95,6 @@ for i in freedoms:
 
     rmse = np.sqrt(mean_squared_error(y, y_pred))
     print(f'The root mean square is: {rmse}, with the degree of freedom is: {i}')
-
 
     plt.figure(figsize=(7.5, 10.5))
     plt.rcParams['font.family'] = 'STIXGeneral'
