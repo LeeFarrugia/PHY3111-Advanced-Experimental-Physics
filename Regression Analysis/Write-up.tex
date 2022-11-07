@@ -12,19 +12,19 @@
 \thispagestyle{titlepagestyle}
 \pagestyle{mystyle}
 
-\section*{Task 1 - Simple Linear Regression}
-\subsection*{Abstract}
+\section{Task 1 - Simple Linear Regression}
+\subsection{Abstract}
 insert very important stuff here
 
-\subsection*{Introduction and Theoretical Background}
+\subsection{Introduction and Theoretical Background}
 cause why the fuck not
 
-\subsection*{Materials and Methods}
+\subsection{Materials and Methods}
 
-\subsubsection*{Languages and Packages}
+\subsubsection{Languages and Packages}
 Python 3.10.8, Pandas, Numpy, Matplolib.pyplot.
 
-\subsubsection*{Methodology}
+\subsubsection{Methodology}
 \begin{enumerate}
     \item The dataset provided was imported into the program, each variable defined according to its respective column of data, and each variable was converted into an array with the use of numpy.
     \item A function was constructed to calculate the \(\alpha\) and \(\beta\) that correspond to the \(\alpha\) and \(\beta\) of the equation:
@@ -40,120 +40,18 @@ Python 3.10.8, Pandas, Numpy, Matplolib.pyplot.
     \item Using this function the experimental values for \(E\) and \(T_0\) and their respective uncertainties were calculated. Using these values a trendline was generated, with the residuals being plotted directly underneath it. 
 \end{enumerate}
 
-\subsection*{Results}
+\subsection{Results}
 
-\subsection*{Discussion}
+\subsection{Discussion}
 
-\subsection*{Figures and Graphs}
+\subsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{1Plot1.png}
     \caption{A graph of stress vs strain and their respective residuals}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot1.png}
-    \caption{A graph of Luminosity vs Temperature}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot2.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\)}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot3.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot4_2.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 2}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot4_10.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 10}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot4_15.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 15}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot4_16.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 16}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot4_17.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 17}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot4_20.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 20}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot4_25.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 25}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot4_30.png}
-    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 30}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{2Plot5.png}
-    \caption{A graph of \(\frac{L}{a}\) vs T}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{3Plot1.png}
-    \caption{A graph of \(\log{A}\) vs \(\log{T}\)}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{3Plot2.png}
-    \caption{A graph of \(\frac{A}{A_0}\) vs T and subplot of \(\log{A}\) vs \(\log{T}\)}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{3Plot3.png}
-    \caption{A heat map of the Z vs N with the stability line}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{4Plot1.png}
-    \caption{A graph of all moon offset vs julian date waves}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = \textwidth]{4Plot2.png}
-    \caption{A graph of \(r^3\) vs \(T^2\)}
-\end{figure}
-
-\section*{Appendix}
+\subsection{Appendix}
 \begin{minted}{py}
 # Task 1
 
@@ -280,6 +178,86 @@ f.tight_layout()
 f.savefig('1Plot1.png', dpi=800)
 f.show()
 
+\end{minted}
+
+\section{Task 2}
+\subsection{Figures and Graphs}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot1.png}
+    \caption{A graph of Luminosity vs Temperature}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot2.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot3.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot4_2.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot4_10.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 10}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot4_15.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 15}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot4_16.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 16}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot4_17.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 17}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot4_20.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 20}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot4_25.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 25}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot4_30.png}
+    \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 30}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{2Plot5.png}
+    \caption{A graph of \(\frac{L}{a}\) vs T}
+\end{figure}
+
+\subsection{Appendix}
+\begin{minted}{py}
+#Task 2
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -345,7 +323,6 @@ plt.rcParams['font.weight'] = 'normal'
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-plt.tight_layout()
 
 # dropping the unwanted values
 value_3 = data.mask(data['Star type']!=3).dropna().reset_index()
@@ -356,16 +333,17 @@ plt.title(r'A graph of $\log{\mathrm{Luminosity}}$ vs $\log{\mathrm{Temperature}
 plt.savefig('2Plot3.png', dpi=800)
 plt.close()
 
-# obtaining the log of the wanted data
-y = np.log(value_3['Luminosity(L/Lo)'])
-x = np.log(value_3['Temperature/K'])
-# reshaping the array
-x_a = x.array.reshape(-1,1)  # type: ignore
-
 # listing a number of the tried degree values
-freedoms = np.array([2, 10, 20, 30, 25, 15, 16, 17])
+degrees = np.array([2, 10, 20, 30, 25, 15, 16, 17])
 # creating a loop to test each degree until the smallest rmse is obtained and plotting each test
-for i in freedoms:
+
+for i in degrees:
+    # obtaining the log of the wanted data
+    y = np.log(value_3['Luminosity(L/Lo)'])
+    x = np.log(value_3['Temperature/K'])
+
+    # reshaping the array
+    x_a = x.array.reshape(-1,1)  # type: ignore
     poly = pf(degree=i)
     poly_Lumen=poly.fit_transform(x_a)
 
@@ -376,7 +354,6 @@ for i in freedoms:
     rmse = np.sqrt(mean_squared_error(y, y_pred))
     print(f'The root mean square is: {rmse}, with the degree of freedom is: {i}')
 
-
     plt.figure(figsize=(7.5, 10.5))
     plt.rcParams['font.family'] = 'STIXGeneral'
     plt.rcParams['mathtext.fontset'] = 'stix'
@@ -385,7 +362,6 @@ for i in freedoms:
     plt.minorticks_on()
     plt.grid(visible=True, which='major', linestyle='-')
     plt.grid(visible=True, which='minor', linestyle='--')
-    plt.tight_layout()
 
     plt.scatter(x, y, color='k')
     sort_axis = operator.itemgetter(0)
@@ -462,6 +438,30 @@ print(f'Theoretical stellar radius: {r_theoretical}')
 r_experimental = np.sqrt((L_data)/((4)*(pi)*(popt[0])*(T_data**4)))
 print(f'Experimental stellar radius: {r_experimental}')
 
+\end{minted}
+
+\section{Task 3}
+\subsection{Figures and Graphs}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{3Plot1.png}
+    \caption{A graph of \(\log{A}\) vs \(\log{T}\)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{3Plot2.png}
+    \caption{A graph of \(\frac{A}{A_0}\) vs T and subplot of \(\log{A}\) vs \(\log{T}\)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{3Plot3.png}
+    \caption{A heat map of the Z vs N with the stability line}
+\end{figure}
+
+\subsection{Appendix}
+\begin{minted}{py}
 #Task 3
 
 from matplotlib.colors import LogNorm
@@ -534,7 +534,7 @@ t_values = df['t/s']
 mean_ua = [np.mean(a_uvalues.iloc[index_array[i]:index_array[i+1]]) for i in range(len(index_array)-1)]
 mean_t = [np.mean(t_values.iloc[index_array[i]:index_array[i+1]]) for i in range(len(index_array)-1)]
 
-# definign the plotting parameters
+# edfinign the plotting parameters
 plt.figure(figsize=(7.5, 10.5))
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
@@ -669,7 +669,24 @@ plt.plot(z_n['N'], z_n['Z'], color='k')
 
 # saving the figure
 plt.savefig('3Plot3.png', dpi=800)
+\end{minted}
 
+\section{Task 4}
+\subsection{Figures and Graphs}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{4Plot1.png}
+    \caption{A graph of all moon offset vs julian date waves}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \textwidth]{4Plot2.png}
+    \caption{A graph of \(r^3\) vs \(T^2\)}
+\end{figure}
+
+\subsection{Appendix}
+\begin{minted}{py}
 #Task 4
 
 import pandas as pd
@@ -827,7 +844,7 @@ jupiter_real_mass =1.898e27
 # finding the mass of jupiter
 jupiter_mass = (4*(np.pi**2)*grad)/G
 # finding the error of the mass of jupiter calculation
-delta_jupiter_mass = np.sqrt(((4*(np.pi**2))/G)*(grad_err))
+delta_jupiter_mass = np.sqrt((((4*(np.pi**2))/G)*(grad_err))**2)
 jupiter_precision = abs(((jupiter_mass/jupiter_real_mass)-1)*100)
 # displaying the results
 print(f'The mass of jupiter is: {jupiter_mass:.2E}kg ± {delta_jupiter_mass:.2E} an precision of {jupiter_precision:.2f}%')
@@ -864,7 +881,6 @@ callisto_precision = abs(((m_callisto/real_callisto_mass)-1)*100)
 
 # displaying the values obtained
 print(f'The mass of Io is: {m_io:.2E}kg with a precision of {io_precision:.2f}%. The mass of Europa is: {m_europa:.2E}kg with a precision of {europa_precision:.2f}%. The mass of Ganymede is: {m_ganymede:.2E}kg with a precision of {ganymede_precision:.2f}%. The mass of callisto is: {m_callisto:.2E}kg with a precision of {callisto_precision:.2f}%.')
-
 \end{minted}
 
 \end{document}
