@@ -1,0 +1,209 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}Task 3}
+
+\PYG{k+kn}{from} \PYG{n+nn}{matplotlib.colors} \PYG{k+kn}{import} \PYG{n}{LogNorm}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{seaborn} \PYG{k}{as} \PYG{n+nn}{sns}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.metrics} \PYG{k+kn}{import} \PYG{n}{mean\PYGZus{}squared\PYGZus{}error}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.optimize} \PYG{k+kn}{import} \PYG{n}{curve\PYGZus{}fit}
+
+\PYG{c+c1}{\PYGZsh{} importing the data to be analysed}
+\PYG{n}{data} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Q3\PYGZus{}\PYGZus{}Isotope\PYGZus{}Decay\PYGZus{}Dataset.csv\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} initialising the lists to be used}
+\PYG{n}{index\PYGZus{}list}\PYG{o}{=}\PYG{p}{[]}
+\PYG{n}{slice\PYGZus{}list}\PYG{o}{=}\PYG{p}{[]}
+\PYG{n}{lst} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{half\PYGZus{}life\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{z\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{n\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{new\PYGZus{}list} \PYG{o}{=}\PYG{p}{[]}
+\PYG{n}{new\PYGZus{}z\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{new\PYGZus{}n\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+
+\PYG{c+c1}{\PYGZsh{} defining array to be used}
+\PYG{n}{even\PYGZus{}a} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{5922}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n}{odd\PYGZus{}a} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{5921}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} importing specific data for A}
+\PYG{n}{a\PYGZus{}values} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}A\PYGZsq{}}\PYG{p}{]}
+\PYG{c+c1}{\PYGZsh{} creating an index with the data selected}
+\PYG{n}{index\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{a\PYGZus{}values}\PYG{p}{)}\PYG{o}{+}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} finding the ean values of A for each isotope, 20 values each}
+\PYG{n}{mean\PYGZus{}a} \PYG{o}{=} \PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{a\PYGZus{}values}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{index\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]:}\PYG{n}{index\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]])} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{index\PYGZus{}array}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)]}
+
+\PYG{c+c1}{\PYGZsh{} finding which values of the mean are lower than 95 to account for the noise of the values and storing their index}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{mean\PYGZus{}a}\PYG{p}{)):}
+    \PYG{k}{if} \PYG{n}{mean\PYGZus{}a}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{95}\PYG{p}{:}
+        \PYG{n}{index\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} creating new list to slice the data according to the indices from before}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{index\PYGZus{}list}\PYG{p}{)):}
+    \PYG{n}{slice\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{((}\PYG{n}{index\PYGZus{}list}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{20}\PYG{p}{)}
+    \PYG{n}{slice\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{((}\PYG{n}{index\PYGZus{}list}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{20}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} keeping only the data for the unstable isotopes}
+\PYG{n}{data\PYGZus{}sliced} \PYG{o}{=} \PYG{p}{[}\PYG{n}{data}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{slice\PYGZus{}list}\PYG{p}{[}\PYG{n}{even\PYGZus{}a}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]:}\PYG{n}{slice\PYGZus{}list}\PYG{p}{[}\PYG{n}{odd\PYGZus{}a}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{even\PYGZus{}a}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)]}
+
+\PYG{c+c1}{\PYGZsh{} removing any empty values}
+\PYG{n}{data\PYGZus{}sliced} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{filter}\PYG{p}{(}\PYG{k}{lambda} \PYG{n}{df}\PYG{p}{:} \PYG{o+ow}{not} \PYG{n}{df}\PYG{o}{.}\PYG{n}{empty}\PYG{p}{,} \PYG{n}{data\PYGZus{}sliced}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} defining an empty dataframe}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}z\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}n\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}t/s\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}A\PYGZsq{}}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} creating a dataframe with the sliced values for later use}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{data\PYGZus{}sliced}\PYG{p}{)):}
+    \PYG{n}{temp\PYGZus{}df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(}\PYG{n}{data\PYGZus{}sliced}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{columns}\PYG{o}{=}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}z\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}n\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}t/s\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}A\PYGZsq{}}\PYG{p}{])}
+    \PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{concat}\PYG{p}{([}\PYG{n}{df}\PYG{p}{,}\PYG{n}{temp\PYGZus{}df}\PYG{p}{])}\PYG{o}{.}\PYG{n}{reset\PYGZus{}index}\PYG{p}{(}\PYG{n}{drop}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} indexing the new dataframe}
+\PYG{n}{index\PYGZus{}df} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{df}\PYG{p}{),} \PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{df}\PYG{o}{.}\PYG{n}{reset\PYGZus{}index}\PYG{p}{(}\PYG{n}{drop}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}\PYG{o}{.}\PYG{n}{set\PYGZus{}index}\PYG{p}{(}\PYG{n}{index\PYGZus{}df}\PYG{p}{,} \PYG{n}{inplace}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} selecting only the data for A and t}
+\PYG{n}{a\PYGZus{}uvalues} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}A\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{t\PYGZus{}values} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}t/s\PYGZsq{}}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} finding the mean for A and t for each isotope}
+\PYG{n}{mean\PYGZus{}ua} \PYG{o}{=} \PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{a\PYGZus{}uvalues}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{index\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]:}\PYG{n}{index\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]])} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{index\PYGZus{}array}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)]}
+\PYG{n}{mean\PYGZus{}t} \PYG{o}{=} \PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{t\PYGZus{}values}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{n}{index\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]:}\PYG{n}{index\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]])} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{index\PYGZus{}array}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)]}
+
+\PYG{c+c1}{\PYGZsh{} edfinign the plotting parameters}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} plotting the data}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{mean\PYGZus{}t}\PYG{p}{),} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{mean\PYGZus{}ua}\PYG{p}{),} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}3Plot1.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} selecting the data only for calcium}
+\PYG{n}{calcium\PYGZus{}df} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}z\PYGZsq{}}\PYG{p}{]}\PYG{o}{==}\PYG{l+m+mi}{20}\PYG{p}{]}
+\PYG{c+c1}{\PYGZsh{} selecting only the data for 1 calcium isotope}
+\PYG{n}{calcium\PYGZus{}df} \PYG{o}{=} \PYG{n}{df}\PYG{o}{.}\PYG{n}{iloc}\PYG{p}{[}\PYG{l+m+mi}{5680}\PYG{p}{:}\PYG{l+m+mi}{6080}\PYG{p}{]}
+\PYG{c+c1}{\PYGZsh{} re\PYGZhy{}indexing}
+\PYG{n}{calcium\PYGZus{}df}\PYG{o}{.}\PYG{n}{reset\PYGZus{}index}\PYG{p}{(}\PYG{n}{drop}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{inplace}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} defining the values and data to be used for calcium}
+\PYG{n}{calcium\PYGZus{}a} \PYG{o}{=} \PYG{n}{calcium\PYGZus{}df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}A\PYGZsq{}}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mi}{20}\PYG{p}{]}
+\PYG{n}{calcium\PYGZus{}log\PYGZus{}a} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{calcium\PYGZus{}df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}A\PYGZsq{}}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mi}{20}\PYG{p}{])}
+\PYG{n}{calcium\PYGZus{}t} \PYG{o}{=} \PYG{p}{(}\PYG{n}{calcium\PYGZus{}df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}t/s\PYGZsq{}}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mi}{20}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} defining the function to find the value of A/A0}
+\PYG{k}{def} \PYG{n+nf}{fit\PYGZus{}func}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{n}{thalf}\PYG{p}{):}
+    \PYG{k}{return} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{((}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1} \PYG{o}{*} \PYG{n}{t} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{))}\PYG{o}{/}\PYG{n}{thalf}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} using curve fit to calculate the value of the half life}
+\PYG{n}{popt}\PYG{p}{,} \PYG{n}{pcov} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{fit\PYGZus{}func}\PYG{p}{,} \PYG{n}{calcium\PYGZus{}t}\PYG{p}{,} \PYG{p}{(}\PYG{n}{calcium\PYGZus{}a}\PYG{o}{/}\PYG{n}{calcium\PYGZus{}a}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]))}
+
+\PYG{c+c1}{\PYGZsh{} obtaining the curve of the calclium isotope decay}
+\PYG{n}{fitted\PYGZus{}line} \PYG{o}{=} \PYG{n}{fit\PYGZus{}func}\PYG{p}{(}\PYG{n}{calcium\PYGZus{}t}\PYG{p}{,} \PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The half life of calcium\PYGZhy{}14 is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{s\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} obtaining the straight line to compare values obtained}
+\PYG{n}{coeffs}\PYG{p}{,} \PYG{n}{cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{polyfit}\PYG{p}{(}\PYG{n}{calcium\PYGZus{}t}\PYG{p}{,} \PYG{n}{calcium\PYGZus{}log\PYGZus{}a}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{cov}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{polyfunc} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{poly1d}\PYG{p}{(}\PYG{n}{coeffs}\PYG{p}{)}
+\PYG{n}{trendline} \PYG{o}{=} \PYG{n}{polyfunc}\PYG{p}{(}\PYG{n}{calcium\PYGZus{}t}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The half life of calcium\PYGZhy{}14 is from the srtaight line graph: }\PYG{l+s+si}{\PYGZob{}}\PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{/}\PYG{n}{coeffs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{s\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} defining the subplots}
+\PYG{n}{f}\PYG{p}{,} \PYG{p}{(}\PYG{n}{a0}\PYG{p}{,} \PYG{n}{a1}\PYG{p}{)} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{sharex}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{sharey}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.3}\PYG{p}{,} \PYG{l+m+mf}{10.7}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} defining the font to be used}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+
+\PYG{c+c1}{\PYGZsh{} plotting the curve}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{calcium\PYGZus{}t}\PYG{p}{,} \PYG{p}{(}\PYG{n}{calcium\PYGZus{}a}\PYG{o}{/}\PYG{n}{calcium\PYGZus{}a}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]),} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Data Points\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{calcium\PYGZus{}t}\PYG{p}{,} \PYG{n}{fitted\PYGZus{}line}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Trendline\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Time/s\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}A/A0\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph \PYGZdl{}\PYGZbs{}frac}\PYG{l+s+si}{\PYGZob{}A\PYGZcb{}\PYGZob{}A\PYGZus{}0\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{} vs Time\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} plotting the straight line}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{calcium\PYGZus{}t}\PYG{p}{,} \PYG{n}{calcium\PYGZus{}log\PYGZus{}a}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Data Point\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{calcium\PYGZus{}t}\PYG{p}{,} \PYG{n}{trendline}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Trendline\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Time/s\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}log(A)\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of \PYGZdl{}log(A)\PYGZdl{} vs Time\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} removing the excess space, showing legend and saving figure}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}3Plot2.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} defining specific data columns}
+\PYG{n}{df\PYGZus{}t} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}t/s\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{df\PYGZus{}a} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}A\PYGZsq{}}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} creating array for selections of data}
+\PYG{n}{selection\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}t/s\PYGZsq{}}\PYG{p}{]),} \PYG{l+m+mi}{20}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} applying the curve fit function on all of the data}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{selection\PYGZus{}array}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{n}{da} \PYG{o}{=} \PYG{n}{df\PYGZus{}a}\PYG{p}{[}\PYG{n}{selection\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]:}\PYG{n}{selection\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]]}
+    \PYG{n}{dt} \PYG{o}{=} \PYG{n}{df\PYGZus{}t}\PYG{p}{[}\PYG{n}{selection\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]:}\PYG{n}{selection\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]]}
+    \PYG{n}{da0} \PYG{o}{=} \PYG{n}{df\PYGZus{}a}\PYG{p}{[}\PYG{n}{selection\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]]}
+    \PYG{n}{da\PYGZus{}da0} \PYG{o}{=} \PYG{n}{da}\PYG{o}{/}\PYG{n}{da0}
+    \PYG{n}{popt}\PYG{p}{,} \PYG{n}{pcov} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{fit\PYGZus{}func}\PYG{p}{,} \PYG{n}{dt}\PYG{p}{,} \PYG{n}{da\PYGZus{}da0}\PYG{p}{)}
+    \PYG{n}{half\PYGZus{}life\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+    \PYG{n}{z\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}z\PYGZsq{}}\PYG{p}{][}\PYG{n}{selection\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]])}
+    \PYG{n}{n\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}n\PYGZsq{}}\PYG{p}{][}\PYG{n}{selection\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]])}
+
+\PYG{c+c1}{\PYGZsh{} joining the 3 lists together}
+\PYG{n}{plotting\PYGZus{}data} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{zip}\PYG{p}{(}\PYG{n}{z\PYGZus{}list}\PYG{p}{,} \PYG{n}{n\PYGZus{}list}\PYG{p}{,} \PYG{n}{half\PYGZus{}life\PYGZus{}list}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} creating a data frame for Z, N, Half life}
+\PYG{n}{results\PYGZus{}df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}Z\PYGZsq{}}\PYG{p}{:}\PYG{n}{z\PYGZus{}list}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}N\PYGZsq{}}\PYG{p}{:} \PYG{n}{n\PYGZus{}list}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Half Life/s\PYGZsq{}}\PYG{p}{:} \PYG{n}{half\PYGZus{}life\PYGZus{}list}\PYG{p}{\PYGZcb{})}
+\PYG{n}{plot\PYGZus{}data} \PYG{o}{=} \PYG{n}{results\PYGZus{}df}\PYG{o}{.}\PYG{n}{pivot}\PYG{p}{(}\PYG{n}{index}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Z\PYGZsq{}}\PYG{p}{,} \PYG{n}{columns}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}N\PYGZsq{}}\PYG{p}{,}
+\PYG{n}{values}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Half Life/s\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} defining the font to be used}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+
+\PYG{c+c1}{\PYGZsh{} plotting the Heat map}
+\PYG{n}{ax} \PYG{o}{=} \PYG{n}{sns}\PYG{o}{.}\PYG{n}{heatmap}\PYG{p}{(}\PYG{n}{plot\PYGZus{}data}\PYG{p}{,} \PYG{n}{square}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{norm}\PYG{o}{=}\PYG{n}{LogNorm}\PYG{p}{())}
+\PYG{n}{ax}\PYG{o}{.}\PYG{n}{invert\PYGZus{}yaxis}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} finding the index for when Z = N}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{results\PYGZus{}df}\PYG{p}{)):}
+    \PYG{k}{if} \PYG{n}{results\PYGZus{}df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Z\PYGZsq{}}\PYG{p}{][}\PYG{n}{i}\PYG{p}{]} \PYG{o}{==} \PYG{n}{results\PYGZus{}df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}N\PYGZsq{}}\PYG{p}{][}\PYG{n}{i}\PYG{p}{]:}
+        \PYG{n}{new\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} selecting the data for when Z = N}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{new\PYGZus{}list}\PYG{p}{:}
+    \PYG{n}{new\PYGZus{}z\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{z\PYGZus{}list}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+    \PYG{n}{new\PYGZus{}n\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{n\PYGZus{}list}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} changing the data from before of Z = N, into a dataframe}
+\PYG{n}{z\PYGZus{}n} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}Z\PYGZsq{}}\PYG{p}{:} \PYG{n}{new\PYGZus{}z\PYGZus{}list}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}N\PYGZsq{}}\PYG{p}{:} \PYG{n}{new\PYGZus{}n\PYGZus{}list}\PYG{p}{\PYGZcb{})}
+
+\PYG{c+c1}{\PYGZsh{} plotting the straight line for the data}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{z\PYGZus{}n}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}N\PYGZsq{}}\PYG{p}{],} \PYG{n}{z\PYGZus{}n}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Z\PYGZsq{}}\PYG{p}{],} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} saving the figure}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}3Plot3.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\end{Verbatim}

@@ -1,0 +1,196 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}Task 4}
+
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.optimize} \PYG{k+kn}{import} \PYG{n}{curve\PYGZus{}fit}
+\PYG{k+kn}{import} \PYG{n+nn}{seaborn} \PYG{k}{as} \PYG{n+nn}{sns}
+
+\PYG{c+c1}{\PYGZsh{} importing the data}
+\PYG{n}{data} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Q4\PYGZus{}\PYGZus{}Galilean\PYGZus{}Moon\PYGZus{}Astrometric\PYGZus{}Data.csv\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} importing the offset data for each moon}
+\PYG{n}{io\PYGZus{}position} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Io\PYGZus{}Offset (Jup Diameters)\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{europa\PYGZus{}position} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Europa\PYGZus{}Offset (Jup Diameters)\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{ganymede\PYGZus{}position} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Ganymede\PYGZus{}Offset (Jup Diameters)\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{callisto\PYGZus{}position} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Callisto\PYGZus{}Offset (Jup Diameters)\PYGZsq{}}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} importing the hjd data for each moon}
+\PYG{n}{io\PYGZus{}hjd} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Io\PYGZus{}Julian\PYGZus{}Date (HJD)\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{europa\PYGZus{}hjd} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Europa\PYGZus{}Julian\PYGZus{}Date (HJD)\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{ganymede\PYGZus{}hjd} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Ganymede\PYGZus{}Julian\PYGZus{}Date (HJD)\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{callisto\PYGZus{}hjd} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Callisto\PYGZus{}Julian\PYGZus{}Date (HJD)\PYGZsq{}}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} creating linspaces for each moon to obtain a smooth curve}
+\PYG{n}{io\PYGZus{}lin} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{n}{io\PYGZus{}hjd}\PYG{o}{.}\PYG{n}{min}\PYG{p}{(),} \PYG{n}{io\PYGZus{}hjd}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(),} \PYG{l+m+mi}{1000}\PYG{p}{)}
+\PYG{n}{europa\PYGZus{}lin} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{n}{europa\PYGZus{}hjd}\PYG{o}{.}\PYG{n}{min}\PYG{p}{(),} \PYG{n}{europa\PYGZus{}hjd}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(),} \PYG{l+m+mi}{1000}\PYG{p}{)}
+\PYG{n}{ganymede\PYGZus{}lin} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{n}{ganymede\PYGZus{}hjd}\PYG{o}{.}\PYG{n}{min}\PYG{p}{(),} \PYG{n}{ganymede\PYGZus{}hjd}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(),} \PYG{l+m+mi}{1000}\PYG{p}{)}
+\PYG{n}{callisto\PYGZus{}lin} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{n}{callisto\PYGZus{}hjd}\PYG{o}{.}\PYG{n}{min}\PYG{p}{(),} \PYG{n}{callisto\PYGZus{}hjd}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(),} \PYG{l+m+mi}{1000}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} defining the wave function to plot the data}
+\PYG{k}{def} \PYG{n+nf}{wave\PYGZus{}func}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{n}{A}\PYG{p}{,} \PYG{n}{T}\PYG{p}{):}
+    \PYG{k}{return} \PYG{n}{A}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(((}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{p}{)}\PYG{o}{/}\PYG{n}{T}\PYG{p}{)}\PYG{o}{*}\PYG{n}{t}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} determining the curve fit to the io data and obtaining the line data}
+\PYG{n}{popt\PYGZus{}io}\PYG{p}{,} \PYG{n}{pcov\PYGZus{}io} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{wave\PYGZus{}func}\PYG{p}{,} \PYG{n}{io\PYGZus{}hjd}\PYG{p}{,} \PYG{n}{io\PYGZus{}position}\PYG{p}{,} \PYG{n}{p0}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{io\PYGZus{}position}\PYG{p}{),} \PYG{l+m+mf}{1.75}\PYG{p}{))}
+\PYG{n}{fitted\PYGZus{}io} \PYG{o}{=} \PYG{n}{wave\PYGZus{}func}\PYG{p}{(}\PYG{n}{io\PYGZus{}lin}\PYG{p}{,} \PYG{n}{popt\PYGZus{}io}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{popt\PYGZus{}io}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} determining the curve fit to the europa data and obtaining the line data}
+\PYG{n}{popt\PYGZus{}europa}\PYG{p}{,} \PYG{n}{pcov\PYGZus{}europa} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{wave\PYGZus{}func}\PYG{p}{,} \PYG{n}{europa\PYGZus{}hjd}\PYG{p}{,} \PYG{n}{europa\PYGZus{}position}\PYG{p}{,} \PYG{n}{p0}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{europa\PYGZus{}position}\PYG{p}{),}\PYG{l+m+mf}{3.56}\PYG{p}{))}
+\PYG{n}{fitted\PYGZus{}europa} \PYG{o}{=} \PYG{n}{wave\PYGZus{}func}\PYG{p}{(}\PYG{n}{europa\PYGZus{}lin}\PYG{p}{,} \PYG{n}{popt\PYGZus{}europa}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{popt\PYGZus{}europa}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} determining the curve fit to the ganymede data and obtaining the line data}
+\PYG{n}{popt\PYGZus{}ganymede}\PYG{p}{,} \PYG{n}{pcov\PYGZus{}ganymede} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{wave\PYGZus{}func}\PYG{p}{,} \PYG{n}{ganymede\PYGZus{}hjd}\PYG{p}{,} \PYG{n}{ganymede\PYGZus{}position}\PYG{p}{,} \PYG{n}{p0}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{ganymede\PYGZus{}position}\PYG{p}{),} \PYG{l+m+mf}{7.15}\PYG{p}{))}
+\PYG{n}{fitted\PYGZus{}ganymede} \PYG{o}{=} \PYG{n}{wave\PYGZus{}func}\PYG{p}{(}\PYG{n}{ganymede\PYGZus{}lin}\PYG{p}{,} \PYG{n}{popt\PYGZus{}ganymede}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{popt\PYGZus{}ganymede}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} determining the curve fit to the callisto data and obtaining the line data}
+\PYG{n}{popt\PYGZus{}callisto}\PYG{p}{,} \PYG{n}{pcov\PYGZus{}callisto} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{wave\PYGZus{}func}\PYG{p}{,} \PYG{n}{callisto\PYGZus{}hjd}\PYG{p}{,} \PYG{n}{callisto\PYGZus{}position}\PYG{p}{,} \PYG{n}{p0}\PYG{o}{=}\PYG{p}{(}\PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{callisto\PYGZus{}position}\PYG{p}{),} \PYG{l+m+mf}{16.5}\PYG{p}{))}
+\PYG{n}{fitted\PYGZus{}callisto} \PYG{o}{=} \PYG{n}{wave\PYGZus{}func}\PYG{p}{(}\PYG{n}{callisto\PYGZus{}lin}\PYG{p}{,} \PYG{n}{popt\PYGZus{}callisto}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{popt\PYGZus{}callisto}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} defining the subplots to be plotted with their respective data, size and variables}
+\PYG{n}{f}\PYG{p}{,} \PYG{p}{(}\PYG{n}{a0}\PYG{p}{,} \PYG{n}{a1}\PYG{p}{,} \PYG{n}{a2}\PYG{p}{,} \PYG{n}{a3}\PYG{p}{)} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{sharex}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,} \PYG{n}{sharey}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.3}\PYG{p}{,} \PYG{l+m+mf}{10.7}\PYG{p}{))}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Julian Date\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Offset in Jupiter Diameter\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{io\PYGZus{}hjd}\PYG{p}{,} \PYG{n}{io\PYGZus{}position}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Io\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{io\PYGZus{}lin}\PYG{p}{,} \PYG{n}{fitted\PYGZus{}io}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Io Fit\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Julian Date\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Offset in Jupiter Diameter\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{europa\PYGZus{}hjd}\PYG{p}{,} \PYG{n}{europa\PYGZus{}position}\PYG{p}{,} \PYG{n}{marker}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}s\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Europa\PYGZsq{}}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{} type:ignore}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{europa\PYGZus{}lin}\PYG{p}{,} \PYG{n}{fitted\PYGZus{}europa}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Europa Fit\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+
+\PYG{n}{a2}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{a2}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a2}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a2}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Julian Date\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a2}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Offset in Jupiter Diameter\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a2}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{ganymede\PYGZus{}hjd}\PYG{p}{,} \PYG{n}{ganymede\PYGZus{}position}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Ganymede\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a2}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{ganymede\PYGZus{}lin}\PYG{p}{,} \PYG{n}{fitted\PYGZus{}ganymede}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Ganymede Fit\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a2}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+
+\PYG{n}{a3}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{a3}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a3}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a3}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Julian Date\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a3}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Offset in Jupiter Diameter\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a3}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{callisto\PYGZus{}hjd}\PYG{p}{,} \PYG{n}{callisto\PYGZus{}position}\PYG{p}{,} \PYG{n}{marker}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZca{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Callisto\PYGZsq{}}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} type:ignore}
+\PYG{n}{a3}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{callisto\PYGZus{}lin}\PYG{p}{,} \PYG{n}{fitted\PYGZus{}callisto}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Callisto Fit\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a3}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{c+c1}{\PYGZsh{} saving the figure}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}4Plot1.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\PYG{c+c1}{\PYGZsh{} clearing the plotted figure}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} calculating the semi\PYGZhy{}major axis of each moon in meters}
+\PYG{n}{io\PYGZus{}rad} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{popt\PYGZus{}io}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{138920000}
+\PYG{n}{europa\PYGZus{}rad} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{popt\PYGZus{}europa}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{138920000}
+\PYG{n}{ganymede\PYGZus{}rad} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{popt\PYGZus{}ganymede}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{138920000}
+\PYG{n}{callisto\PYGZus{}rad} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{popt\PYGZus{}callisto}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{138920000}
+
+\PYG{c+c1}{\PYGZsh{} displaying the semi\PYGZhy{}major axis of each moon}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}Io semi\PYGZhy{}major axis is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{io\PYGZus{}rad}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{m, Europa semi\PYGZhy{}major axis is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{europa\PYGZus{}rad}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{m, Ganymede semi\PYGZhy{}major axis is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{ganymede\PYGZus{}rad}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{m, Callisto semi\PYGZhy{}major axis is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{callisto\PYGZus{}rad}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{m\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the periodic time of each moon in seconds}
+\PYG{n}{io\PYGZus{}period} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{popt\PYGZus{}io}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{86400}
+\PYG{n}{europa\PYGZus{}period} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{popt\PYGZus{}europa}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{86400}
+\PYG{n}{ganymede\PYGZus{}period} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{popt\PYGZus{}ganymede}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{86400}
+\PYG{n}{callisto\PYGZus{}period} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{popt\PYGZus{}callisto}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}\PYG{o}{*}\PYG{l+m+mi}{86400}
+
+\PYG{c+c1}{\PYGZsh{} displaying the periodic time for each moon}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}Io period is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{io\PYGZus{}period}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{s, Europa period is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{europa\PYGZus{}period}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{s, Ganymede period is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{ganymede\PYGZus{}period}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{s, Callisto period is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{callisto\PYGZus{}period}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{s\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} defining arrays for radii and periods}
+\PYG{n}{radius} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{n}{io\PYGZus{}rad}\PYG{p}{,} \PYG{n}{europa\PYGZus{}rad}\PYG{p}{,} \PYG{n}{ganymede\PYGZus{}rad}\PYG{p}{,} \PYG{n}{callisto\PYGZus{}rad}\PYG{p}{])}
+\PYG{n}{period} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{n}{io\PYGZus{}period}\PYG{p}{,} \PYG{n}{europa\PYGZus{}period}\PYG{p}{,} \PYG{n}{ganymede\PYGZus{}period}\PYG{p}{,} \PYG{n}{callisto\PYGZus{}period}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} finding r\PYGZca{}3 and T\PYGZca{}2}
+\PYG{n}{Y} \PYG{o}{=} \PYG{n}{radius}\PYG{o}{**}\PYG{l+m+mi}{3}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{period}\PYG{o}{**}\PYG{l+m+mi}{2}
+
+\PYG{c+c1}{\PYGZsh{} determining the line of best fit for the given data}
+\PYG{n}{coeffs}\PYG{p}{,} \PYG{n}{cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{polyfit}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{Y}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{cov}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{poly\PYGZus{}function} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{poly1d}\PYG{p}{(}\PYG{n}{coeffs}\PYG{p}{)}
+\PYG{n}{fit\PYGZus{}line} \PYG{o}{=} \PYG{n}{poly\PYGZus{}function}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} plotting the straight line graph}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,}\PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{Y}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{fit\PYGZus{}line}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}r\PYGZdl{}\PYGZca{}3\PYGZdl{}/m\PYGZdl{}\PYGZca{}3\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}T\PYGZdl{}\PYGZca{}2\PYGZdl{}/s\PYGZdl{}\PYGZca{}2\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A Graph of r\PYGZdl{}\PYGZca{}3\PYGZdl{} vs T\PYGZdl{}\PYGZca{}2\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}4Plot2.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} determining the gradient of the straight line and the gradient error}
+\PYG{n}{grad} \PYG{o}{=} \PYG{n}{coeffs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{n}{grad\PYGZus{}err} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{cov}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{])}
+\PYG{c+c1}{\PYGZsh{} defining the gravitational constant and real jupiter mass}
+\PYG{n}{G} \PYG{o}{=} \PYG{l+m+mf}{6.6743e\PYGZhy{}11}
+\PYG{n}{jupiter\PYGZus{}real\PYGZus{}mass} \PYG{o}{=}\PYG{l+m+mf}{1.898e27}
+\PYG{c+c1}{\PYGZsh{} finding the mass of jupiter}
+\PYG{n}{jupiter\PYGZus{}mass} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{4}\PYG{o}{*}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{grad}\PYG{p}{)}\PYG{o}{/}\PYG{n}{G}
+\PYG{c+c1}{\PYGZsh{} finding the error of the mass of jupiter calculation}
+\PYG{n}{delta\PYGZus{}jupiter\PYGZus{}mass} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{((((}\PYG{l+m+mi}{4}\PYG{o}{*}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}\PYG{o}{/}\PYG{n}{G}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{grad\PYGZus{}err}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n}{jupiter\PYGZus{}precision} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(((}\PYG{n}{jupiter\PYGZus{}mass}\PYG{o}{/}\PYG{n}{jupiter\PYGZus{}real\PYGZus{}mass}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} displaying the results}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The mass of jupiter is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{jupiter\PYGZus{}mass}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{kg ± }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{delta\PYGZus{}jupiter\PYGZus{}mass}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{ an precision of }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{jupiter\PYGZus{}precision}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZpc{}\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} the semi\PYGZhy{}major axis squared}
+\PYG{n}{r2\PYGZus{}io} \PYG{o}{=} \PYG{n}{io\PYGZus{}rad}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{r2\PYGZus{}europa} \PYG{o}{=} \PYG{n}{europa\PYGZus{}rad}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{r2\PYGZus{}ganymede} \PYG{o}{=} \PYG{n}{ganymede\PYGZus{}rad}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{r2\PYGZus{}callisto} \PYG{o}{=} \PYG{n}{callisto\PYGZus{}rad}\PYG{o}{**}\PYG{l+m+mi}{2}
+
+\PYG{c+c1}{\PYGZsh{} real masses of jupiter\PYGZsq{}s moons}
+\PYG{n}{real\PYGZus{}io\PYGZus{}mass} \PYG{o}{=} \PYG{l+m+mf}{8.932e22}
+\PYG{n}{real\PYGZus{}europa\PYGZus{}mass} \PYG{o}{=} \PYG{l+m+mf}{4.8e22}
+\PYG{n}{real\PYGZus{}ganymede\PYGZus{}mass} \PYG{o}{=} \PYG{l+m+mf}{1.482e23}
+\PYG{n}{real\PYGZus{}callisto\PYGZus{}mass} \PYG{o}{=} \PYG{l+m+mf}{1.076e23}
+
+\PYG{c+c1}{\PYGZsh{} gravitational force of jupiter on the respective moon}
+\PYG{n}{F\PYGZus{}io} \PYG{o}{=} \PYG{l+m+mf}{6.35e22}
+\PYG{n}{F\PYGZus{}europa} \PYG{o}{=} \PYG{l+m+mf}{1.4e22}
+\PYG{n}{F\PYGZus{}ganymede} \PYG{o}{=} \PYG{l+m+mf}{1.63e22}
+\PYG{n}{F\PYGZus{}callisto} \PYG{o}{=} \PYG{l+m+mf}{3.87e21}
+
+\PYG{c+c1}{\PYGZsh{} finding the mass of each moon}
+\PYG{n}{m\PYGZus{}io} \PYG{o}{=} \PYG{p}{(}\PYG{n}{F\PYGZus{}io}\PYG{o}{*}\PYG{p}{(}\PYG{n}{r2\PYGZus{}io}\PYG{p}{))}\PYG{o}{/}\PYG{p}{(}\PYG{n}{G}\PYG{o}{*}\PYG{n}{jupiter\PYGZus{}mass}\PYG{p}{)}
+\PYG{n}{m\PYGZus{}europa} \PYG{o}{=} \PYG{p}{(}\PYG{n}{F\PYGZus{}europa}\PYG{o}{*}\PYG{p}{(}\PYG{n}{r2\PYGZus{}europa}\PYG{p}{))}\PYG{o}{/}\PYG{p}{(}\PYG{n}{G}\PYG{o}{*}\PYG{n}{jupiter\PYGZus{}mass}\PYG{p}{)}
+\PYG{n}{m\PYGZus{}ganymede} \PYG{o}{=} \PYG{p}{(}\PYG{n}{F\PYGZus{}ganymede}\PYG{o}{*}\PYG{p}{(}\PYG{n}{r2\PYGZus{}ganymede}\PYG{p}{))}\PYG{o}{/}\PYG{p}{(}\PYG{n}{G}\PYG{o}{*}\PYG{n}{jupiter\PYGZus{}mass}\PYG{p}{)}
+\PYG{n}{m\PYGZus{}callisto} \PYG{o}{=} \PYG{p}{(}\PYG{n}{F\PYGZus{}callisto}\PYG{o}{*}\PYG{p}{(}\PYG{n}{r2\PYGZus{}callisto}\PYG{p}{))}\PYG{o}{/}\PYG{p}{(}\PYG{n}{G}\PYG{o}{*}\PYG{n}{jupiter\PYGZus{}mass}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the precision for the masses of the moons}
+\PYG{n}{io\PYGZus{}precision} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(((}\PYG{n}{m\PYGZus{}io}\PYG{o}{/}\PYG{n}{real\PYGZus{}io\PYGZus{}mass}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{)}
+\PYG{n}{europa\PYGZus{}precision} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(((}\PYG{n}{m\PYGZus{}europa}\PYG{o}{/}\PYG{n}{real\PYGZus{}europa\PYGZus{}mass}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{)}
+\PYG{n}{ganymede\PYGZus{}precision} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(((}\PYG{n}{m\PYGZus{}ganymede}\PYG{o}{/}\PYG{n}{real\PYGZus{}ganymede\PYGZus{}mass}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{)}
+\PYG{n}{callisto\PYGZus{}precision} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{(((}\PYG{n}{m\PYGZus{}callisto}\PYG{o}{/}\PYG{n}{real\PYGZus{}callisto\PYGZus{}mass}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{100}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} displaying the values obtained}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The mass of Io is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{m\PYGZus{}io}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{kg with a precision of }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{io\PYGZus{}precision}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZpc{}. The mass of Europa is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{m\PYGZus{}europa}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{kg with a precision of }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{europa\PYGZus{}precision}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZpc{}. The mass of Ganymede is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{m\PYGZus{}ganymede}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{kg with a precision of }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{ganymede\PYGZus{}precision}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZpc{}. The mass of callisto is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{m\PYGZus{}callisto}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{kg with a precision of }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{callisto\PYGZus{}precision}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZpc{}.\PYGZsq{}}\PYG{p}{)}
+\end{Verbatim}

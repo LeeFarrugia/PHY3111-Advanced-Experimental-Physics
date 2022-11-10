@@ -13,11 +13,11 @@
 \pagestyle{mystyle}
 
 \section{Task 1 - Simple Linear Regression}
-\subsection{Abstract}
-insert very important stuff here
 
 \subsection{Introduction and Theoretical Background}
-cause why the fuck not
+The generic term ``Regression'' in the case of statistical methods is the attempt to fit a mode to the data in order to determine the relationship between the outcome and input data. Regression can be done using different methods, one of which, ordinary least squares, was used in this task.
+
+Specifically for this task the data for a Young's Modulus experiment was fitted with the use of the ordinary least squares regression in order to obtain the straight line graph. The ordinary least squares method was applied on the data by the use of python. The input data was obtained through an experiment of Young's Modulus, which was done by varying weights applied to a tinned copper wire and measuring the resultant depression of the contact point.
 
 \subsection{Materials and Methods}
 
@@ -41,8 +41,51 @@ Python 3.10.8, Pandas, Numpy, Matplolib.pyplot.
 \end{enumerate}
 
 \subsection{Results}
+function results, residuals, gradient and delta gradient, intercept and delta intercept, E and T0 and delta of E and T0
+
+\begin{longtable}{|c|c|c|c|c|c|}
+\hline \(\beta\) & \(\Delta \beta\) & \(\alpha\) & \(\Delta \alpha\) & r & R\\ \hline
+\endfirsthead
+
+\hline \(\beta\) & \(\Delta \beta\) & \(\alpha\) & \(\Delta \alpha\) & r & R\\ \hline
+\endhead
+
+1266912.35 & 81009.26 & 12.51 & 0.67 & 0.99 & 0.99\\ \hline
+
+\caption{Table of Function Results}
+\label{tab: Table 1.1}\\
+\end{longtable}
+
+\begin{longtable}{|c|c|c|c|}
+\hline Gradient/Nm\(^2\) & \(\Delta\)Gradient/Nm\(^2\)  & Intercept & \(\Delta\)Intercept\\ \hline
+\endfirsthead
+
+\hline Gradient/Nm\(^2\) & \(\Delta\)Gradient/Nm\(^2\)  & Intercept & \(\Delta\)Intercept\\ \hline
+\endhead
+
+1266912.35 & \SI{4.67e-10}{} & 12.51 & \SI{3.84e-15}{} \\ \hline
+
+\caption{Table of Results from the Graph}
+\label{tab: Table 1.2}\\
+\end{longtable}
+
+\begin{longtable}{|c|c|c|c|}
+\hline E &\(\Delta\)E & \(\text{T}_0\) & \(\Delta\)\(\text{T}_0\)\\ \hline
+\endfirsthead
+
+\hline E & \(\Delta\)E & \(\text{T}_0\) & \(\Delta\)\(\text{T}_0\)\\ \hline
+
+\si{1e11}{} & & & &\\ \hline
+\endhead
+
+\SI{2.79}{} & \SI{101}{} & \SI{7.98}{} & \SI{0.03}{}\\ \hline
+
+\caption{Results of Young's Modulus and Initial tension}
+\label{tab: Table 1.3}\\
+\end{longtable}
 
 \subsection{Discussion}
+sajkbdkasjbdk
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
@@ -181,6 +224,12 @@ f.show()
 \end{minted}
 
 \section{Task 2}
+
+\subsection{Introduction and Theoretical Background}
+cause why the fuck not
+
+\subsection{Materials and Methods}
+
 \subsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
@@ -441,6 +490,12 @@ print(f'Experimental stellar radius: {r_experimental}')
 \end{minted}
 
 \section{Task 3}
+
+\subsection{Introduction and Theoretical Background}
+cause why the fuck not
+
+\subsection{Materials and Methods}
+
 \subsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
@@ -672,6 +727,12 @@ plt.savefig('3Plot3.png', dpi=800)
 \end{minted}
 
 \section{Task 4}
+
+\subsection{Introduction and Theoretical Background}
+cause why the fuck not
+
+\subsection{Materials and Methods}
+
 \subsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
