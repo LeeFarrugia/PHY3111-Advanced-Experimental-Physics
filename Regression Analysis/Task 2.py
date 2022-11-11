@@ -113,7 +113,7 @@ for i in degrees:
     plt.xlabel(r'$\log{T/K}$')
     plt.ylabel(r' Predicted Luminosity')
     plt.title(f'A graph of Temperature vs Luminosity with degree {i}')
-    plt.savefig(f'2Plot4_{i}.png', dpi=800)
+    #plt.savefig(f'2Plot4_{i}.png', dpi=800)
     plt.close()
 
 # importing the filtered data to be analysed
@@ -161,16 +161,19 @@ plt.xlabel(r'T/K')
 plt.ylabel(r'$\frac{\mathrm{L}}{\mathrm{A}}$ /Wm$^{-2}$')
 plt.savefig('2Plot5.png', dpi=800)
 
+# theoretical boltzmann constant
+sigma_theoretical = 5.6696e-8 
+
+boltz_accu = ((popt[0]/sigma_theoretical)-1)*100
+
 # displaying the boltzamnn constant
-print(f'The Boltzmann constant is: {popt[0]:.2E}')
+print(f'The Boltzmann constant is: {popt[0]:.2E}, with a precision of {boltz_accu}')
 
 # importing the third set of data
 table_2_data = pd.read_excel('Q2c__Table_2_Data.xlsx')
 
 L_data = (table_2_data['L/L0'])*(3.846e26)    
-T_data = table_2_data['T/K']
-# theoretical boltzmann constant
-sigma_theoretical = 5.6696e-8                               
+T_data = table_2_data['T/K']                              
 
 # calculating the theoretical radii
 r_theoretical = np.sqrt((L_data)/((4)*(pi)*(sigma_theoretical)*(T_data**4)))
@@ -179,3 +182,7 @@ print(f'Theoretical stellar radius: {r_theoretical}')
 # calculating the experimental radii
 r_experimental = np.sqrt((L_data)/((4)*(pi)*(popt[0])*(T_data**4)))
 print(f'Experimental stellar radius: {r_experimental}')
+
+for i in range(len(r_experimental)):
+    r_accuracy = abs((r_experimental[i]/r_theoretical[i])-1)*100
+    print(r_accuracy)

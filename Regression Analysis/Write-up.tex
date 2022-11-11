@@ -265,6 +265,7 @@ f.show()
 
 \end{minted}
 \newpage
+
 \section{Task 2 -  Polynomial Regression \& Power Law Fitting}
 
 \subsection{Introduction and Theoretical Background}
@@ -274,7 +275,7 @@ Sometimes the relationship between the output variable and the predictor variabl
 \end{equation}
 we now have the equation in the polynomial form of:
 \begin{equation}
-    Y = \theta_0 + \theata_1 x^1 + \theata_2 x^2 + \theata_3 x^3 + \cdots + \theata_n x^n .
+    Y = \theta_0 + \theta_1 x^1 + \theta_2 x^2 + \theta_3 x^3 + \cdots + \theta_n x^n .
 \end{equation}
 \(n\) in this case is the degree of the polynomial which when increases will increase the polynomial complexity but in certain cases this higher value is needed to fit accordingly.
 
@@ -301,7 +302,55 @@ Python 3.10.8, Pandas, Numpy, Matplolib.pyplot, Scipy, sklearn.
 \end{enumerate}
 
 \subsection{Results}
+\begin{longtable}{|c|c|}
+    \hline Polynomial Degree & Root Mean Square Error \\ \hline
+    \endfirsthead
 
+    \hline Polynomial Degree & Root Mean Square Error \\ \hline
+    \endhead
+
+    2 & 1.06954\\ \hline
+    10 & 0.99632 \\ \hline
+    15 & 0.99301 \\ \hline
+    16 & 0.99286 \\ \hline
+    17 & 0.99289 \\ \hline
+    20 & 0.99396 \\ \hline
+    30 & 1.00272 \\ \hline
+
+    \caption{Table of Polynomial Degrees and Root Mean Square Errors}
+    \label{Tab: Table 2.1}\\
+\end{longtable}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline 
+        Experimental Boltzamnn constant & 5.89 \(\times\) 10\(^{-8}\) \\ \hline
+        Theoretical Boltzmann constant & 5.67 \(\times\) 10\(^{-8}\) \\ \hline
+        Accuracy & 3.85\% \\ \hline
+    \end{tabular}
+    \caption{Table of Boltzmann Values and the Accuracy}
+    \label{Tab: Table 2.2}
+\end{table}
+
+\begin{longtable}{|c|c|c|c|c|c|}
+    \hline Star & T/K & L/L\(_0\) & Theoretical Radius & Experimental Radius & Accuracy\\ \hline
+    \endfirsthead
+
+    \hline Star & T/K & L/L\(_0\) & Theoretical Radius & Experimental Radius & Accuracy\\ \hline
+    \endhead
+
+    Beltelgeuse (min) & 3600 & 90000 & 5.38 \(\times\) 10\(^{11}\) & 5.28 \(\times\) 10\(^{11}\) & 1.87\%\\ \hline
+    Beltelgeuse (max) & 3600 & 150000 & 2.20 \(\times\) 10\(^{11}\) & 2.15 \(\times\) 10\(^{11}\) & 1.87\%\\ \hline
+    Arcturus & 4286 & 170 & 1.65 \(\times\) 10\(^{10}\) & 1.62 \(\times\) 10\(^{10}\) & 1.85\%\\ \hline
+    TRAPPIST-1  & 2566 & 0.000553 & 8.30 \(\times\) 10\(^{7}\) & 8.14 \(\times\) 10\(^{7}\) & 1.87\%\\ \hline
+    \(\alpha\) Centauri A  & 5790 & 1.519 & 8.54 \(\times\) 10\(^{8}\) & 8.38 \(\times\) 10\(^{8}\) & 1.87\%\\ \hline
+    \(\alpha\) Centauri B  & 5260 & 0.5002 & 5.94 \(\times\) 10\(^{8}\) & 5.83 \(\times\) 10\(^{8}\) & 1.87\%\\ \hline
+    Proxima Centauri & 3042 & 0.0017 & 1.04 \(\times\) 10\(^{8}\) & 1.02 \(\times\) 10\(^{8}\) & 1.87\%\\ \hline
+
+    \caption{Table of Star Data, Radii and Accuracy}
+    \label{Tab: Table 2.3}\\
+\end{longtable}
 
 \subsection{Discussion}
 
@@ -556,16 +605,19 @@ plt.xlabel(r'T/K')
 plt.ylabel(r'$\frac{\mathrm{L}}{\mathrm{A}}$ /Wm$^{-2}$')
 plt.savefig('2Plot5.png', dpi=800)
 
+# theoretical boltzmann constant
+sigma_theoretical = 5.6696e-8 
+
+boltz_accu = ((popt[0]/sigma_theoretical)-1)*100
+
 # displaying the boltzamnn constant
-print(f'The Boltzmann constant is: {popt[0]:.2E}')
+print(f'The Boltzmann constant is: {popt[0]:.2E}, with a precision of {boltz_accu}')
 
 # importing the third set of data
 table_2_data = pd.read_excel('Q2c__Table_2_Data.xlsx')
 
 L_data = (table_2_data['L/L0'])*(3.846e26)    
-T_data = table_2_data['T/K']
-# theoretical boltzmann constant
-sigma_theoretical = 5.6696e-8                               
+T_data = table_2_data['T/K']                              
 
 # calculating the theoretical radii
 r_theoretical = np.sqrt((L_data)/((4)*(pi)*(sigma_theoretical)*(T_data**4)))
@@ -574,6 +626,10 @@ print(f'Theoretical stellar radius: {r_theoretical}')
 # calculating the experimental radii
 r_experimental = np.sqrt((L_data)/((4)*(pi)*(popt[0])*(T_data**4)))
 print(f'Experimental stellar radius: {r_experimental}')
+
+for i in range(len(r_experimental)):
+    r_accuracy = abs((r_experimental[i]/r_theoretical[i])-1)*100
+    print(r_accuracy)
 
 \end{minted}
 
