@@ -65,7 +65,6 @@ def beta_alpha_function(xi, xbar, yi, ybar):
 
 # calling previous function to get the actual values
 beta, alpha, delta_beta, delta_alpha, r, R = beta_alpha_function(xi, xbar, yi, ybar)
-print(beta, alpha, delta_beta, delta_alpha, r, R)
 
 # calculating the experimental values 
 for i in range(len(xi)):
@@ -83,9 +82,6 @@ coeffs, cov = np.polyfit(xi, ye_array, 1, cov=True)
 polyfunc = np.poly1d(coeffs)
 trendline = polyfunc(xi)
 
-print(coeffs[0], np.sqrt(cov[0][0]))
-print(coeffs[1], np.sqrt(cov[1][1]))
-
 # calculating the young's modulus and T0
 E = coeffs[0]/m_constant
 T0 = coeffs[1]/c_constant
@@ -101,6 +97,8 @@ print(f'The value of E is : {E}, with an error of: {delta_E}. The value of T0: {
 
 # calculating the residuals
 residual = np.subtract(yi,trendline)
+
+print(residual)
 
 f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, gridspec_kw={'height_ratios': [3, 1]}, figsize=(7.3, 10.7))
 

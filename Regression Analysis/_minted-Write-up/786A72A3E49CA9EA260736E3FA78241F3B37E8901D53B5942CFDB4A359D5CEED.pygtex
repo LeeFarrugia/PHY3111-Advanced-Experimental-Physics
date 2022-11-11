@@ -1,0 +1,23 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{beta\PYGZus{}alpha\PYGZus{}function}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{,} \PYG{n}{xbar}\PYG{p}{,} \PYG{n}{yi}\PYG{p}{,} \PYG{n}{ybar}\PYG{p}{):}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{)):}
+        \PYG{n}{prod} \PYG{o}{=} \PYG{p}{(}\PYG{n}{xi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{xbar}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{yi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{ybar}\PYG{p}{)}
+        \PYG{n}{prodlist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{prod}\PYG{p}{)}
+        \PYG{n}{xdenom} \PYG{o}{=} \PYG{p}{(}\PYG{n}{xi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{xbar}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+        \PYG{n}{denomlist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{xdenom}\PYG{p}{)}
+        \PYG{n}{ydenom} \PYG{o}{=} \PYG{p}{(}\PYG{n}{yi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{ybar}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+        \PYG{n}{ydenomlist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{ydenom}\PYG{p}{)}
+    \PYG{n}{prod\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{prodlist}\PYG{p}{)}
+    \PYG{n}{denom\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{denomlist}\PYG{p}{)}
+    \PYG{n}{ydenom\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{ydenomlist}\PYG{p}{)}
+    \PYG{n}{numerator} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{prod\PYGZus{}array}\PYG{p}{)}
+    \PYG{n}{denominator} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{denom\PYGZus{}array}\PYG{p}{)}
+    \PYG{n}{ydenominator} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{ydenom\PYGZus{}array}\PYG{p}{)}
+    \PYG{n}{beta} \PYG{o}{=} \PYG{n}{numerator}\PYG{o}{/}\PYG{n}{denominator}
+    \PYG{n}{alpha} \PYG{o}{=} \PYG{n}{ybar} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{beta}\PYG{o}{*}\PYG{n}{xbar}\PYG{p}{)}
+    \PYG{n}{r} \PYG{o}{=} \PYG{n}{numerator}\PYG{o}{/}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{denominator}\PYG{o}{*}\PYG{n}{ydenominator}\PYG{p}{))}
+    \PYG{n}{delta\PYGZus{}beta} \PYG{o}{=} \PYG{p}{(}\PYG{n}{beta}\PYG{o}{/}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{p}{)))}\PYG{o}{*}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{n}{delta\PYGZus{}alpha} \PYG{o}{=} \PYG{n}{delta\PYGZus{}beta}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(((}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{xi}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))))}
+    \PYG{n}{R} \PYG{o}{=} \PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2}
+    \PYG{k}{return} \PYG{n}{beta}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{,} \PYG{n}{delta\PYGZus{}beta}\PYG{p}{,} \PYG{n}{delta\PYGZus{}alpha}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{R} \PYG{o}{.}
+\end{Verbatim}

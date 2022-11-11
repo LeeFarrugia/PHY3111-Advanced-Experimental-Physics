@@ -29,11 +29,14 @@ Python 3.10.8, Pandas, Numpy, Matplolib.pyplot.
     \item The dataset provided was imported into the program, each variable defined according to its respective column of data, and each variable was converted into an array with the use of numpy.
     \item A function was constructed to calculate the \(\alpha\) and \(\beta\) that correspond to the \(\alpha\) and \(\beta\) of the equation:
     \begin{equation}
+        \label{equation 1}\\
         Y_e = \alpha + \beta X .
     \end{equation}
     \(\alpha\) and \(\beta\) were further defined as the following:
     \begin{align}
+        \label{equation 2}\\
         \beta &= \frac{\sum_{i=1}^{n}(X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^{n}(X_i - \bar{X})^2} ,\\
+        \label{equation 3}
         \alpha &= \bar{Y} - \beta \bar{X} .
     \end{align}
     \item This function was further expanded to include the calculation of the uncertainties of \(\alpha\) and \(\beta\), and the correlation coefficient and coefficient of determination.
@@ -41,8 +44,6 @@ Python 3.10.8, Pandas, Numpy, Matplolib.pyplot.
 \end{enumerate}
 
 \subsection{Results}
-function results, residuals, gradient and delta gradient, intercept and delta intercept, E and T0 and delta of E and T0
-
 \begin{longtable}{|c|c|c|c|c|c|}
 \hline \(\beta\) & \(\Delta \beta\) & \(\alpha\) & \(\Delta \alpha\) & r & R\\ \hline
 \endfirsthead
@@ -57,10 +58,10 @@ function results, residuals, gradient and delta gradient, intercept and delta in
 \end{longtable}
 
 \begin{longtable}{|c|c|c|c|}
-\hline Gradient/Nm\(^2\) & \(\Delta\)Gradient/Nm\(^2\)  & Intercept & \(\Delta\)Intercept\\ \hline
+\hline Gradient/Nm\(^2\) & \(\Delta\)Gradient/Nm\(^2\)  & Intercept/Nm\(^2\) & \(\Delta\)Intercept/Nm\(^2\)\\ \hline
 \endfirsthead
 
-\hline Gradient/Nm\(^2\) & \(\Delta\)Gradient/Nm\(^2\)  & Intercept & \(\Delta\)Intercept\\ \hline
+\hline Gradient/Nm\(^2\) & \(\Delta\)Gradient/Nm\(^2\)  & Intercept/Nm\(^2\) & \(\Delta\)Intercept/Nm\(^2\)\\ \hline
 \endhead
 
 1266912.35 & \SI{4.67e-10}{} & 12.51 & \SI{3.84e-15}{} \\ \hline
@@ -70,28 +71,61 @@ function results, residuals, gradient and delta gradient, intercept and delta in
 \end{longtable}
 
 \begin{longtable}{|c|c|c|c|}
-\hline E &\(\Delta\)E & \(\text{T}_0\) & \(\Delta\)\(\text{T}_0\)\\ \hline
+\hline E/Nm\(^2\) &\(\Delta\)E/Nm\(^2\) & \(\text{T}_0\)/N & \(\Delta\)\(\text{T}_0\)/N\\ \hline
 \endfirsthead
 
-\hline E & \(\Delta\)E & \(\text{T}_0\) & \(\Delta\)\(\text{T}_0\)\\ \hline
-
-\si{1e11}{} & & & &\\ \hline
+\hline E/Nm\(^2\) & \(\Delta\)E/Nm\(^2\) & \(\text{T}_0\)/N & \(\Delta\)\(\text{T}_0\)/N\\ \hline
 \endhead
 
-\SI{2.79}{} & \SI{101}{} & \SI{7.98}{} & \SI{0.03}{}\\ \hline
+\SI{2.79e11}{} & \SI{101}{} & \SI{7.98}{} & \SI{0.03}{}\\ \hline
 
 \caption{Results of Young's Modulus and Initial tension}
 \label{tab: Table 1.3}\\
 \end{longtable}
 
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Residuals & -0.36 & -0.11 & 0.48 & 0.72 & -0.73 \\\hline
+\end{tabular}
+\caption{Table of Residuals}
+\label{tab: Table 1.4}
+\end{table}
+
 \subsection{Discussion}
-sajkbdkasjbdk
+In order to calculate \(\alpha\) and \(\beta\), a function was created to match equation~\ref{equation 2}, additionally, the function was expanded to also calculate the correlation and determination coefficients. This can be seen in the following piece of code:
+\begin{minted}{py}
+def beta_alpha_function(xi, xbar, yi, ybar):
+    for i in range(len(xi)):
+        prod = (xi[i]-xbar)*(yi[i]-ybar)
+        prodlist.append(prod)
+        xdenom = (xi[i]-xbar)**2
+        denomlist.append(xdenom)
+        ydenom = (yi[i]-ybar)**2
+        ydenomlist.append(ydenom)
+    prod_array = np.array(prodlist)
+    denom_array = np.array(denomlist)
+    ydenom_array = np.array(ydenomlist)
+    numerator = sum(prod_array)
+    denominator = sum(denom_array)
+    ydenominator = sum(ydenom_array)
+    beta = numerator/denominator
+    alpha = ybar - (beta*xbar)
+    r = numerator/(np.sqrt(denominator*ydenominator))
+    delta_beta = (beta/(np.sqrt(len(xi)-2)))*(np.sqrt((1/r**2)-1))
+    delta_alpha = delta_beta*np.sqrt(((1/len(xi))*(sum(xi**2))))
+    R = r**2
+    return beta, alpha, delta_beta, delta_alpha, r, R .
+\end{minted}
+The values for \(\alpha\) and \(\beta\) were then used to plot the fit for the data given and obtain the Young's Modulus of the wire and its initial Tension. The fit resulted in a straight line were the Young's Modulus was the gradient and the initial Tension was the y-intercept. This can be further seen from the obtain graph~\ref{fig:Fig 1.1}. Furthermore, the residuals of the the points to the fit were also calculated using by finding the difference of the original data point and the fitted data points and these were plotted underneath the original straight line plot. 
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{1Plot1.png}
     \caption{A graph of stress vs strain and their respective residuals}
+    \label{fig:Fig 1.1}
 \end{figure}
 
 \subsection{Appendix}
@@ -140,7 +174,9 @@ for i in range(len(mass_array)-1):
 yi = np.array(ylist)
 ybar = np.mean(yi)
 
-# defining the function to calculate alpha, beta, coefficient of correlation and determination
+# defining the function to calculate alpha, 
+# beta, coefficient of correlation and 
+# determination
 def beta_alpha_function(xi, xbar, yi, ybar):
     for i in range(len(xi)):
         prod = (xi[i]-xbar)*(yi[i]-ybar)
@@ -164,7 +200,8 @@ def beta_alpha_function(xi, xbar, yi, ybar):
     return beta, alpha, delta_beta, delta_alpha, r, R
 
 # calling previous function to get the actual values
-beta, alpha, delta_beta, delta_alpha, r, R = beta_alpha_function(xi, xbar, yi, ybar)
+beta, alpha, delta_beta, delta_alpha, r, R 
+= beta_alpha_function(xi, xbar, yi, ybar)
 
 # calculating the experimental values 
 for i in range(len(xi)):
@@ -187,12 +224,17 @@ E = coeffs[0]/m_constant
 T0 = coeffs[1]/c_constant
 delta_E = np.sqrt(cov[0][0])
 delta_T0 = np.sqrt(cov[1][1])
-print(f'the value of E is : {E}, with an error of: {delta_E}. The value of T0: {T0}, with and error of {delta_T0}')
+print(f'the value of E is : {E}, 
+with an error of: {delta_E}. 
+The value of T0: {T0}, with 
+and error of {delta_T0}')
 
 # calculating the residuals
 residual = np.subtract(yi,trendline)
 
-f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, gridspec_kw={'height_ratios': [3, 1]}, figsize=(7.3, 10.7))
+f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, 
+gridspec_kw={'height_ratios': [3, 1]}, 
+figsize=(7.3, 10.7))
 
 # defining the font to be used
 plt.rcParams['font.family'] = 'STIXGeneral'
@@ -222,86 +264,132 @@ f.savefig('1Plot1.png', dpi=800)
 f.show()
 
 \end{minted}
-
-\section{Task 2}
+\newpage
+\section{Task 2 -  Polynomial Regression \& Power Law Fitting}
 
 \subsection{Introduction and Theoretical Background}
-cause why the fuck not
+Sometimes the relationship between the output variable and the predictor variable do not follow a linear relationship, thus the need arises to find a way to fit this relationship. This is achieved by using the Polynomial Regression. In this case rather than having the previous equation of:
+\begin{equation}
+    Y = \alpha + \beta X ,
+\end{equation}
+we now have the equation in the polynomial form of:
+\begin{equation}
+    Y = \theta_0 + \theata_1 x^1 + \theata_2 x^2 + \theata_3 x^3 + \cdots + \theata_n x^n .
+\end{equation}
+\(n\) in this case is the degree of the polynomial which when increases will increase the polynomial complexity but in certain cases this higher value is needed to fit accordingly.
+
+In this task, we are asked to find the polynomial regression fit to the Hertzsprung-Russell Diagram. This plots the temperature of the starts in question against their luminosity, which allows us to characterise the individual stars and track how they evolve.
 
 \subsection{Materials and Methods}
+\subsubsection{Languages and Packages}
+Python 3.10.8, Pandas, Numpy, Matplolib.pyplot, Scipy, sklearn.
+
+\subsubsection{Methodology}
+\begin{enumerate}
+    \item The data was imported into the code, and it was split according to the stellar type and the relative luminosity was plotted against the temperature. 
+    \item As the variance was too large, the logarithm of both plotting variables was taken in order to produce a better scale. 
+    \item The data was then filtered to only consider the data for the ``Main sequence''.
+    \item This data was fitted to the Stefan-Boltzmann power law, which is defined as: 
+    \begin{equation} 
+        f(x) = \alpha x^{\beta} ,
+    \end{equation}
+    which was adapted for the equation:
+    \begin{equation}
+        L = A \sigma T^4 .
+    \end{equation}
+    \item From the previous equation \(\sigma\) was calculated using the \mintinline{python}{curve_fit} function of \mintinline{python}{scipy}, and this value is then compared with the theoretical value. These values were then used to calculate the stellar radii of the star given in a second data set.
+\end{enumerate}
+
+\subsection{Results}
+
+
+\subsection{Discussion}
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot1.png}
     \caption{A graph of Luminosity vs Temperature}
+    \label{fig:Fig 2.1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot2.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\)}
+    \label{fig:Fig 2.2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot3.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3}
+    \label{fig:Fig 2.3}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot4_2.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 2}
+    \label{fig:Fig 2.4}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot4_10.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 10}
+    \label{fig:Fig 2.5}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot4_15.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 15}
+    \label{fig:Fig 2.6}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot4_16.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 16}
+    \label{fig:Fig 2.7}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot4_17.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 17}
+    \label{fig:Fig 2.8}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot4_20.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 20}
+    \label{fig:Fig 2.9}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot4_25.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 25}
+    \label{fig:Fig 2.10}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot4_30.png}
     \caption{A graph of \(\log{Luminosity}\) vs \(\log{Temperature}\) for star type 3, with degree 30}
+    \label{fig:Fig 2.11}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{2Plot5.png}
     \caption{A graph of \(\frac{L}{a}\) vs T}
+    \label{fig:Fig 2.12}
 \end{figure}
+Write to
 
 \subsection{Appendix}
 \begin{minted}{py}
