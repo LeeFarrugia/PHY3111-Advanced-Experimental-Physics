@@ -353,6 +353,11 @@ Python 3.10.8, Pandas, Numpy, Matplolib.pyplot, Scipy, sklearn.
 \end{longtable}
 
 \subsection{Discussion}
+After obtaining the data for the main sequence of the stars, the fit was obtained by variating the degrees of the polynomial as can be seen in the graphs: Figure \ref{fig:Fig 2.4}, Figure \ref{fig:Fig 2.5}, Figure \ref{fig:Fig 2.6}, Figure \ref{fig:Fig 2.7}, Figure \ref{fig:Fig 2.8}, Figure \ref{fig:Fig 2.9}, Figure \ref{fig:Fig 2.10}, Figure \ref{fig:Fig 2.11}. This was used to determine the root mean square error and as the root mean square should be as close to 0 as possible the lowest value was when the degree of the polynomial was equal to \(16\), which resulting in a root mean square error of \(0.99286\). The Stefan-Boltzmann equation was adapted to become:
+\begin{equation}
+    L/A = \sigma T^4 ,
+\end{equation}
+which was then run through the program with the input data in order to obtain \(\sigma\), that is the Boltzmann constant, which was found to be \(5.89 \times 10^{-8}\). This values was then used to calculate the radii of specific stars which the data for the temperature and luminosity data was provided. 
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
