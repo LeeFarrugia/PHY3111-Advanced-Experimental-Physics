@@ -355,9 +355,19 @@ Python 3.10.8, Pandas, Numpy, Matplolib.pyplot, Scipy, sklearn.
 \subsection{Discussion}
 After obtaining the data for the main sequence of the stars, the fit was obtained by variating the degrees of the polynomial as can be seen in the graphs: Figure \ref{fig:Fig 2.4}, Figure \ref{fig:Fig 2.5}, Figure \ref{fig:Fig 2.6}, Figure \ref{fig:Fig 2.7}, Figure \ref{fig:Fig 2.8}, Figure \ref{fig:Fig 2.9}, Figure \ref{fig:Fig 2.10}, Figure \ref{fig:Fig 2.11}. This was used to determine the root mean square error and as the root mean square should be as close to 0 as possible the lowest value was when the degree of the polynomial was equal to \(16\), which resulting in a root mean square error of \(0.99286\). The Stefan-Boltzmann equation was adapted to become:
 \begin{equation}
-    L/A = \sigma T^4 ,
+    \frac{L}{A} = \sigma T^4 ,
 \end{equation}
-which was then run through the program with the input data in order to obtain \(\sigma\), that is the Boltzmann constant, which was found to be \(5.89 \times 10^{-8}\). This values was then used to calculate the radii of specific stars which the data for the temperature and luminosity data was provided. 
+which was then run through the program with the input data in order to obtain \(\sigma\), that is the Boltzmann constant, which was found to be \(5.89 \times 10^{-8}\). This values was then used to calculate the radii of specific stars which the data for the temperature and luminosity data was provided.
+
+A brown dwarf is a stellar object that due to its size cannot allow the hydrogen fusion like that of the main sequence stars, however these types of stars still are able to fuse deuterium and lithium. These factors give an indication why these types of stars have such a low surface temperature and are not very bright at the visible wavelengths. These types of stars can be seen in the lower region in figure \ref{fig:Fig 2.2}.
+
+A white dwarf tends to be a remnant of the main sequence stars that are no able to generate the high temperature required to fuse helium, carbon or neon into the next stages. There is no fusion occurring within a white dwarf. As the star no longer produces its own energy it will lose its temperature over time as it radiates its energy. These types of stars can be seen in the lower region in figure~\ref{fig:Fig 2.2}.
+
+The main sequence stars are a group of stars that the Sun is a part of. These stars have a high enough temperature and size in order to fuse hydrogen into helium. Furthermore, about \(90\%\) of the stars in the universe are part of this group of stellar objects. These types of stars can be seen in the continuos region in figure~\ref{fig:Fig 2.2}. This sequence is further separated into different sections as can be clearly seen in figure~\ref{fig:Fig 2.3} where with higher temperature they have a higher luminosity.
+
+The supergiant category of stars refers to the stars that are very large in size. They can also be defined as part of the evolution of stars. One can consider when a main sequence star start to fuse helium rather than hydrogen and the core changes into an iron core, their atmosphere inflates and thus become supergiants. These types of starts can be seen in the top band in figure~\ref{fig:Fig 2.2}.
+
+The hypergiant category encompasses the largest and most luminous stars found in the universe, with that being said these are the most rare type of stars. these type of stars can be seen in the topmost part in figure \ref{fig:Fig 2.2}.
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
@@ -641,7 +651,7 @@ for i in range(len(r_experimental)):
 \section{Task 3}
 
 \subsection{Introduction and Theoretical Background}
-cause why the fuck not
+In certain cases an exponential fit is required in order to fit the trendline to the data given, one such example was tackled in this task, as it was required to obtain a trendline to the exponential decay of radioactive substances. Hoever, this hlights the fact that the initial guesses that are given to the function must be ideal in order to obtain the ideal trendline.
 
 \subsection{Materials and Methods}
 

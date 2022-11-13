@@ -2,5 +2,8 @@
     "python.analysis.typeCheckingMode": "basic",
     "cSpell.ignoreWords": [
         "xlist"
+    ],
+    "cSpell.words": [
+        "hypergiant"
     ]
 }
