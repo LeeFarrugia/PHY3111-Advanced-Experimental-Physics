@@ -1,0 +1,197 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}Task 2}
+
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{operator}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.preprocessing} \PYG{k+kn}{import} \PYG{n}{PolynomialFeatures} \PYG{k}{as} \PYG{n}{pf}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.linear\PYGZus{}model} \PYG{k+kn}{import} \PYG{n}{LinearRegression}
+\PYG{k+kn}{from} \PYG{n+nn}{sklearn.metrics} \PYG{k+kn}{import} \PYG{n}{mean\PYGZus{}squared\PYGZus{}error}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.optimize} \PYG{k+kn}{import} \PYG{n}{curve\PYGZus{}fit}
+\PYG{k+kn}{from} \PYG{n+nn}{math} \PYG{k+kn}{import} \PYG{n}{pi}
+
+\PYG{c+c1}{\PYGZsh{} creating empty list}
+\PYG{n}{A\PYGZus{}list}\PYG{o}{=}\PYG{p}{[]}
+
+\PYG{c+c1}{\PYGZsh{} importing the data to be analysed}
+\PYG{n}{data} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Q2a\PYGZus{}\PYGZus{}HR\PYGZus{}Diagram.csv\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} grouping the data given by star type}
+\PYG{n}{data}\PYG{o}{.}\PYG{n}{groupby}\PYG{p}{([}\PYG{l+s+s1}{\PYGZsq{}Star type\PYGZsq{}}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} setting parameters for plotting}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} plotting scatter plot for the data given}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{((}\PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Temperature/K\PYGZsq{}}\PYG{p}{]),} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Luminosity(L/Lo)\PYGZsq{}}\PYG{p}{],} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}L/Lo\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}T/K\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}A graph of Luminosity vs Temperature\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2Plot1.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} setting parameters for plotting}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{} plotting log of the data}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Temperature/K\PYGZsq{}}\PYG{p}{]),}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Luminosity(L/Lo)\PYGZsq{}}\PYG{p}{]),} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}log\PYGZob{}L/Lo\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}log\PYGZob{}T/K\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of \PYGZdl{}\PYGZbs{}log}\PYG{l+s+si}{\PYGZob{}Luminosity\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{} vs \PYGZdl{}\PYGZbs{}log}\PYG{l+s+si}{\PYGZob{}Temperature\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2Plot2.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} setting parameters for plotting}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} dropping the unwanted values}
+\PYG{n}{value\PYGZus{}3} \PYG{o}{=} \PYG{n}{data}\PYG{o}{.}\PYG{n}{mask}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Star type\PYGZsq{}}\PYG{p}{]}\PYG{o}{!=}\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{()}\PYG{o}{.}\PYG{n}{reset\PYGZus{}index}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{value\PYGZus{}3}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Temperature/K\PYGZsq{}}\PYG{p}{]),}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{value\PYGZus{}3}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Luminosity(L/Lo)\PYGZsq{}}\PYG{p}{]),} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}log\PYGZob{}L/Lo\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}log\PYGZob{}T/K\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of \PYGZdl{}\PYGZbs{}log\PYGZob{}\PYGZbs{}mathrm}\PYG{l+s+si}{\PYGZob{}Luminosity\PYGZcb{}}\PYG{l+s+s1}{\PYGZcb{}\PYGZdl{}}
+\PYG{n}{vs} \PYG{err}{\PYGZdl{}}\PYGZbs{}\PYG{n}{log}\PYG{p}{\PYGZob{}}\PYGZbs{}\PYG{n}{mathrm}\PYG{p}{\PYGZob{}}\PYG{n}{Temperature}\PYG{p}{\PYGZcb{}\PYGZcb{}}\PYG{err}{\PYGZdl{}} \PYG{k}{for} \PYG{n}{star} \PYG{n+nb}{type} \PYG{l+m+mi}{3}\PYG{l+s+s1}{\PYGZsq{})}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2Plot3.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} listing a number of the tried degree values}
+\PYG{n}{degrees} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{30}\PYG{p}{,} \PYG{l+m+mi}{25}\PYG{p}{,} \PYG{l+m+mi}{15}\PYG{p}{,} \PYG{l+m+mi}{16}\PYG{p}{,} \PYG{l+m+mi}{17}\PYG{p}{])}
+\PYG{c+c1}{\PYGZsh{} creating a loop to test each degree until the}
+\PYG{c+c1}{\PYGZsh{} smallest rmse is obtained and plotting each test}
+
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{degrees}\PYG{p}{:}
+    \PYG{c+c1}{\PYGZsh{} obtaining the log of the wanted data}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{value\PYGZus{}3}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Luminosity(L/Lo)\PYGZsq{}}\PYG{p}{])}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{value\PYGZus{}3}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Temperature/K\PYGZsq{}}\PYG{p}{])}
+
+    \PYG{c+c1}{\PYGZsh{} reshaping the array}
+    \PYG{n}{x\PYGZus{}a} \PYG{o}{=} \PYG{n}{x}\PYG{o}{.}\PYG{n}{array}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} type: ignore}
+    \PYG{n}{poly} \PYG{o}{=} \PYG{n}{pf}\PYG{p}{(}\PYG{n}{degree}\PYG{o}{=}\PYG{n}{i}\PYG{p}{)}
+    \PYG{n}{poly\PYGZus{}Lumen}\PYG{o}{=}\PYG{n}{poly}\PYG{o}{.}\PYG{n}{fit\PYGZus{}transform}\PYG{p}{(}\PYG{n}{x\PYGZus{}a}\PYG{p}{)}
+
+    \PYG{n}{model} \PYG{o}{=} \PYG{n}{LinearRegression}\PYG{p}{()}
+    \PYG{n}{model}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{poly\PYGZus{}Lumen}\PYG{p}{,} \PYG{n}{y}\PYG{p}{)}
+    \PYG{n}{y\PYGZus{}pred} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{poly\PYGZus{}Lumen}\PYG{p}{)}
+
+    \PYG{n}{rmse} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{mean\PYGZus{}squared\PYGZus{}error}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred}\PYG{p}{))}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The root mean square is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{rmse}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{,}
+    \PYG{k}{with} \PYG{n}{the} \PYG{n}{degree} \PYG{n}{of} \PYG{n}{freedom} \PYG{o+ow}{is}\PYG{p}{:} \PYG{p}{\PYGZob{}}\PYG{n}{i}\PYG{p}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{})}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{sort\PYGZus{}axis} \PYG{o}{=} \PYG{n}{operator}\PYG{o}{.}\PYG{n}{itemgetter}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{n}{sorted\PYGZus{}zip} \PYG{o}{=} \PYG{n+nb}{sorted}\PYG{p}{(}\PYG{n+nb}{zip}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred}\PYG{p}{),} \PYG{n}{key}\PYG{o}{=}\PYG{n}{sort\PYGZus{}axis}\PYG{p}{)}
+    \PYG{n}{x}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred} \PYG{o}{=} \PYG{n+nb}{zip}\PYG{p}{(}\PYG{o}{*}\PYG{n}{sorted\PYGZus{}zip}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y\PYGZus{}pred}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}log\PYGZob{}T/K\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{} Predicted Luminosity\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}A graph of Temperature vs Luminosity with degree }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{i}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}2Plot4\PYGZus{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{i}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} importing the filtered data to be analysed}
+\PYG{n}{data2} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Q2b\PYGZus{}\PYGZus{}stars.csv\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} defining each variable}
+\PYG{n}{T} \PYG{o}{=} \PYG{n}{data2}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Temperature/K\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{L} \PYG{o}{=} \PYG{p}{(}\PYG{n}{data2}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Luminosity(L/Lo)\PYGZsq{}}\PYG{p}{])}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mf}{3.846e26}\PYG{p}{)}
+\PYG{n}{R} \PYG{o}{=} \PYG{n}{data2}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Radius(R/Ro)\PYGZsq{}}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} creating a loop to obtain A}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{R}\PYG{p}{)):}
+    \PYG{n}{a} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*} \PYG{n}{pi} \PYG{o}{*}\PYG{p}{((}\PYG{n}{R}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{*}\PYG{l+m+mf}{6.957e8}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{n}{A\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{a}\PYG{p}{)}
+
+\PYG{n}{A} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{A\PYGZus{}list}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the L/A}
+\PYG{n}{L\PYGZus{}A} \PYG{o}{=} \PYG{n}{L}\PYG{o}{/}\PYG{n}{A}
+
+\PYG{c+c1}{\PYGZsh{} defining a function to fit to}
+\PYG{k}{def} \PYG{n+nf}{fit\PYGZus{}func}\PYG{p}{(}\PYG{n}{T}\PYG{p}{,} \PYG{n}{sigma}\PYG{p}{):}
+    \PYG{k}{return} \PYG{n}{sigma} \PYG{o}{*} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{power}\PYG{p}{(}\PYG{n}{T}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} creating a linspace to obtain a smoother curve}
+\PYG{n}{T\PYGZus{}lin} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{n}{T}\PYG{o}{.}\PYG{n}{min}\PYG{p}{(),} \PYG{n}{T}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(),} \PYG{l+m+mi}{1000}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} using curve fit to obtain the best fitting curve}
+\PYG{n}{popt}\PYG{p}{,} \PYG{n}{pcov} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{fit\PYGZus{}func}\PYG{p}{,} \PYG{n}{T}\PYG{p}{,} \PYG{n}{L\PYGZus{}A}\PYG{p}{)}
+\PYG{n}{fit\PYGZus{}line} \PYG{o}{=} \PYG{n}{fit\PYGZus{}func}\PYG{p}{(}\PYG{n}{T\PYGZus{}lin}\PYG{p}{,} \PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} plotting the graph}
+\PYG{n}{f} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of \PYGZdl{}\PYGZbs{}frac\PYGZob{}\PYGZbs{}mathrm}\PYG{l+s+si}{\PYGZob{}L\PYGZcb{}}\PYG{l+s+s1}{\PYGZcb{}\PYGZob{}\PYGZbs{}mathrm}\PYG{l+s+si}{\PYGZob{}A\PYGZcb{}}\PYG{l+s+s1}{\PYGZcb{}\PYGZdl{} against T\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{T}\PYG{p}{,} \PYG{n}{L\PYGZus{}A}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{T\PYGZus{}lin}\PYG{p}{,} \PYG{n}{fit\PYGZus{}line}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}T/K\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}frac\PYGZob{}\PYGZbs{}mathrm}\PYG{l+s+si}{\PYGZob{}L\PYGZcb{}}\PYG{l+s+s1}{\PYGZcb{}\PYGZob{}\PYGZbs{}mathrm}\PYG{l+s+si}{\PYGZob{}A\PYGZcb{}}\PYG{l+s+s1}{\PYGZcb{}\PYGZdl{} /Wm\PYGZdl{}\PYGZca{}\PYGZob{}\PYGZhy{}2\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}2Plot5.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} theoretical boltzmann constant}
+\PYG{n}{sigma\PYGZus{}theoretical} \PYG{o}{=} \PYG{l+m+mf}{5.6696e\PYGZhy{}8}
+
+\PYG{n}{boltz\PYGZus{}accu} \PYG{o}{=} \PYG{p}{((}\PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{/}\PYG{n}{sigma\PYGZus{}theoretical}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{100}
+
+\PYG{c+c1}{\PYGZsh{} displaying the boltzamnn constant}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The Boltzmann constant is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{,}
+\PYG{k}{with} \PYG{n}{a} \PYG{n}{precision} \PYG{n}{of} \PYG{p}{\PYGZob{}}\PYG{n}{boltz\PYGZus{}accu}\PYG{p}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{})}
+
+\PYG{c+c1}{\PYGZsh{} importing the third set of data}
+\PYG{n}{table\PYGZus{}2\PYGZus{}data} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Q2c\PYGZus{}\PYGZus{}Table\PYGZus{}2\PYGZus{}Data.xlsx\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{L\PYGZus{}data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{table\PYGZus{}2\PYGZus{}data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}L/L0\PYGZsq{}}\PYG{p}{])}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mf}{3.846e26}\PYG{p}{)}
+\PYG{n}{T\PYGZus{}data} \PYG{o}{=} \PYG{n}{table\PYGZus{}2\PYGZus{}data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}T/K\PYGZsq{}}\PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{} calculating the theoretical radii}
+\PYG{n}{r\PYGZus{}theoretical} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{((}\PYG{n}{L\PYGZus{}data}\PYG{p}{)}\PYG{o}{/}\PYG{p}{((}\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{pi}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{sigma\PYGZus{}theoretical}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{T\PYGZus{}data}\PYG{o}{**}\PYG{l+m+mi}{4}\PYG{p}{)))}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}Theoretical stellar radius: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{r\PYGZus{}theoretical}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the experimental radii}
+\PYG{n}{r\PYGZus{}experimental} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{((}\PYG{n}{L\PYGZus{}data}\PYG{p}{)}\PYG{o}{/}\PYG{p}{((}\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{pi}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{*}\PYG{p}{(}\PYG{n}{T\PYGZus{}data}\PYG{o}{**}\PYG{l+m+mi}{4}\PYG{p}{)))}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}Experimental stellar radius: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{r\PYGZus{}experimental}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{r\PYGZus{}experimental}\PYG{p}{)):}
+    \PYG{n}{r\PYGZus{}accuracy} \PYG{o}{=} \PYG{n+nb}{abs}\PYG{p}{((}\PYG{n}{r\PYGZus{}experimental}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{/}\PYG{n}{r\PYGZus{}theoretical}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{100}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{r\PYGZus{}accuracy}\PYG{p}{)}
+
+\end{Verbatim}

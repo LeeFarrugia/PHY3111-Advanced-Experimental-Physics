@@ -275,11 +275,11 @@ Sometimes the relationship between the output variable and the predictor variabl
 \end{equation}
 we now have the equation in the polynomial form of:
 \begin{equation}
-    Y = \theta_0 + \theta_1 x^1 + \theta_2 x^2 + \theta_3 x^3 + \cdots + \theta_n x^n .
+    Y = \theta_0 + \theta_1 x^1+ \theta_2 x^2 + \theta_3 x^3 + \cdots + \theta_n x^n .
 \end{equation}
 \(n\) in this case is the degree of the polynomial which when increases will increase the polynomial complexity but in certain cases this higher value is needed to fit accordingly.
 
-In this task, we are asked to find the polynomial regression fit to the Hertzsprung-Russell Diagram. This plots the temperature of the starts in question against their luminosity, which allows us to characterise the individual stars and track how they evolve.
+In this task, we are asked to find the polynomial regression fit to the Hertzsprung-Russell Diagram. This plots the temperature of the starts in question against their luminosity, which allows us to characterise the individual stars and track how they evolve \parencite{muncaster}.
 
 \subsection{Materials and Methods}
 \subsubsection{Languages and Packages}
@@ -343,7 +343,7 @@ Python 3.10.8, Pandas, Numpy, Matplolib.pyplot, Scipy, sklearn.
     Beltelgeuse (min) & 3600 & 90000 & 5.38 \(\times\) 10\(^{11}\) & 5.28 \(\times\) 10\(^{11}\) & 1.87\%\\ \hline
     Beltelgeuse (max) & 3600 & 150000 & 2.20 \(\times\) 10\(^{11}\) & 2.15 \(\times\) 10\(^{11}\) & 1.87\%\\ \hline
     Arcturus & 4286 & 170 & 1.65 \(\times\) 10\(^{10}\) & 1.62 \(\times\) 10\(^{10}\) & 1.85\%\\ \hline
-    TRAPPIST-1  & 2566 & 0.000553 & 8.30 \(\times\) 10\(^{7}\) & 8.14 \(\times\) 10\(^{7}\) & 1.87\%\\ \hline
+    TRAPPIST-1.000000 & 2566 & 0.000553 & 8.30 \(\times\) 10\(^{7}\) & 8.14 \(\times\) 10\(^{7}\) & 1.87\%\\ \hline
     \(\alpha\) Centauri A  & 5790 & 1.519 & 8.54 \(\times\) 10\(^{8}\) & 8.38 \(\times\) 10\(^{8}\) & 1.87\%\\ \hline
     \(\alpha\) Centauri B  & 5260 & 0.5002 & 5.94 \(\times\) 10\(^{8}\) & 5.83 \(\times\) 10\(^{8}\) & 1.87\%\\ \hline
     Proxima Centauri & 3042 & 0.0017 & 1.04 \(\times\) 10\(^{8}\) & 1.02 \(\times\) 10\(^{8}\) & 1.87\%\\ \hline
@@ -359,15 +359,15 @@ After obtaining the data for the main sequence of the stars, the fit was obtaine
 \end{equation}
 which was then run through the program with the input data in order to obtain \(\sigma\), that is the Boltzmann constant, which was found to be \(5.89 \times 10^{-8}\). This values was then used to calculate the radii of specific stars which the data for the temperature and luminosity data was provided.
 
-A brown dwarf is a stellar object that due to its size cannot allow the hydrogen fusion like that of the main sequence stars, however these types of stars still are able to fuse deuterium and lithium. These factors give an indication why these types of stars have such a low surface temperature and are not very bright at the visible wavelengths. These types of stars can be seen in the lower region in figure \ref{fig:Fig 2.2}.
+A brown dwarf is a stellar object that due to its size cannot allow the hydrogen fusion like that of the main sequence stars, however these types of stars still are able to fuse deuterium and lithium. These factors give an indication why these types of stars have such a low surface temperature and are not very bright at the visible wavelengths \parencite{jaschek1990classification}. These types of stars can be seen in the lower region in figure \ref{fig:Fig 2.2}.
 
-A white dwarf tends to be a remnant of the main sequence stars that are no able to generate the high temperature required to fuse helium, carbon or neon into the next stages. There is no fusion occurring within a white dwarf. As the star no longer produces its own energy it will lose its temperature over time as it radiates its energy. These types of stars can be seen in the lower region in figure~\ref{fig:Fig 2.2}.
+A white dwarf tends to be a remnant of the main sequence stars that are no able to generate the high temperature required to fuse helium, carbon or neon into the next stages. There is no fusion occurring within a white dwarf. As the star no longer produces its own energy it will lose its temperature over time as it radiates its energy \parencite{hoyle1955evolution}. These types of stars can be seen in the lower region in figure~\ref{fig:Fig 2.2}.
 
-The main sequence stars are a group of stars that the Sun is a part of. These stars have a high enough temperature and size in order to fuse hydrogen into helium. Furthermore, about \(90\%\) of the stars in the universe are part of this group of stellar objects. These types of stars can be seen in the continuos region in figure~\ref{fig:Fig 2.2}. This sequence is further separated into different sections as can be clearly seen in figure~\ref{fig:Fig 2.3} where with higher temperature they have a higher luminosity.
+The main sequence stars are a group of stars that the Sun is a part of. These stars have a high enough temperature and size in order to fuse hydrogen into helium. Furthermore, about \(90\%\) of the stars in the universe are part of this group of stellar objects \parencite{jaschek1990classification}. These types of stars can be seen in the continuos region in figure~\ref{fig:Fig 2.2}. This sequence is further separated into different sections as can be clearly seen in figure~\ref{fig:Fig 2.3} where with higher temperature they have a higher luminosity.
 
-The supergiant category of stars refers to the stars that are very large in size. They can also be defined as part of the evolution of stars. One can consider when a main sequence star start to fuse helium rather than hydrogen and the core changes into an iron core, their atmosphere inflates and thus become supergiants. These types of starts can be seen in the top band in figure~\ref{fig:Fig 2.2}.
+The supergiant category of stars refers to the stars that are very large in size. They can also be defined as part of the evolution of stars. One can consider when a main sequence star start to fuse helium rather than hydrogen and the core changes into an iron core, their atmosphere inflates and thus become supergiants \parencite{jaschek1990classification}. These types of starts can be seen in the top band in figure~\ref{fig:Fig 2.2}.
 
-The hypergiant category encompasses the largest and most luminous stars found in the universe, with that being said these are the most rare type of stars. these type of stars can be seen in the topmost part in figure \ref{fig:Fig 2.2}.
+The hypergiant category encompasses the largest and most luminous stars found in the universe, with that being said these are the most rare type of stars \parencite{jaschek1990classification}. These type of stars can be seen in the topmost part in figure \ref{fig:Fig 2.2}.
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
@@ -508,7 +508,8 @@ plt.grid(visible=True, which='minor', linestyle='--')
 
 
 # plotting log of the data
-plt.scatter(np.log(data['Temperature/K']), np.log(data['Luminosity(L/Lo)']), color='k')
+plt.scatter(np.log(data['Temperature/K']), 
+np.log(data['Luminosity(L/Lo)']), color='k')
 plt.ylabel(r'$\log{L/Lo}$')
 plt.xlabel(r'$\log{T/K}$')
 plt.title(r'A graph of $\log{Luminosity}$ vs $\log{Temperature}$')
@@ -527,7 +528,8 @@ plt.grid(visible=True, which='minor', linestyle='--')
 
 # dropping the unwanted values
 value_3 = data.mask(data['Star type']!=3).dropna().reset_index()
-plt.scatter(np.log(value_3['Temperature/K']), np.log(value_3['Luminosity(L/Lo)']), color='k')
+plt.scatter(np.log(value_3['Temperature/K']), 
+np.log(value_3['Luminosity(L/Lo)']), color='k')
 plt.ylabel(r'$\log{L/Lo}$')
 plt.xlabel(r'$\log{T/K}$')
 plt.title(r'A graph of $\log{\mathrm{Luminosity}}$ vs $\log{\mathrm{Temperature}}$ for star type 3')
@@ -536,7 +538,8 @@ plt.close()
 
 # listing a number of the tried degree values
 degrees = np.array([2, 10, 20, 30, 25, 15, 16, 17])
-# creating a loop to test each degree until the smallest rmse is obtained and plotting each test
+# creating a loop to test each degree until the
+# smallest rmse is obtained and plotting each test
 
 for i in degrees:
     # obtaining the log of the wanted data
@@ -553,7 +556,8 @@ for i in degrees:
     y_pred = model.predict(poly_Lumen)
 
     rmse = np.sqrt(mean_squared_error(y, y_pred))
-    print(f'The root mean square is: {rmse}, with the degree of freedom is: {i}')
+    print(f'The root mean square is: {rmse}, 
+    with the degree of freedom is: {i}')
 
     plt.figure(figsize=(7.5, 10.5))
     plt.rcParams['font.family'] = 'STIXGeneral'
@@ -626,7 +630,8 @@ sigma_theoretical = 5.6696e-8
 boltz_accu = ((popt[0]/sigma_theoretical)-1)*100
 
 # displaying the boltzamnn constant
-print(f'The Boltzmann constant is: {popt[0]:.2E}, with a precision of {boltz_accu}')
+print(f'The Boltzmann constant is: {popt[0]:.2E}, 
+with a precision of {boltz_accu}')
 
 # importing the third set of data
 table_2_data = pd.read_excel('Q2c__Table_2_Data.xlsx')
@@ -648,30 +653,65 @@ for i in range(len(r_experimental)):
 
 \end{minted}
 
-\section{Task 3}
+\section{Task 3 - Exponential Curve Fitting}
 
 \subsection{Introduction and Theoretical Background}
-In certain cases an exponential fit is required in order to fit the trendline to the data given, one such example was tackled in this task, as it was required to obtain a trendline to the exponential decay of radioactive substances. Hoever, this hlights the fact that the initial guesses that are given to the function must be ideal in order to obtain the ideal trendline.
+In certain cases an exponential fit is required in order to fit the trendline to the data given, one such example was tackled in this task, as it was required to obtain a trendline to the exponential decay of radioactive substances. Hoever, this highlights the fact that the initial guesses that are given to the function must be ideal in order to obtain the ideal trendline.
 
 \subsection{Materials and Methods}
+\subsubsection{Languages and Packages}
+Python 3.10.8, Pandas, Numpy, Mathplotlib.pyplot, Seaborn, Scipy, Sklearn. 
+
+\subsubsection{Methodology}
+\begin{enumerate}
+    \item The data for Calcium was selected, this was when the atomic number, Z was equal to 20. The exponential regression line was fitted to this data and the half-life was obtained.
+    \item The same procedure was repeated for all the unstable isotopes in the dataset. 
+    \item A list for the proton number, neutron number and half-lives was created and this was plotted using the seaborn heatmap function. a striaght line was plotted accordingly to show the valley of stability by plotting a line for when Z=N.
+\end{enumerate}
+
+\subsection{Results}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+    t\(_{\frac{1}{2}\mathrm{ exponential}}\)/\(\times 10^{-8}\)s & 3.54 \\ \hline
+    t\(_{\frac{1}{2}\mathrm{ lineral}}\)/\(\times 10^{-8}\)s & 3.54 \\ \hline
+    \end{tabular}
+    \caption{Table of Calcium Half-life}
+    \label{tab: Table 3.1}
+\end{table}
+
+\subsection{Discussion}
+In this task it was required to find the half life of many istopes of different elements. One of the cases was for calclium-14. This was don by first selecting the data for when Z=20 and applying a \mintinline{py}{curve_fit} on the data using the follwoing equation:
+\begin{equation}
+    \frac{A}{A_0} = \exp\left(-\frac{t\ln2}{t_\frac{1}{2}}\right) ,
+\end{equation}
+the resultant fit can be seen in the top half of figure \ref{fig:Fig 3.2}. In addition to this the straight line fit of the data was plotted in order to compare both ways to find the half-life. In the case of the logarithmic case the equation then becomes:
+\begin{equation}
+    \log{A} = A_0-\frac{\ln2}{t_{\frac{1}{2}}}t ,
+\end{equation}
+the result of this linear equation can be seen in the lower part of the figure \ref{fig:Fig 3.2}. One can see from the results show in the table \ref{tab: Table 3.1} that both methods result in the same value for the half-life. The \mintinline{py}{curve_fit} method was then used on all of the data given, which resulted in a list of half-lives. This list was then appened with the corresponding Z number and N number in order to obtain the final table of all values to be used for later plotting. These results were then passed thorugh the code in order to obtain the heat map that can be seen in figure \ref{fig:Fig 3.3}. One should note that the central white dots are the stable isotopes in the valley of stability \parencite{macintosh2001m} and that the black straight line going through the plot is the line of Z=N. It should also be noted that the valley of stability does not follow a proportional increase after Z=20 \parencite{boutin2002climbing}. This is as isotopes with more than 20 protons require more than 20 neutrons in order to be stable.
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{3Plot1.png}
     \caption{A graph of \(\log{A}\) vs \(\log{T}\)}
+    \label{fig:Fig 3.1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{3Plot2.png}
     \caption{A graph of \(\frac{A}{A_0}\) vs T and subplot of \(\log{A}\) vs \(\log{T}\)}
+    \label{fig:Fig 3.2}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{3Plot3.png}
     \caption{A heat map of the Z vs N with the stability line}
+    \label{fig:Fig 3.3}
 \end{figure}
 
 \subsection{Appendix}
@@ -710,9 +750,13 @@ a_values = data['A']
 index_array = np.arange(0, len(a_values)+20, 20)
 
 # finding the ean values of A for each isotope, 20 values each
-mean_a = [np.mean(a_values.iloc[index_array[i]:index_array[i+1]]) for i in range(len(index_array)-1)]
+mean_a = [np.mean(a_values.iloc[index_array[i]
+:index_array[i+1]]) for i in 
+range(len(index_array)-1)]
 
-# finding which values of the mean are lower than 95 to account for the noise of the values and storing their index
+# finding which values of the mean are lower than 95
+# to account for the noise of the values and storing
+# their index
 for i in range(len(mean_a)):
     if mean_a[i] < 95:
         index_list.append(i)
@@ -723,7 +767,8 @@ for i in range(len(index_list)):
     slice_list.append((index_list[i]+1)*20)
 
 # keeping only the data for the unstable isotopes
-data_sliced = [data.iloc[slice_list[even_a[i]]:slice_list[odd_a[i]]] for i in range(len(even_a)-1)]
+data_sliced = [data.iloc[slice_list[even_a[i]]:slice_list[odd_a[i]]] 
+for i in range(len(even_a)-1)]
 
 # removing any empty values
 data_sliced = list(filter(lambda df: not df.empty, data_sliced))
@@ -745,8 +790,12 @@ a_uvalues = df['A']
 t_values = df['t/s']
 
 # finding the mean for A and t for each isotope
-mean_ua = [np.mean(a_uvalues.iloc[index_array[i]:index_array[i+1]]) for i in range(len(index_array)-1)]
-mean_t = [np.mean(t_values.iloc[index_array[i]:index_array[i+1]]) for i in range(len(index_array)-1)]
+mean_ua = [np.mean(a_uvalues.iloc[index_array[i]
+:index_array[i+1]]) for i in 
+range(len(index_array)-1)]
+mean_t = [np.mean(t_values.iloc[index_array[i]
+:index_array[i+1]]) for i in 
+range(len(index_array)-1)]
 
 # edfinign the plotting parameters
 plt.figure(figsize=(7.5, 10.5))
@@ -792,7 +841,8 @@ coeffs, cov = np.polyfit(calcium_t, calcium_log_a, 1, cov=True)
 polyfunc = np.poly1d(coeffs)
 trendline = polyfunc(calcium_t)
 
-print(f'The half life of calcium-14 is from the srtaight line graph: {-np.log(2)/coeffs[0]:.2E}s')
+print(f'The half life of calcium-14 is from the
+straight line graph: {-np.log(2)/coeffs[0]:.2E}s')
 
 # defining the subplots
 f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, figsize=(7.3, 10.7))
@@ -851,7 +901,9 @@ for i in range(len(selection_array)-1):
 plotting_data = list(zip(z_list, n_list, half_life_list))
 
 # creating a data frame for Z, N, Half life
-results_df = pd.DataFrame({'Z':z_list, 'N': n_list, 'Half Life/s': half_life_list})
+results_df = pd.DataFrame({'Z':z_list, 'N': n_list,
+'Half Life/s': half_life_list})
+results_df.to_excel('Table.xlsx')
 plot_data = results_df.pivot(index='Z', columns='N',
 values='Half Life/s')
 
@@ -885,24 +937,90 @@ plt.plot(z_n['N'], z_n['Z'], color='k')
 plt.savefig('3Plot3.png', dpi=800)
 \end{minted}
 
-\section{Task 4}
+\section{Task 4 - Periodic Curve Fitting}
 
 \subsection{Introduction and Theoretical Background}
-cause why the fuck not
+In some cases niether of the linear, curve or exponential regression would fit the trendline accordingly to the data, as the data has a clear periodic property. One of such cases is the data of the orbit of moons around a planet. In this case the orbital data for the 4 innermost moons of Jupiter was considered. 
+
+As this task deals with orbital data, one should consider the 3 Kepler Laws. Kepler's first law states that \textit{``the orbit of a planet is elliptical and that the Sun is positioned at one focus''} \parencite{muncaster}. The second law states that \textit{``a line joining the planet to the Sun sweeps out equal areas in equal time
+intervals''} \parencite{muncaster}. Furthermore, the third law states that \textit{``the orbital period of a planet squared is proportional to the semi-major axis
+cubed''} \parencite{muncaster}. Additionally one must consider that if a moon with mass \textit{m} is orbiting a planet with mass \textit{M}, the centripital force is equal to the gravitational force \parencite{muncaster}. If one uses this consideration in conjuction with Kepler's third law the following equation is obtained:
+\begin{equation}
+    T^2 = \frac{4\pi^2r^3}{\mathrm{GM}}
+    \label{eq: equation 4.1}
+\end{equation}
 
 \subsection{Materials and Methods}
+\subsubsection{Languages and Packages}
+Python 3.10.8, Pandas, Numpy, Matplotlib.pyplot, Scipy.
+
+\subsubsection{Methodology}
+\begin{enumerate}
+    \item The data for the first moon Io was first plotted in order to get an idea of how the position moves periodically about the 0 point. From this behaviour it was noted that the parameters to be used should be the maximum amplitude and the wavelength.
+    \item The function taking the two parameters was used for all the moon data in order to obtain all the periodic times and semi-major axis. These values were converted from jupiter diameters and julian data into meteres and seconds respectively.
+    \item The previous values were then used to obtain the mass of jupiter by linear regression of equation~\ref{eq: equation 4.1}. 
+    \item These values were then used in conjuction with the gravitaional foces of jupiter on each moon to determine the mass of each moon.
+\end{enumerate}
+
+\subsection{Results}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    Moon Name & Semi Major axis/m & T/s & m/kg & m\(_{accuracy}\) \\ \hline
+    Io & 4.2\(\times10^8\) & 151200.02 & 8.71\(\times10^{22}\) & 2.50\% \\ \hline
+    Europa & 6.6\(\times10^8\) & 307583.91 & 4.81\(\times10^{22}\) & 0.26\% \\ \hline
+    Ganymede & 1.1\(\times10^9\) & 617760.01 & 1.44\(\times10^{23}\) & 2.99\% \\ \hline
+    Callisto & 1.9\(\times10^9\) & 1425599.87 & 1.06\(\times10^{23}\) & 1.39\% \\ \hline
+    \end{tabular}
+    \caption{Table of Jupiter Moon Information}
+    \label{tab: Table 4.1}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+    M\(_{jupiter}\) & 1.92\(\times10^{27}\) \textpm 6.77\(\times10^{24}\)kg \\ \hline
+    M\(_{percision}\) & 1.12\% \\ \hline
+    \end{tabular}
+    \caption{Table of Jupiter Information}
+    \label{tab: Table 4.2}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+    F\(_{g io}\) & 6.35 \(\times 10^{22}\) \\ \hline
+    F\(_{g europa}\) & 1.40 \(\times 10^{22}\) \\ \hline
+    F\(_{g ganymede}\) & 1.63 \(\times 10^{22}\) \\ \hline
+    F\(_{g callisto}\) & 3.87 \(\times 10^{21}\) \\ \hline
+    \end{tabular}
+    \caption{Table of Garivationa forces on the moons}
+    \label{tab: Table 4.3}
+\end{table}
+
+\subsection{Discussion}
+In order to obtain the periodic time of the orbit of each moon, the \mintinline{py}{curve_fit} was given two paraments. The first parament ws the amplitude of each orbit which was simply done by finding the maximum value of each moon, the second parameter was the wavelength or time to reach the same place in the orbit, this was done with a bit of trial and imporvement method. The semi-major axis of each planet was then converted to meters by simply multiplying each value by the jupiter diameter and the conversion from julian date to s was simply by multiplying by \(86400\). The mass of jupiter was then found by inputting the relevant values into equation \ref{eq: equation 4.1} and treating the \(\frac{4\pi^2}{GM}\) as the gradient for the straight line that can be seen in figure \ref{fig:Fig 4.2}. The mass was then found by simply making M the subject of the formula in the aformentioned equation when equatl to the gradient. The actual mass of jupiter and the actual mass of each of the moon were used witht h the actual radius in order to calculcate the gravitational force of jupiter on the moon using the following equation:
+\begin{equation}
+    F_g = \frac{GM_Jm_{moon}}{r^2} .
+\end{equation}
+The graviatiational forces were then used in conjuction with the experimental value of the mass of jupiter and the radius of the orbit in order to calculate the individual masses of the moon \parencite{muncaster}. 
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{4Plot1.png}
     \caption{A graph of all moon offset vs julian date waves}
+    \label{fig:Fig 4.1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{4Plot2.png}
     \caption{A graph of \(r^3\) vs \(T^2\)}
+    \label{fig:Fig 4.2}
 \end{figure}
 
 \subsection{Appendix}
@@ -1102,5 +1220,8 @@ callisto_precision = abs(((m_callisto/real_callisto_mass)-1)*100)
 # displaying the values obtained
 print(f'The mass of Io is: {m_io:.2E}kg with a precision of {io_precision:.2f}%. The mass of Europa is: {m_europa:.2E}kg with a precision of {europa_precision:.2f}%. The mass of Ganymede is: {m_ganymede:.2E}kg with a precision of {ganymede_precision:.2f}%. The mass of callisto is: {m_callisto:.2E}kg with a precision of {callisto_precision:.2f}%.')
 \end{minted}
+
+\section{References}
+\printbibliography[heading = none]
 
 \end{document}

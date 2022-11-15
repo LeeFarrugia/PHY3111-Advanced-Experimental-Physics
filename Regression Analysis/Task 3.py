@@ -174,6 +174,7 @@ plotting_data = list(zip(z_list, n_list, half_life_list))
 
 # creating a data frame for Z, N, Half life
 results_df = pd.DataFrame({'Z':z_list, 'N': n_list, 'Half Life/s': half_life_list})
+results_df.to_excel('Table.xlsx')
 plot_data = results_df.pivot(index='Z', columns='N',
 values='Half Life/s')
 
