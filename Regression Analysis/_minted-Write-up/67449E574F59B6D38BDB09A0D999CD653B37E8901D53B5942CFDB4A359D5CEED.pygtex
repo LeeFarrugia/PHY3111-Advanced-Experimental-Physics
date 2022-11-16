@@ -1,0 +1,135 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Task 1}
+
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+
+\PYG{c+c1}{\PYGZsh{} creating the empty lists to be used}
+\PYG{n}{xlist} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{ylist} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{prodlist} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{denomlist} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{ydenomlist} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{yelist} \PYG{o}{=} \PYG{p}{[]}
+
+\PYG{c+c1}{\PYGZsh{} reading the data}
+\PYG{n}{data} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}csv}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Q1\PYGZus{}\PYGZus{}Youngs\PYGZus{}Modulus\PYGZus{}of\PYGZus{}a\PYGZus{}Wire.csv\PYGZsq{}}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} changing the individual columns into arrays}
+\PYG{n}{diameter\PYGZus{}array} \PYG{o}{=} \PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Diameter/m\PYGZsq{}}\PYG{p}{])}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{mass\PYGZus{}array} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}m/kg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{x1\PYGZus{}array} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}1/m\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{x2\PYGZus{}array} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}2/m\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{x3\PYGZus{}array} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}3/m\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{x4\PYGZus{}array} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}4/m\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{L\PYGZus{}array} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}L/m\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{x0\PYGZus{}array} \PYG{o}{=} \PYG{n}{data}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}x\PYGZus{}0/m\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} finding the x\PYGZhy{}x0 part of the equation}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x1\PYGZus{}array}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{([}\PYG{n}{x1\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{x2\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{x3\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{x4\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]])}
+    \PYG{n}{X} \PYG{o}{=} \PYG{p}{(}\PYG{n}{x}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{n}{x0\PYGZus{}array}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{n}{xlist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{X}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} calculating xi and xbar}
+\PYG{n}{xi} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{xlist}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{xbar} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating yi and y bar}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{mass\PYGZus{}array}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{n}{yi} \PYG{o}{=} \PYG{n}{mass\PYGZus{}array}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{/}\PYG{n}{xlist}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+    \PYG{n}{ylist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{yi}\PYG{p}{)}
+
+\PYG{n}{yi} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{ylist}\PYG{p}{)}
+\PYG{n}{ybar} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{yi}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} defining the function to calculate alpha, beta, coefficient of correlation and determination}
+\PYG{k}{def} \PYG{n+nf}{beta\PYGZus{}alpha\PYGZus{}function}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{,} \PYG{n}{xbar}\PYG{p}{,} \PYG{n}{yi}\PYG{p}{,} \PYG{n}{ybar}\PYG{p}{):}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{)):}
+        \PYG{n}{prod} \PYG{o}{=} \PYG{p}{(}\PYG{n}{xi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{xbar}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{yi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{ybar}\PYG{p}{)}
+        \PYG{n}{prodlist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{prod}\PYG{p}{)}
+        \PYG{n}{xdenom} \PYG{o}{=} \PYG{p}{(}\PYG{n}{xi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{xbar}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+        \PYG{n}{denomlist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{xdenom}\PYG{p}{)}
+        \PYG{n}{ydenom} \PYG{o}{=} \PYG{p}{(}\PYG{n}{yi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{ybar}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+        \PYG{n}{ydenomlist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{ydenom}\PYG{p}{)}
+    \PYG{n}{prod\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{prodlist}\PYG{p}{)}
+    \PYG{n}{denom\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{denomlist}\PYG{p}{)}
+    \PYG{n}{ydenom\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{ydenomlist}\PYG{p}{)}
+    \PYG{n}{numerator} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{prod\PYGZus{}array}\PYG{p}{)}
+    \PYG{n}{denominator} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{denom\PYGZus{}array}\PYG{p}{)}
+    \PYG{n}{ydenominator} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{ydenom\PYGZus{}array}\PYG{p}{)}
+    \PYG{n}{beta} \PYG{o}{=} \PYG{n}{numerator}\PYG{o}{/}\PYG{n}{denominator}
+    \PYG{n}{alpha} \PYG{o}{=} \PYG{n}{ybar} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{beta}\PYG{o}{*}\PYG{n}{xbar}\PYG{p}{)}
+    \PYG{n}{r} \PYG{o}{=} \PYG{n}{numerator}\PYG{o}{/}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{denominator}\PYG{o}{*}\PYG{n}{ydenominator}\PYG{p}{))}
+    \PYG{n}{delta\PYGZus{}beta} \PYG{o}{=} \PYG{p}{(}\PYG{n}{beta}\PYG{o}{/}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{p}{)))}\PYG{o}{*}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{n}{delta\PYGZus{}alpha} \PYG{o}{=} \PYG{n}{delta\PYGZus{}beta}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(((}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{xi}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))))}
+    \PYG{n}{R} \PYG{o}{=} \PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2}
+    \PYG{k}{return} \PYG{n}{beta}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{,} \PYG{n}{delta\PYGZus{}beta}\PYG{p}{,} \PYG{n}{delta\PYGZus{}alpha}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{R}
+
+\PYG{c+c1}{\PYGZsh{} calling previous function to get the actual values}
+\PYG{n}{beta}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{,} \PYG{n}{delta\PYGZus{}beta}\PYG{p}{,} \PYG{n}{delta\PYGZus{}alpha}\PYG{p}{,} \PYG{n}{r}\PYG{p}{,} \PYG{n}{R} \PYG{o}{=} \PYG{n}{beta\PYGZus{}alpha\PYGZus{}function}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{,} \PYG{n}{xbar}\PYG{p}{,} \PYG{n}{yi}\PYG{p}{,} \PYG{n}{ybar}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the experimental values}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{)):}
+    \PYG{n}{ye} \PYG{o}{=} \PYG{n}{alpha} \PYG{o}{+} \PYG{p}{(}\PYG{n}{beta}\PYG{o}{*}\PYG{n}{xi}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+    \PYG{n}{yelist}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{ye}\PYG{p}{)}
+\PYG{n}{ye\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{yelist}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the constants for the gradient and intercept}
+\PYG{n}{radius} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{average}\PYG{p}{(}\PYG{n}{diameter\PYGZus{}array}\PYG{p}{)}
+\PYG{n}{m\PYGZus{}constant} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{8}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{radius}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}\PYG{o}{/}\PYG{p}{(}\PYG{l+m+mf}{9.81}\PYG{o}{*}\PYG{p}{(}\PYG{n}{L\PYGZus{}array}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{))}
+\PYG{n}{c\PYGZus{}constant} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{/}\PYG{p}{(}\PYG{n}{L\PYGZus{}array}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{*}\PYG{l+m+mf}{9.81}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} finding the line of best fit to the data}
+\PYG{n}{coeffs}\PYG{p}{,} \PYG{n}{cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{polyfit}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{,} \PYG{n}{ye\PYGZus{}array}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{cov}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{polyfunc} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{poly1d}\PYG{p}{(}\PYG{n}{coeffs}\PYG{p}{)}
+\PYG{n}{trendline} \PYG{o}{=} \PYG{n}{polyfunc}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the young\PYGZsq{}s modulus and T0}
+\PYG{n}{E} \PYG{o}{=} \PYG{n}{coeffs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{/}\PYG{n}{m\PYGZus{}constant}
+\PYG{n}{T0} \PYG{o}{=} \PYG{n}{coeffs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{/}\PYG{n}{c\PYGZus{}constant}
+\PYG{n}{grad\PYGZus{}error} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{cov}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{])}
+\PYG{n}{inter\PYGZus{}error} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{cov}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{])}
+
+\PYG{n}{g} \PYG{o}{=} \PYG{l+m+mf}{9.81}
+
+\PYG{n}{delta\PYGZus{}E} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(((((}\PYG{n}{g}\PYG{o}{*}\PYG{p}{(}\PYG{n}{L\PYGZus{}array}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{))} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{8}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)))} \PYG{o}{*} \PYG{p}{(}\PYG{n}{grad\PYGZus{}error}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{+} \PYG{p}{((((}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{p}{(}\PYG{n}{L\PYGZus{}array}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{*} \PYG{n}{coeffs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{*}\PYG{n}{g}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{8}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)))} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mf}{0.001}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{+} \PYG{p}{((((}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{coeffs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{*} \PYG{n}{g} \PYG{o}{*} \PYG{p}{(}\PYG{n}{L\PYGZus{}array}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{))} \PYG{o}{/} \PYG{p}{(}\PYG{l+m+mi}{8}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{)))}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mf}{1e\PYGZhy{}4}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{delta\PYGZus{}T0} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(((((}\PYG{n}{L\PYGZus{}array}\PYG{o}{*}\PYG{n}{g}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{n}{inter\PYGZus{}error}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{+} \PYG{p}{((((}\PYG{n}{coeffs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{*}\PYG{n}{g}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mf}{0.001}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The value of E is : }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{, with an error of: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{delta\PYGZus{}E}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{. The value of T0: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{T0}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{, with and error of }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{delta\PYGZus{}T0}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the residuals}
+\PYG{n}{residual} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{yi}\PYG{p}{,}\PYG{n}{trendline}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{residual}\PYG{p}{)}
+
+\PYG{n}{f}\PYG{p}{,} \PYG{p}{(}\PYG{n}{a0}\PYG{p}{,} \PYG{n}{a1}\PYG{p}{)} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{subplots}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{sharex}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{sharey}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{,} \PYG{n}{gridspec\PYGZus{}kw}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}height\PYGZus{}ratios\PYGZsq{}}\PYG{p}{:} \PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]\PYGZcb{},} \PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.3}\PYG{p}{,} \PYG{l+m+mf}{10.7}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} defining the font to be used}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+
+\PYG{c+c1}{\PYGZsh{} plotting both graph as subplots}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{,} \PYG{n}{yi}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Data Points\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{,} \PYG{n}{trendline}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Trendline\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Strain\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Stress\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a0}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}A graph of Stress vs Strain\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{xi}\PYG{p}{,} \PYG{n}{residual}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Residuals\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Strain\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{a1}\PYG{o}{.}\PYG{n}{set\PYGZus{}title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}A graph of Residuals vs Strain\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}1Plot1.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\end{Verbatim}

@@ -120,7 +120,7 @@ def beta_alpha_function(xi, xbar, yi, ybar):
 \end{minted}
 The values for \(\alpha\) and \(\beta\) were then used to plot the fit for the data given and obtain the Young's Modulus of the wire and its initial tension. The fit resulted in a straight line were the Young's Modulus was the gradient and the initial tension was the y-intercept. This can be further seen from the obtain figure~\ref{fig:Fig 1.1}. Furthermore, the residuals of the the points to the fit were also calculated using by finding the difference of the original data point and the fitted data points and these were plotted underneath the original straight line plot. 
 
-\subsection{Figures and Graphs}
+\subsubsection{Figures and Graphs}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \textwidth]{1Plot1.png}
@@ -174,9 +174,7 @@ for i in range(len(mass_array)-1):
 yi = np.array(ylist)
 ybar = np.mean(yi)
 
-# defining the function to calculate alpha, 
-# beta, coefficient of correlation and 
-# determination
+# defining the function to calculate alpha, beta, coefficient of correlation and determination
 def beta_alpha_function(xi, xbar, yi, ybar):
     for i in range(len(xi)):
         prod = (xi[i]-xbar)*(yi[i]-ybar)
@@ -200,8 +198,7 @@ def beta_alpha_function(xi, xbar, yi, ybar):
     return beta, alpha, delta_beta, delta_alpha, r, R
 
 # calling previous function to get the actual values
-beta, alpha, delta_beta, delta_alpha, r, R 
-= beta_alpha_function(xi, xbar, yi, ybar)
+beta, alpha, delta_beta, delta_alpha, r, R = beta_alpha_function(xi, xbar, yi, ybar)
 
 # calculating the experimental values 
 for i in range(len(xi)):
@@ -222,19 +219,22 @@ trendline = polyfunc(xi)
 # calculating the young's modulus and T0
 E = coeffs[0]/m_constant
 T0 = coeffs[1]/c_constant
-delta_E = np.sqrt(cov[0][0])
-delta_T0 = np.sqrt(cov[1][1])
-print(f'the value of E is : {E}, 
-with an error of: {delta_E}. 
-The value of T0: {T0}, with 
-and error of {delta_T0}')
+grad_error = np.sqrt(cov[0][0])
+inter_error = np.sqrt(cov[1][1])
+
+g = 9.81
+
+delta_E = np.sqrt(((((g*(L_array**3)) / (8*np.pi*(r**2))) * (grad_error))**2) + ((((3*(L_array**2) * coeffs[0]*g) / (8*np.pi*(r**2))) * (0.001))**2) + ((((-2*coeffs[0] * g * (L_array**3)) / (8*np.pi*(r**3)))*(1e-4))**2))
+delta_T0 = np.sqrt(((((L_array*g)/4) * (inter_error))**2) + ((((coeffs[1]*g)/4) * (0.001))**2))
+
+print(f'The value of E is : {E}, with an error of: {delta_E}. The value of T0: {T0}, with and error of {delta_T0}')
 
 # calculating the residuals
 residual = np.subtract(yi,trendline)
 
-f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, 
-gridspec_kw={'height_ratios': [3, 1]}, 
-figsize=(7.3, 10.7))
+print(residual)
+
+f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, gridspec_kw={'height_ratios': [3, 1]}, figsize=(7.3, 10.7))
 
 # defining the font to be used
 plt.rcParams['font.family'] = 'STIXGeneral'
@@ -457,7 +457,7 @@ Write to
 
 \subsection{Appendix}
 \begin{minted}{py}
-#Task 2
+# Task 2
 
 import numpy as np
 import pandas as pd
@@ -508,8 +508,7 @@ plt.grid(visible=True, which='minor', linestyle='--')
 
 
 # plotting log of the data
-plt.scatter(np.log(data['Temperature/K']), 
-np.log(data['Luminosity(L/Lo)']), color='k')
+plt.scatter(np.log(data['Temperature/K']), np.log(data['Luminosity(L/Lo)']), color='k')
 plt.ylabel(r'$\log{L/Lo}$')
 plt.xlabel(r'$\log{T/K}$')
 plt.title(r'A graph of $\log{Luminosity}$ vs $\log{Temperature}$')
@@ -528,8 +527,7 @@ plt.grid(visible=True, which='minor', linestyle='--')
 
 # dropping the unwanted values
 value_3 = data.mask(data['Star type']!=3).dropna().reset_index()
-plt.scatter(np.log(value_3['Temperature/K']), 
-np.log(value_3['Luminosity(L/Lo)']), color='k')
+plt.scatter(np.log(value_3['Temperature/K']), np.log(value_3['Luminosity(L/Lo)']), color='k')
 plt.ylabel(r'$\log{L/Lo}$')
 plt.xlabel(r'$\log{T/K}$')
 plt.title(r'A graph of $\log{\mathrm{Luminosity}}$ vs $\log{\mathrm{Temperature}}$ for star type 3')
@@ -538,8 +536,7 @@ plt.close()
 
 # listing a number of the tried degree values
 degrees = np.array([2, 10, 20, 30, 25, 15, 16, 17])
-# creating a loop to test each degree until the
-# smallest rmse is obtained and plotting each test
+# creating a loop to test each degree until the smallest rmse is obtained and plotting each test
 
 for i in degrees:
     # obtaining the log of the wanted data
@@ -556,8 +553,7 @@ for i in degrees:
     y_pred = model.predict(poly_Lumen)
 
     rmse = np.sqrt(mean_squared_error(y, y_pred))
-    print(f'The root mean square is: {rmse}, 
-    with the degree of freedom is: {i}')
+    print(f'The root mean square is: {rmse}, with the degree of freedom is: {i}')
 
     plt.figure(figsize=(7.5, 10.5))
     plt.rcParams['font.family'] = 'STIXGeneral'
@@ -576,7 +572,7 @@ for i in degrees:
     plt.xlabel(r'$\log{T/K}$')
     plt.ylabel(r' Predicted Luminosity')
     plt.title(f'A graph of Temperature vs Luminosity with degree {i}')
-    plt.savefig(f'2Plot4_{i}.png', dpi=800)
+    #plt.savefig(f'2Plot4_{i}.png', dpi=800)
     plt.close()
 
 # importing the filtered data to be analysed
@@ -630,8 +626,7 @@ sigma_theoretical = 5.6696e-8
 boltz_accu = ((popt[0]/sigma_theoretical)-1)*100
 
 # displaying the boltzamnn constant
-print(f'The Boltzmann constant is: {popt[0]:.2E}, 
-with a precision of {boltz_accu}')
+print(f'The Boltzmann constant is: {popt[0]:.2E}, with a precision of {boltz_accu}')
 
 # importing the third set of data
 table_2_data = pd.read_excel('Q2c__Table_2_Data.xlsx')
@@ -717,7 +712,7 @@ the result of this linear equation can be seen in the lower part of the figure \
 
 \subsection{Appendix}
 \begin{minted}{py}
-#Task 3
+# Task 3
 
 from matplotlib.colors import LogNorm
 import numpy as np
@@ -751,13 +746,9 @@ a_values = data['A']
 index_array = np.arange(0, len(a_values)+20, 20)
 
 # finding the ean values of A for each isotope, 20 values each
-mean_a = [np.mean(a_values.iloc[index_array[i]
-:index_array[i+1]]) for i in 
-range(len(index_array)-1)]
+mean_a = [np.mean(a_values.iloc[index_array[i]:index_array[i+1]]) for i in range(len(index_array)-1)]
 
-# finding which values of the mean are lower than 95
-# to account for the noise of the values and storing
-# their index
+# finding which values of the mean are lower than 95 to account for the noise of the values and storing their index
 for i in range(len(mean_a)):
     if mean_a[i] < 95:
         index_list.append(i)
@@ -768,8 +759,7 @@ for i in range(len(index_list)):
     slice_list.append((index_list[i]+1)*20)
 
 # keeping only the data for the unstable isotopes
-data_sliced = [data.iloc[slice_list[even_a[i]]:slice_list[odd_a[i]]] 
-for i in range(len(even_a)-1)]
+data_sliced = [data.iloc[slice_list[even_a[i]]:slice_list[odd_a[i]]] for i in range(len(even_a)-1)]
 
 # removing any empty values
 data_sliced = list(filter(lambda df: not df.empty, data_sliced))
@@ -791,12 +781,8 @@ a_uvalues = df['A']
 t_values = df['t/s']
 
 # finding the mean for A and t for each isotope
-mean_ua = [np.mean(a_uvalues.iloc[index_array[i]
-:index_array[i+1]]) for i in 
-range(len(index_array)-1)]
-mean_t = [np.mean(t_values.iloc[index_array[i]
-:index_array[i+1]]) for i in 
-range(len(index_array)-1)]
+mean_ua = [np.mean(a_uvalues.iloc[index_array[i]:index_array[i+1]]) for i in range(len(index_array)-1)]
+mean_t = [np.mean(t_values.iloc[index_array[i]:index_array[i+1]]) for i in range(len(index_array)-1)]
 
 # edfinign the plotting parameters
 plt.figure(figsize=(7.5, 10.5))
@@ -842,8 +828,7 @@ coeffs, cov = np.polyfit(calcium_t, calcium_log_a, 1, cov=True)
 polyfunc = np.poly1d(coeffs)
 trendline = polyfunc(calcium_t)
 
-print(f'The half life of calcium-14 is from the
-straight line graph: {-np.log(2)/coeffs[0]:.2E}s')
+print(f'The half life of calcium-14 is from the srtaight line graph: {-np.log(2)/coeffs[0]:.2E}s')
 
 # defining the subplots
 f, (a0, a1) = plt.subplots(2, 1, sharex=True, sharey=False, figsize=(7.3, 10.7))
@@ -902,8 +887,7 @@ for i in range(len(selection_array)-1):
 plotting_data = list(zip(z_list, n_list, half_life_list))
 
 # creating a data frame for Z, N, Half life
-results_df = pd.DataFrame({'Z':z_list, 'N': n_list,
-'Half Life/s': half_life_list})
+results_df = pd.DataFrame({'Z':z_list, 'N': n_list, 'Half Life/s': half_life_list})
 results_df.to_excel('Table.xlsx')
 plot_data = results_df.pivot(index='Z', columns='N',
 values='Half Life/s')
@@ -936,6 +920,7 @@ plt.plot(z_n['N'], z_n['Z'], color='k')
 
 # saving the figure
 plt.savefig('3Plot3.png', dpi=800)
+
 \end{minted}
 
 \section{Task 4 - Periodic Curve Fitting}
@@ -974,7 +959,7 @@ Python 3.10.8, Pandas, Numpy, Matplotlib.pyplot, Scipy.
     Ganymede & 1.1\(\times10^9\) & 617760.01 & 1.44\(\times10^{23}\) & 2.99\% \\ \hline
     Callisto & 1.9\(\times10^9\) & 1425599.87 & 1.06\(\times10^{23}\) & 1.39\% \\ \hline
     \end{tabular}
-    \caption{Table of Jupiter Moon Information}
+    \caption{Table of Jupiter's Moon Information}
     \label{tab: Table 4.1}
 \end{table}
 
@@ -998,7 +983,7 @@ Python 3.10.8, Pandas, Numpy, Matplotlib.pyplot, Scipy.
     F\(_{g ganymede}\) & 1.63 \(\times 10^{22}\) \\ \hline
     F\(_{g callisto}\) & 3.87 \(\times 10^{21}\) \\ \hline
     \end{tabular}
-    \caption{Table of Garivationa forces on the moons}
+    \caption{Table of Garivational forces on the moons}
     \label{tab: Table 4.3}
 \end{table}
 
@@ -1028,13 +1013,12 @@ The graviatiational forces were then used in conjuction with the experimental va
 
 \subsection{Appendix}
 \begin{minted}{py}
-#Task 4
+# Task 4
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-import seaborn as sns
 
 # importing the data 
 data = pd.read_csv('Q4__Galilean_Moon_Astrometric_Data.csv')
@@ -1062,29 +1046,23 @@ def wave_func(t, A, T):
     return A*np.sin(((2*np.pi)/T)*t)
 
 # determining the curve fit to the io data and obtaining the line data
-popt_io, pcov_io = curve_fit(wave_func, io_hjd, io_position, 
-p0=(max(io_position), 1.75))
+popt_io, pcov_io = curve_fit(wave_func, io_hjd, io_position, p0=(max(io_position), 1.75))
 fitted_io = wave_func(io_lin, popt_io[0], popt_io[1])
 
 # determining the curve fit to the europa data and obtaining the line data
-popt_europa, pcov_europa = curve_fit(wave_func, europa_hjd, europa_position, 
-p0=(max(europa_position),3.56))
+popt_europa, pcov_europa = curve_fit(wave_func, europa_hjd, europa_position, p0=(max(europa_position),3.56))
 fitted_europa = wave_func(europa_lin, popt_europa[0], popt_europa[1])
 
 # determining the curve fit to the ganymede data and obtaining the line data
-popt_ganymede, pcov_ganymede = curve_fit(wave_func, ganymede_hjd, ganymede_position, 
-p0=(max(ganymede_position), 7.15))
+popt_ganymede, pcov_ganymede = curve_fit(wave_func, ganymede_hjd, ganymede_position, p0=(max(ganymede_position), 7.15))
 fitted_ganymede = wave_func(ganymede_lin, popt_ganymede[0], popt_ganymede[1])
 
 # determining the curve fit to the callisto data and obtaining the line data
-popt_callisto, pcov_callisto = curve_fit(wave_func, callisto_hjd, callisto_position, 
-p0=(max(callisto_position), 16.5))
+popt_callisto, pcov_callisto = curve_fit(wave_func, callisto_hjd, callisto_position, p0=(max(callisto_position), 16.5))
 fitted_callisto = wave_func(callisto_lin, popt_callisto[0], popt_callisto[1])
 
-# defining the subplots to be plotted with their respective data,
-# size and variables
-f, (a0, a1, a2, a3) = plt.subplots(4, 1, sharex=False, 
-sharey=False, figsize=(7.3, 10.7))
+# defining the subplots to be plotted with their respective data, size and variables
+f, (a0, a1, a2, a3) = plt.subplots(4, 1, sharex=False, sharey=False, figsize=(7.3, 10.7))
 
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
@@ -1105,8 +1083,7 @@ a1.grid(visible=True, which='major', linestyle='-')
 a1.grid(visible=True, which='minor', linestyle='--')
 a1.set_xlabel('Julian Date')
 a1.set_ylabel('Offset in Jupiter Diameter')
-a1.scatter(europa_hjd, europa_position, 
-marker='s', color='k', label='Europa')
+a1.scatter(europa_hjd, europa_position, marker='s', color='k', label='Europa') # type:ignore
 a1.plot(europa_lin, fitted_europa, '--', color='k', label='Europa Fit')
 a1.legend()
 
@@ -1124,8 +1101,7 @@ a3.grid(visible=True, which='major', linestyle='-')
 a3.grid(visible=True, which='minor', linestyle='--')
 a3.set_xlabel('Julian Date')
 a3.set_ylabel('Offset in Jupiter Diameter')
-a3.scatter(callisto_hjd, callisto_position, marker='^', 
-color='k', label='Callisto')
+a3.scatter(callisto_hjd, callisto_position, marker='^', color='k', label='Callisto')  # type:ignore
 a3.plot(callisto_lin, fitted_callisto, '--', color='k', label='Callisto Fit')
 a3.legend()
 
@@ -1143,10 +1119,7 @@ ganymede_rad = abs(popt_ganymede[0])*138920000
 callisto_rad = abs(popt_callisto[0])*138920000
 
 # displaying the semi-major axis of each moon
-print(f'Io semi-major axis is: {io_rad:.2}m, 
-Europa semi-major axis is: {europa_rad:.2}m, 
-Ganymede semi-major axis is: {ganymede_rad:.2}m, 
-Callisto semi-major axis is: {callisto_rad:.2}m')
+print(f'Io semi-major axis is: {io_rad:.2}m, Europa semi-major axis is: {europa_rad:.2}m, Ganymede semi-major axis is: {ganymede_rad:.2}m, Callisto semi-major axis is: {callisto_rad:.2}m')
 
 # calculating the periodic time of each moon in seconds
 io_period = abs(popt_io[1])*86400
@@ -1155,10 +1128,7 @@ ganymede_period = abs(popt_ganymede[1])*86400
 callisto_period = abs(popt_callisto[1])*86400
 
 # displaying the periodic time for each moon
-print(f'Io period is: {io_period:.2f}s, 
-Europa period is: {europa_period:.2f}s, 
-Ganymede period is: {ganymede_period:.2f}s, 
-Callisto period is: {callisto_period:.2f}s')
+print(f'Io period is: {io_period:.2f}s, Europa period is: {europa_period:.2f}s, Ganymede period is: {ganymede_period:.2f}s, Callisto period is: {callisto_period:.2f}s')
 
 # defining arrays for radii and periods
 radius = np.array([io_rad, europa_rad, ganymede_rad, callisto_rad])
@@ -1202,9 +1172,7 @@ jupiter_mass = (4*(np.pi**2)*grad)/G
 delta_jupiter_mass = np.sqrt((((4*(np.pi**2))/G)*(grad_err))**2)
 jupiter_precision = abs(((jupiter_mass/jupiter_real_mass)-1)*100)
 # displaying the results
-print(f'The mass of jupiter is: {jupiter_mass:.2E}kg ± 
-{delta_jupiter_mass:.2E} an precision of 
-{jupiter_precision:.2f}%')
+print(f'The mass of jupiter is: {jupiter_mass:.2E}kg ± {delta_jupiter_mass:.2E} an precision of {jupiter_precision:.2f}%')
 
 # the semi-major axis squared
 r2_io = io_rad**2
@@ -1237,13 +1205,8 @@ ganymede_precision = abs(((m_ganymede/real_ganymede_mass)-1)*100)
 callisto_precision = abs(((m_callisto/real_callisto_mass)-1)*100)
 
 # displaying the values obtained
-print(f'The mass of Io is: {m_io:.2E}kg with a precision of 
-{io_precision:.2f}%. The mass of Europa is: 
-{m_europa:.2E}kg with a precision of {europa_precision:.2f}%. The mass of Ganymede 
-is: {m_ganymede:.2E}kg with a precision of
-{ganymede_precision:.2f}%. 
-The mass of callisto is: {m_callisto:.2E}kg 
-with a precision of {callisto_precision:.2f}%.')
+print(f'The mass of Io is: {m_io:.2E}kg with a precision of {io_precision:.2f}%. The mass of Europa is: {m_europa:.2E}kg with a precision of {europa_precision:.2f}%. The mass of Ganymede is: {m_ganymede:.2E}kg with a precision of {ganymede_precision:.2f}%. The mass of callisto is: {m_callisto:.2E}kg with a precision of {callisto_precision:.2f}%.')
+
 \end{minted}
 
 \section{References}
