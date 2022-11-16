@@ -15,7 +15,7 @@
 \section{Task 1 - Simple Linear Regression}
 
 \subsection{Introduction and Theoretical Background}
-The generic term ``Regression'' in the case of statistical methods is the attempt to fit a mode to the data in order to determine the relationship between the outcome and input data. Regression can be done using different methods, one of which, ordinary least squares, was used in this task.
+The generic term ``Regression'' in the case of statistical methods is the attempt to fit a model to the data in order to determine the relationship between the outcome and input data. Regression can be done using different methods, one of which, ordinary least squares, was used in this task.
 
 Specifically for this task the data for a Young's Modulus experiment was fitted with the use of the ordinary least squares regression in order to obtain the straight line graph. The ordinary least squares method was applied on the data by the use of python. The input data was obtained through an experiment of Young's Modulus, which was done by varying weights applied to a tinned copper wire and measuring the resultant depression of the contact point.
 
@@ -94,7 +94,7 @@ Residuals & -0.36 & -0.11 & 0.48 & 0.72 & -0.73 \\\hline
 \end{table}
 
 \subsection{Discussion}
-In order to calculate \(\alpha\) and \(\beta\), a function was created to match equation~\ref{equation 2}, additionally, the function was expanded to also calculate the correlation and determination coefficients. This can be seen in the following piece of code:
+In order to calculate \(\alpha\) and \(\beta\), a function was created to match equation~\ref{equation 2}. Additionally, the function was expanded to also calculate the correlation and determination coefficients. This can be seen in the following piece of code:
 \begin{minted}{py}
 def beta_alpha_function(xi, xbar, yi, ybar):
     for i in range(len(xi)):
@@ -118,7 +118,7 @@ def beta_alpha_function(xi, xbar, yi, ybar):
     R = r**2
     return beta, alpha, delta_beta, delta_alpha, r, R .
 \end{minted}
-The values for \(\alpha\) and \(\beta\) were then used to plot the fit for the data given and obtain the Young's Modulus of the wire and its initial Tension. The fit resulted in a straight line were the Young's Modulus was the gradient and the initial Tension was the y-intercept. This can be further seen from the obtain graph~\ref{fig:Fig 1.1}. Furthermore, the residuals of the the points to the fit were also calculated using by finding the difference of the original data point and the fitted data points and these were plotted underneath the original straight line plot. 
+The values for \(\alpha\) and \(\beta\) were then used to plot the fit for the data given and obtain the Young's Modulus of the wire and its initial tension. The fit resulted in a straight line were the Young's Modulus was the gradient and the initial tension was the y-intercept. This can be further seen from the obtain figure~\ref{fig:Fig 1.1}. Furthermore, the residuals of the the points to the fit were also calculated using by finding the difference of the original data point and the fitted data points and these were plotted underneath the original straight line plot. 
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
@@ -359,7 +359,7 @@ After obtaining the data for the main sequence of the stars, the fit was obtaine
 \end{equation}
 which was then run through the program with the input data in order to obtain \(\sigma\), that is the Boltzmann constant, which was found to be \(5.89 \times 10^{-8}\). This values was then used to calculate the radii of specific stars which the data for the temperature and luminosity data was provided.
 
-A brown dwarf is a stellar object that due to its size cannot allow the hydrogen fusion like that of the main sequence stars, however these types of stars still are able to fuse deuterium and lithium. These factors give an indication why these types of stars have such a low surface temperature and are not very bright at the visible wavelengths \parencite{jaschek1990classification}. These types of stars can be seen in the lower region in figure \ref{fig:Fig 2.2}.
+A brown dwarf is a stellar object that due to its size cannot allow hydrogen fusion like that of the main sequence stars, however these types of stars still are able to fuse deuterium and lithium. These factors give an indication why these types of stars have such a low surface temperature and are not very bright at the visible wavelengths \parencite{jaschek1990classification}. These types of stars can be seen in the lower region in figure~\ref{fig:Fig 2.2}.
 
 A white dwarf tends to be a remnant of the main sequence stars that are no able to generate the high temperature required to fuse helium, carbon or neon into the next stages. There is no fusion occurring within a white dwarf. As the star no longer produces its own energy it will lose its temperature over time as it radiates its energy \parencite{hoyle1955evolution}. These types of stars can be seen in the lower region in figure~\ref{fig:Fig 2.2}.
 
@@ -367,7 +367,7 @@ The main sequence stars are a group of stars that the Sun is a part of. These st
 
 The supergiant category of stars refers to the stars that are very large in size. They can also be defined as part of the evolution of stars. One can consider when a main sequence star start to fuse helium rather than hydrogen and the core changes into an iron core, their atmosphere inflates and thus become supergiants \parencite{jaschek1990classification}. These types of starts can be seen in the top band in figure~\ref{fig:Fig 2.2}.
 
-The hypergiant category encompasses the largest and most luminous stars found in the universe, with that being said these are the most rare type of stars \parencite{jaschek1990classification}. These type of stars can be seen in the topmost part in figure \ref{fig:Fig 2.2}.
+The hypergiant category encompasses the largest and most luminous stars found in the universe, with that being said these are the most rare type of stars \parencite{jaschek1990classification}. These type of stars can be seen in the topmost part in figure~\ref{fig:Fig 2.2}.
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
@@ -656,7 +656,7 @@ for i in range(len(r_experimental)):
 \section{Task 3 - Exponential Curve Fitting}
 
 \subsection{Introduction and Theoretical Background}
-In certain cases an exponential fit is required in order to fit the trendline to the data given, one such example was tackled in this task, as it was required to obtain a trendline to the exponential decay of radioactive substances. Hoever, this highlights the fact that the initial guesses that are given to the function must be ideal in order to obtain the ideal trendline.
+In certain cases an exponential fit is required in order to fit the trendline to the data given, one such example was tackled in this task. It was required to obtain a trendline to the exponential decay of radioactive substances. However, this highlights the fact that the initial guesses that are given to the function must be ideal in order to obtain the ideal trendline.
 
 \subsection{Materials and Methods}
 \subsubsection{Languages and Packages}
@@ -666,7 +666,7 @@ Python 3.10.8, Pandas, Numpy, Mathplotlib.pyplot, Seaborn, Scipy, Sklearn.
 \begin{enumerate}
     \item The data for Calcium was selected, this was when the atomic number, Z was equal to 20. The exponential regression line was fitted to this data and the half-life was obtained.
     \item The same procedure was repeated for all the unstable isotopes in the dataset. 
-    \item A list for the proton number, neutron number and half-lives was created and this was plotted using the seaborn heatmap function. a striaght line was plotted accordingly to show the valley of stability by plotting a line for when Z=N.
+    \item A list for the proton number, neutron number and half-lives was created and this was plotted using the seaborn heatmap function. A straight line was plotted accordingly to show the valley of stability by plotting a line for when Z=N.
 \end{enumerate}
 
 \subsection{Results}
@@ -682,15 +682,16 @@ Python 3.10.8, Pandas, Numpy, Mathplotlib.pyplot, Seaborn, Scipy, Sklearn.
 \end{table}
 
 \subsection{Discussion}
-In this task it was required to find the half life of many istopes of different elements. One of the cases was for calclium-14. This was don by first selecting the data for when Z=20 and applying a \mintinline{py}{curve_fit} on the data using the follwoing equation:
+In this task it was required to find the half life of many istopes of different elements. One of the cases was for calclium-14. This was don by first selecting the data for when Z=20 and applying a \mintinline{py}{curve_fit} on the data using the following equation:
 \begin{equation}
     \frac{A}{A_0} = \exp\left(-\frac{t\ln2}{t_\frac{1}{2}}\right) ,
 \end{equation}
-the resultant fit can be seen in the top half of figure \ref{fig:Fig 3.2}. In addition to this the straight line fit of the data was plotted in order to compare both ways to find the half-life. In the case of the logarithmic case the equation then becomes:
+the resultant fit can be seen in the top half of figure
+~\ref{fig:Fig 3.2}. In addition to this the straight line fit of the data was plotted in order to compare both ways to find the half-life. In the case of the logarithmic case the equation then becomes:
 \begin{equation}
     \log{A} = A_0-\frac{\ln2}{t_{\frac{1}{2}}}t ,
 \end{equation}
-the result of this linear equation can be seen in the lower part of the figure \ref{fig:Fig 3.2}. One can see from the results show in the table \ref{tab: Table 3.1} that both methods result in the same value for the half-life. The \mintinline{py}{curve_fit} method was then used on all of the data given, which resulted in a list of half-lives. This list was then appened with the corresponding Z number and N number in order to obtain the final table of all values to be used for later plotting. These results were then passed thorugh the code in order to obtain the heat map that can be seen in figure \ref{fig:Fig 3.3}. One should note that the central white dots are the stable isotopes in the valley of stability \parencite{macintosh2001m} and that the black straight line going through the plot is the line of Z=N. It should also be noted that the valley of stability does not follow a proportional increase after Z=20 \parencite{boutin2002climbing}. This is as isotopes with more than 20 protons require more than 20 neutrons in order to be stable.
+the result of this linear equation can be seen in the lower part of the figure \ref{fig:Fig 3.2}. One can see from the results show in the table \ref{tab: Table 3.1} that both methods result in the same value for the half-life. The \mintinline{py}{curve_fit} method was then used on all of the data given, which resulted in a list of half-lives. This list was then appened with the corresponding Z number and N number in order to obtain the final table of all values to be used for later plotting. These results were then passed thorugh the code in order to obtain the heat map that can be seen in figure \ref{fig:Fig 3.3}. One should note that the central white dots are the stable isotopes in the valley of stability \parencite{macintosh2001m} and that the black straight line going through the plot is the line of Z=N. It should also be noted that the valley of stability does not follow a proportional increase after Z=20 \parencite{boutin2002climbing}. This is as isotopes with more than 20 protons require more than 20 neutrons in order to be stable \parencite{macintosh2001m}.
 
 \subsection{Figures and Graphs}
 \begin{figure}[H]
@@ -940,11 +941,11 @@ plt.savefig('3Plot3.png', dpi=800)
 \section{Task 4 - Periodic Curve Fitting}
 
 \subsection{Introduction and Theoretical Background}
-In some cases niether of the linear, curve or exponential regression would fit the trendline accordingly to the data, as the data has a clear periodic property. One of such cases is the data of the orbit of moons around a planet. In this case the orbital data for the 4 innermost moons of Jupiter was considered. 
+In some cases neither of the linear, curve or exponential regression would fit the trendline according to the data, as the data would have a clear periodic property. One of such cases is the data of the orbit of moons around a planet. In this case the orbital data for the 4 innermost moons of Jupiter was considered. 
 
 As this task deals with orbital data, one should consider the 3 Kepler Laws. Kepler's first law states that \textit{``the orbit of a planet is elliptical and that the Sun is positioned at one focus''} \parencite{muncaster}. The second law states that \textit{``a line joining the planet to the Sun sweeps out equal areas in equal time
 intervals''} \parencite{muncaster}. Furthermore, the third law states that \textit{``the orbital period of a planet squared is proportional to the semi-major axis
-cubed''} \parencite{muncaster}. Additionally one must consider that if a moon with mass \textit{m} is orbiting a planet with mass \textit{M}, the centripital force is equal to the gravitational force \parencite{muncaster}. If one uses this consideration in conjuction with Kepler's third law the following equation is obtained:
+cubed''} \parencite{muncaster}. Additionally, one must consider that if a moon with mass \textit{m} is orbiting a planet with mass \textit{M}, the centripital force is equal to the gravitational force \parencite{muncaster}. If one uses this consideration in conjuction with Kepler's third law the following equation is obtained:
 \begin{equation}
     T^2 = \frac{4\pi^2r^3}{\mathrm{GM}}
     \label{eq: equation 4.1}
@@ -1002,9 +1003,9 @@ Python 3.10.8, Pandas, Numpy, Matplotlib.pyplot, Scipy.
 \end{table}
 
 \subsection{Discussion}
-In order to obtain the periodic time of the orbit of each moon, the \mintinline{py}{curve_fit} was given two paraments. The first parament ws the amplitude of each orbit which was simply done by finding the maximum value of each moon, the second parameter was the wavelength or time to reach the same place in the orbit, this was done with a bit of trial and imporvement method. The semi-major axis of each planet was then converted to meters by simply multiplying each value by the jupiter diameter and the conversion from julian date to s was simply by multiplying by \(86400\). The mass of jupiter was then found by inputting the relevant values into equation \ref{eq: equation 4.1} and treating the \(\frac{4\pi^2}{GM}\) as the gradient for the straight line that can be seen in figure \ref{fig:Fig 4.2}. The mass was then found by simply making M the subject of the formula in the aformentioned equation when equatl to the gradient. The actual mass of jupiter and the actual mass of each of the moon were used witht h the actual radius in order to calculcate the gravitational force of jupiter on the moon using the following equation:
+In order to obtain the periodic time of the orbit of each moon, the \mintinline{py}{curve_fit} was given two paraments. The first parament was the amplitude of each orbit which was simply done by finding the maximum value of each moon positional data, the second parameter was the wavelength or time to reach the same place in the orbit, this was done with a bit of trial and imporvement. The semi-major axis of each planet was then converted to meters by simply multiplying each value by the diameter of jupiter and the conversion from julian date to seconds was simply done by multiplying by \(86400\). The mass of jupiter was then found by inputting the relevant values into equation \ref{eq: equation 4.1} and treating the \(\frac{4\pi^2}{GM}\) as the gradient for the straight line that can be seen in figure \ref{fig:Fig 4.2}. The mass was then found by simply making M the subject of the formula in the aformentioned equation when it was equal to the gradient. The actual mass of jupiter and the actual mass of each of the moon were used with the actual radius in order to calculcate the gravitational force of jupiter on the moon using the following equation:
 \begin{equation}
-    F_g = \frac{GM_Jm_{moon}}{r^2} .
+    F_g = \frac{GM_J~m_{moon}}{r^2} .
 \end{equation}
 The graviatiational forces were then used in conjuction with the experimental value of the mass of jupiter and the radius of the orbit in order to calculate the individual masses of the moon \parencite{muncaster}. 
 
@@ -1022,6 +1023,8 @@ The graviatiational forces were then used in conjuction with the experimental va
     \caption{A graph of \(r^3\) vs \(T^2\)}
     \label{fig:Fig 4.2}
 \end{figure}
+
+\newpage
 
 \subsection{Appendix}
 \begin{minted}{py}
@@ -1059,23 +1062,29 @@ def wave_func(t, A, T):
     return A*np.sin(((2*np.pi)/T)*t)
 
 # determining the curve fit to the io data and obtaining the line data
-popt_io, pcov_io = curve_fit(wave_func, io_hjd, io_position, p0=(max(io_position), 1.75))
+popt_io, pcov_io = curve_fit(wave_func, io_hjd, io_position, 
+p0=(max(io_position), 1.75))
 fitted_io = wave_func(io_lin, popt_io[0], popt_io[1])
 
 # determining the curve fit to the europa data and obtaining the line data
-popt_europa, pcov_europa = curve_fit(wave_func, europa_hjd, europa_position, p0=(max(europa_position),3.56))
+popt_europa, pcov_europa = curve_fit(wave_func, europa_hjd, europa_position, 
+p0=(max(europa_position),3.56))
 fitted_europa = wave_func(europa_lin, popt_europa[0], popt_europa[1])
 
 # determining the curve fit to the ganymede data and obtaining the line data
-popt_ganymede, pcov_ganymede = curve_fit(wave_func, ganymede_hjd, ganymede_position, p0=(max(ganymede_position), 7.15))
+popt_ganymede, pcov_ganymede = curve_fit(wave_func, ganymede_hjd, ganymede_position, 
+p0=(max(ganymede_position), 7.15))
 fitted_ganymede = wave_func(ganymede_lin, popt_ganymede[0], popt_ganymede[1])
 
 # determining the curve fit to the callisto data and obtaining the line data
-popt_callisto, pcov_callisto = curve_fit(wave_func, callisto_hjd, callisto_position, p0=(max(callisto_position), 16.5))
+popt_callisto, pcov_callisto = curve_fit(wave_func, callisto_hjd, callisto_position, 
+p0=(max(callisto_position), 16.5))
 fitted_callisto = wave_func(callisto_lin, popt_callisto[0], popt_callisto[1])
 
-# defining the subplots to be plotted with their respective data, size and variables
-f, (a0, a1, a2, a3) = plt.subplots(4, 1, sharex=False, sharey=False, figsize=(7.3, 10.7))
+# defining the subplots to be plotted with their respective data,
+# size and variables
+f, (a0, a1, a2, a3) = plt.subplots(4, 1, sharex=False, 
+sharey=False, figsize=(7.3, 10.7))
 
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
@@ -1096,7 +1105,8 @@ a1.grid(visible=True, which='major', linestyle='-')
 a1.grid(visible=True, which='minor', linestyle='--')
 a1.set_xlabel('Julian Date')
 a1.set_ylabel('Offset in Jupiter Diameter')
-a1.scatter(europa_hjd, europa_position, marker='s', color='k', label='Europa') # type:ignore
+a1.scatter(europa_hjd, europa_position, 
+marker='s', color='k', label='Europa')
 a1.plot(europa_lin, fitted_europa, '--', color='k', label='Europa Fit')
 a1.legend()
 
@@ -1114,7 +1124,8 @@ a3.grid(visible=True, which='major', linestyle='-')
 a3.grid(visible=True, which='minor', linestyle='--')
 a3.set_xlabel('Julian Date')
 a3.set_ylabel('Offset in Jupiter Diameter')
-a3.scatter(callisto_hjd, callisto_position, marker='^', color='k', label='Callisto')  # type:ignore
+a3.scatter(callisto_hjd, callisto_position, marker='^', 
+color='k', label='Callisto')
 a3.plot(callisto_lin, fitted_callisto, '--', color='k', label='Callisto Fit')
 a3.legend()
 
@@ -1132,7 +1143,10 @@ ganymede_rad = abs(popt_ganymede[0])*138920000
 callisto_rad = abs(popt_callisto[0])*138920000
 
 # displaying the semi-major axis of each moon
-print(f'Io semi-major axis is: {io_rad:.2}m, Europa semi-major axis is: {europa_rad:.2}m, Ganymede semi-major axis is: {ganymede_rad:.2}m, Callisto semi-major axis is: {callisto_rad:.2}m')
+print(f'Io semi-major axis is: {io_rad:.2}m, 
+Europa semi-major axis is: {europa_rad:.2}m, 
+Ganymede semi-major axis is: {ganymede_rad:.2}m, 
+Callisto semi-major axis is: {callisto_rad:.2}m')
 
 # calculating the periodic time of each moon in seconds
 io_period = abs(popt_io[1])*86400
@@ -1141,7 +1155,10 @@ ganymede_period = abs(popt_ganymede[1])*86400
 callisto_period = abs(popt_callisto[1])*86400
 
 # displaying the periodic time for each moon
-print(f'Io period is: {io_period:.2f}s, Europa period is: {europa_period:.2f}s, Ganymede period is: {ganymede_period:.2f}s, Callisto period is: {callisto_period:.2f}s')
+print(f'Io period is: {io_period:.2f}s, 
+Europa period is: {europa_period:.2f}s, 
+Ganymede period is: {ganymede_period:.2f}s, 
+Callisto period is: {callisto_period:.2f}s')
 
 # defining arrays for radii and periods
 radius = np.array([io_rad, europa_rad, ganymede_rad, callisto_rad])
@@ -1185,7 +1202,9 @@ jupiter_mass = (4*(np.pi**2)*grad)/G
 delta_jupiter_mass = np.sqrt((((4*(np.pi**2))/G)*(grad_err))**2)
 jupiter_precision = abs(((jupiter_mass/jupiter_real_mass)-1)*100)
 # displaying the results
-print(f'The mass of jupiter is: {jupiter_mass:.2E}kg ± {delta_jupiter_mass:.2E} an precision of {jupiter_precision:.2f}%')
+print(f'The mass of jupiter is: {jupiter_mass:.2E}kg ± 
+{delta_jupiter_mass:.2E} an precision of 
+{jupiter_precision:.2f}%')
 
 # the semi-major axis squared
 r2_io = io_rad**2
@@ -1218,7 +1237,13 @@ ganymede_precision = abs(((m_ganymede/real_ganymede_mass)-1)*100)
 callisto_precision = abs(((m_callisto/real_callisto_mass)-1)*100)
 
 # displaying the values obtained
-print(f'The mass of Io is: {m_io:.2E}kg with a precision of {io_precision:.2f}%. The mass of Europa is: {m_europa:.2E}kg with a precision of {europa_precision:.2f}%. The mass of Ganymede is: {m_ganymede:.2E}kg with a precision of {ganymede_precision:.2f}%. The mass of callisto is: {m_callisto:.2E}kg with a precision of {callisto_precision:.2f}%.')
+print(f'The mass of Io is: {m_io:.2E}kg with a precision of 
+{io_precision:.2f}%. The mass of Europa is: 
+{m_europa:.2E}kg with a precision of {europa_precision:.2f}%. The mass of Ganymede 
+is: {m_ganymede:.2E}kg with a precision of
+{ganymede_precision:.2f}%. 
+The mass of callisto is: {m_callisto:.2E}kg 
+with a precision of {callisto_precision:.2f}%.')
 \end{minted}
 
 \section{References}
