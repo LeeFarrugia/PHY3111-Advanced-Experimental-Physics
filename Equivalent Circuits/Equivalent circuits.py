@@ -135,13 +135,11 @@ coefficients, cov = np.polyfit(frequency, e_NaCl_real, 5, cov=True)
 poly_function = np.poly1d(coefficients)
 trendline_g_n = poly_function(frequency)
 
-# accuracy calculations
+# value comparisons
 positions = (0, 74, 174, 200)
 for i in positions:
-    accuracy_methanol = abs(((methanol_real[i] / e_methanol_real[i]) - 1) * 100)
-    print(f'The accuracy of the data point {i+1}  of methanol is: {accuracy_methanol:.2f}%')
-    accuracy_NaCl = abs(((NaCl_real[i] / e_NaCl_real[i]) - 1) * 100)
-    print(f'The accuracy of the data point {i+1} of NaCl is : {accuracy_NaCl:2f}')
+    print(f'The calculated permittivity at data point {i+1} for methanol is:{methanol_complex[i]:.2f}, while the given value is: {e_methanol_c[i]:.2f}')
+    print(f'The calculated permittivity at data point {i+1} for NaCl is:{NaCl_complex[i]:.2f}, while the given value is: {e_NaCl_c[i]:.2f}')
 
 # plotting the data for methanol
 plt.figure(figsize=(7.5, 10.5))
@@ -159,9 +157,9 @@ plt.scatter(frequency, e_methanol_real, color='grey', label='Given')
 plt.plot(frequency, trendline_g_m, '--',  color = 'k', label = 'Given')
 plt.xlabel('f/Hz')
 plt.ylabel(r'$\mathrm{\epsilon_{methanol}}$')
-plt.title('Frequency vs Complex Permittivity of Methanol')
+plt.title('Complex Permittivity of Methanol vs Frequency')
 plt.legend()
-plt.savefig('Plot1.pdf', dpi=800)
+plt.savefig('Plot1.png', dpi=800)
 plt.show()
 plt.close()
 
@@ -181,7 +179,7 @@ plt.scatter(frequency, e_NaCl_real, color='grey', label='Given')
 plt.plot(frequency, trendline_g_n, '--',  color = 'k', label = 'Given')
 plt.xlabel('f/Hz')
 plt.ylabel(r'$\mathrm{\epsilon_{NaCl}}$')
-plt.title('Frequency vs Complex Permittivity of NaCl')
+plt.title('Complex Permittivity of NaCl vs Frequency')
 plt.legend()
-plt.savefig('Plot2.pdf', dpi=800)
+plt.savefig('Plot2.png', dpi=800)
 plt.show()
