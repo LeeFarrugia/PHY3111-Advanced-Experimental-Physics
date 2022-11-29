@@ -2795,10 +2795,12 @@
     <bcf:citekey order="2">stuchly1982equivalent</bcf:citekey>
     <bcf:citekey order="3">zajivcek2006evaluation</bcf:citekey>
     <bcf:citekey order="4">marsland1987dielectric</bcf:citekey>
-    <bcf:citekey order="5">liao2011accurate</bcf:citekey>
-    <bcf:citekey order="6">stuchly1982equivalent</bcf:citekey>
-    <bcf:citekey order="7">zajivcek2006evaluation</bcf:citekey>
-    <bcf:citekey order="8">marsland1987dielectric</bcf:citekey>
+    <bcf:citekey order="5">marsland1987dielectric</bcf:citekey>
+    <bcf:citekey order="6">marsland1987dielectric</bcf:citekey>
+    <bcf:citekey order="7">liao2011accurate</bcf:citekey>
+    <bcf:citekey order="8">stuchly1982equivalent</bcf:citekey>
+    <bcf:citekey order="9">zajivcek2006evaluation</bcf:citekey>
+    <bcf:citekey order="10">marsland1987dielectric</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">

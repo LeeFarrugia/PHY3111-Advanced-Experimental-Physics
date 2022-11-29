@@ -45,6 +45,36 @@ In~\cite{marsland1987dielectric} the error correction was described as follows:
 \end{itemize}
 However, as \textbf{E} is not necessary one can substitute the three known admittance values (of air, short and de-ionised water) along with their respective reflective-coefficient thus, cancelling out the \textbf{E} terms.
 
+As can be seen in~\cite{marsland1987dielectric} the admittance of the probe can be modelled in two ways:
+\begin{align}
+    y(\omega, \varepsilon_r) &= G_0 Z_0 \varepsilon_r^{\frac{5}{2}} + j \omega Z_0(\varepsilon_r C_0 + C_p) ,  \label{eq: admittance model 1} \\
+    y(\omega, \varepsilon_r) &= \omega Z_0(\varepsilon_r C_0 + C_f)\,, \label{eq: admittance model 2}
+\end{align}
+called the admittance model 1 and admittance model 2 respectively, where \(\omega\) is the angular frequency, \(\varepsilon_r\) is the relative permittivity of the material in which the probe is embedded/immersed in, \(G_0\) is the free-space radiation conductance, \(\varepsilon_r C_0\) is the capacitance which represents the fringing field in the external dielectric material, \(C_p\) is the capacitance which represents the fringing field in the Teflon dielectric of the cable, which usually is \(C_0 >> C_p\)\,. However, only the admittance model 1 is considered in~\cite{marsland1987dielectric}. Applying a simple linear transformation to equation~\ref{eq: admittance model 1}, we obtain:
+\begin{equation}
+    y^{\prime}(\omega, \varepsilon_r) = \left(\frac{1}{j \omega C_0 Z_0}\right)\, \cdot \,y(\omega , \varepsilon_r) - \left(\frac{C_f}{C_0}\right) , \label{eq: admittance model 1 transformed}
+\end{equation}
+and using equation~\ref{eq: admittance model 1}:
+\begin{equation}
+    y^{\prime}(\omega, \varepsilon_r) = \varepsilon_r + G_n \varepsilon_r^\frac{5}{2} , \label{eq: admittance model 1 substitution}
+\end{equation}
+where \(G_n = \frac{G_0}{j\omega C_0}\). This satisfies the linear transformation due to the cross-ratio invariance, which can be further expanded to:
+\begin{equation}
+    \frac{(\rho_m - \rho_1)(\rho_3 - \rho_1)}{(\rho_m - \rho_2)(\rho_1 - \rho_3)} = \frac{(y^{\prime}_m - y^{\prime}_1)(y^{\prime}_3 - y^{\prime}_2)}{(y^{\prime}_m - y^{\prime}_2)(y^{\prime}_1 - y^{\prime}_2)}\,. \label{eq: opening model 1 subs}
+\end{equation}
+Expanding equation~\ref{eq: opening model 1 subs} to its \(5^{\text{th}}\) order polynomial, we obtain:
+\begin{multline}
+    G_n \varepsilon_m^{\frac{5}{2}} + \varepsilon_m + \\\left[\frac{\Delta_{m1} \Delta_{32} y^{\prime}_3 y^{\prime}_2 + \Delta_{m2} \Delta_{13} y^{\prime}_1 y^{\prime}_3 + \Delta_{m3} \Delta_{21} y^{\prime}_2 y^{\prime}_1}{\Delta_{m1} \Delta{32} y^{\prime}_1 + \Delta_{m2} \Delta{12} y^{\prime}_2 + \Delta_{m3} \Delta{21} y^{\prime}_3}\right]\\ = 0\,. \label{eq: big substitution}
+\end{multline}
+By applying the short-circuit simplification and setting the termination 1 as a short circuit we obtain:
+\begin{multline}
+    G_n \varepsilon_m^{\frac{5}{2}} + \varepsilon_m + \left[\frac{\Delta_{m2}\Delta_{13}}{\Delta_{m1}\Delta_{32}} y^{\prime}_3 + \frac{\Delta_{m3}\Delta_{21}}{\Delta_{m1}\Delta_{32}} y^{\prime}_2\right] \\ = 0 \, \label{eq: simplification of big subsitution}
+\end{multline}
+as \(y^{\prime}_1 \rightarrow \infty\). By omitting the \(G_n\) in equation~\ref{eq: simplification of big subsitution} and in \(y^{\prime}(\omega, \varepsilon_r) = \varepsilon_r + G_n \varepsilon_r^{\frac{5}{2}}\) we obtain:
+\begin{equation}
+    \varepsilon_m = - \frac{\Delta_{m2}\Delta_{13}}{\Delta_{m1}\Delta_{32}} \varepsilon_3 - \frac{\Delta_{m3}\Delta_{21}}{\Delta_{m1}\Delta_{32}} \varepsilon_2 \,.
+\end{equation}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.45\textwidth]{Plot1.png}\caption{A graph of the complex permittivity at each frequency for Methanol}\label{fig: Methanol Graph}
@@ -54,6 +84,43 @@ However, as \textbf{E} is not necessary one can substitute the three known admit
     \centering
     \includegraphics[width = 0.45\textwidth]{Plot2.png}\caption{A graph of the complex permittivity at each frequency for Sodium Chloride}\label{fig: NaCl Graph}
 \end{figure}
+
+\begin{table}[H]
+    \centering
+    \resizebox{0.45\textwidth}{!}{%
+    \begin{tabular}{ccccc}
+    \hline
+    Frequency/Hz &
+      \(\varepsilon_{\mathrm{calculated}}\) &
+      \(\varepsilon_{\mathrm{given}}\) \\
+      \(\times 10^8\)& & \\ \hline \hline
+      5.00   & \(35.15+3.22j\)  & \(35.13-5.07j\)  \\
+      40.15  & \(25.31+6.19j\)  & \(17.81-13.83j\) \\
+      87.65  & \(20.85+0.76j\)  & \(10.17-8.99j\)  \\
+      100.00 & \(11.89+1.19j\)  & \(9.49-8.14j\)   \\
+      \hline
+    \end{tabular}%
+    }
+    \caption{A table of four different data points for methanol}\label{tab: Table 1}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \resizebox{0.45\textwidth}{!}{%
+    \begin{tabular}{ccc}
+    \hline
+    Frequency/Hz &
+      \(\varepsilon_{\mathrm{calculated}}\) &
+      \(\varepsilon_{\mathrm{given}}\) \\
+      \(\times 10^8\)& & \\ \hline \hline
+      5.00   & \(82.94+41.57j\) & \(86.41-48.50j\) \\
+      40.15  & \(80.60+4.30j\)  & \(82.00-21.69j\) \\
+      87.65  & \(80.93+1.69j\)  & \(71.63-32.25j\) \\
+      100.00 & \(81.91+2.70j\)  & \(68.40-34.31j\) \\ \hline
+    \end{tabular}%
+    }
+    \caption{A table of four different data points for NaCl}\label{tab: Table 2}
+\end{table}
 
 \end{multicols*}
 
@@ -202,8 +269,8 @@ trendline_g_n = poly_function(frequency)
 # value comparisons
 positions = (0, 74, 174, 200)
 for i in positions:
-    print(f'The calculated permittivity at data point {i+1} for methanol is:{methanol_complex[i]:.2f}, while the given value is: {e_methanol_c[i]:.2f}')
-    print(f'The calculated permittivity at data point {i+1} for NaCl is:{NaCl_complex[i]:.2f}, while the given value is: {e_NaCl_c[i]:.2f}')
+    print(f'The calculated permittivity at data point {i+1} for methanol is:{e_methanol[i]:.2f}, while the given value is: {e_methanol_c[i]:.2f}')
+    print(f'The calculated permittivity at data point {i+1} for NaCl is:{e_NaCl[i]:.2f}, while the given value is: {e_NaCl_c[i]:.2f}')
 
 # plotting the data for methanol
 plt.figure(figsize=(7.5, 10.5))

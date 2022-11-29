@@ -138,8 +138,8 @@ trendline_g_n = poly_function(frequency)
 # value comparisons
 positions = (0, 74, 174, 200)
 for i in positions:
-    print(f'The calculated permittivity at data point {i+1} for methanol is:{methanol_complex[i]:.2f}, while the given value is: {e_methanol_c[i]:.2f}')
-    print(f'The calculated permittivity at data point {i+1} for NaCl is:{NaCl_complex[i]:.2f}, while the given value is: {e_NaCl_c[i]:.2f}')
+    print(f'The calculated permittivity at data point {i+1} for methanol is:{e_methanol[i]:.2f}, while the given value is: {e_methanol_c[i]:.2f}')
+    print(f'The calculated permittivity at data point {i+1} for NaCl is:{e_NaCl[i]:.2f}, while the given value is: {e_NaCl_c[i]:.2f}')
 
 # plotting the data for methanol
 plt.figure(figsize=(7.5, 10.5))
