@@ -13,12 +13,10 @@
 \pagestyle{mystyle}
 
 \section{Abstract}
-yes
-
-\begin{multicols*}{2}
+The project is concerned with the data analysis on provided values for the given values of the reflection coefficient and transmission coefficient of an open-ended coaxial-line probe. This was done in order to obtain values for the complex permittivity of two unknown materials at varying frequencies, which turned out to ultimately be Methanol and 0.1\% Sodium Chloride (NaCl). The values that were calculated were compared to a given data set of complex permittivity for each material. This comparison was conducted in two ways, initially through the visual comparison of the trendline obtained for the two data sets, followed by the direct comparison of four random points from the whole data sets that were calculated and that were given. From the findings, the data for the NaCl should be retaken in order to confirm whether errors occurred when originally taking the readings or whether the data set for the given complex permittivity is incorrect.
 
 \section{Introduction \& Theoretical Background}
-The use of open-ended coaxial probes to measure the complex permittivity is used as it is a non invasive and non destructive to the materials being checked. However, those are not the only advantages this method has, but also due to the way it is utilised it allow for bandwidth measurement and easy sampling \parencite{liao2011accurate}. This method can be used to measure the microwave complex permittivity of dielectric materials including lossy dielectrics. As the relationship between the reflection and transmission is quite complex, the equivalent circuit method is used to simplify the relationship \parencite{stuchly1982equivalent}. This is quite useful when dealing with lossy dielectrics and biological tissues, as the biological tissues are not only made up from one type of material but, multiple types of tissues in one sample. Another example of the use of this method is explored in \cite{zajivcek2006evaluation}, where they discuss the relationship of the the complex permittivity and the transmission of healthy tissues and tumour tissues. They further discuss how this method could be used to image people with non-ionising radiation.
+The use of open-ended coaxial probes to measure the complex permittivity are used as they are non-invasive and non-destructive to the materials being checked. However, those are not the only advantages this method provides. This method can be utilised to allow for bandwidth measurement and easy sampling \parencite{liao2011accurate}. This method can be used to measure the microwave complex permittivity of dielectric materials including lossy dielectrics. As the relationship between the reflection coefficient and transmission coefficient is quite complex, the equivalent circuit method is used to simplify this relationship \parencite{stuchly1982equivalent}. This is quite useful when dealing with lossy dielectrics and biological tissues, as the biological tissues are not only made up of one type of material but rather of multiple types of tissues in one single sample. Another example of the use of this method is explored in \cite{zajivcek2006evaluation}, where they discuss the relationship of the complex permittivity and the transmission of healthy tissues and tumour tissues. They further discuss how this method could be used to image people using non-ionising radiation.
 
 \section{Materials \& Methods}
 \subsection{Language and Packages}
@@ -27,7 +25,7 @@ Python 3.10.8, Numpy, Pandas, Matplotlib.pyplot \,.
 \begin{enumerate}
     \item The data provided for both methanol and sodium chloride was imported into the program and each sheet was given its own \mintinline{py}{pandas} data frame.
     \item The average for the real and imaginary parts at each frequency was calculated for each standard material, i.e. air, short, di-ionised water.
-    \item The averages calculated in the previous were used to calculate the \(\rho\) of each material. These were then used to calculate the \(\Delta\)s found the equation.
+    \item The averages calculated in the previous section were used to calculate the \(\rho\) of each material. These were then used to calculate the \(\Delta\)s found in the equation.
     \item The equation used was:
             \begin{equation}
                 \varepsilon_m = -\frac{\Delta_{m2}\Delta_{13}}{\Delta_{m1}\Delta_{32}}\varepsilon_3 - \frac{\Delta_{m3}\Delta_{21}}{\Delta_{m1}\Delta_{32}}\varepsilon_1
@@ -41,16 +39,16 @@ Python 3.10.8, Numpy, Pandas, Matplotlib.pyplot \,.
 In~\cite{marsland1987dielectric} the error correction was described as follows:
 \begin{itemize}
     \item Calculate \textbf{E}.
-    \item Use the calculated \textbf{E} to correct subsequent error that arise from the measurements.
+    \item Use the calculated \textbf{E} to correct subsequent errors that arise from the measurements.
 \end{itemize}
-However, as \textbf{E} is not necessary one can substitute the three known admittance values (of air, short and de-ionised water) along with their respective reflective-coefficient thus, cancelling out the \textbf{E} terms.
+However, as \textbf{E} is not necessary, one can substitute the three known admittance values (of air, short and de-ionised water) along with their respective reflective-coefficient thus, cancelling out the \textbf{E} terms.
 
 As can be seen in~\cite{marsland1987dielectric} the admittance of the probe can be modelled in two ways:
 \begin{align}
-    y(\omega, \varepsilon_r) &= G_0 Z_0 \varepsilon_r^{\frac{5}{2}} + j \omega Z_0(\varepsilon_r C_0 + C_p) ,  \label{eq: admittance model 1} \\
+    y(\omega, \varepsilon_r) &= G_0 Z_0 \varepsilon_r^{\frac{5}{2}} + j \omega Z_0(\varepsilon_r C_0 + C_f) ,  \label{eq: admittance model 1} \\
     y(\omega, \varepsilon_r) &= \omega Z_0(\varepsilon_r C_0 + C_f)\,, \label{eq: admittance model 2}
 \end{align}
-called the admittance model 1 and admittance model 2 respectively, where \(\omega\) is the angular frequency, \(\varepsilon_r\) is the relative permittivity of the material in which the probe is embedded/immersed in, \(G_0\) is the free-space radiation conductance, \(\varepsilon_r C_0\) is the capacitance which represents the fringing field in the external dielectric material, \(C_p\) is the capacitance which represents the fringing field in the Teflon dielectric of the cable, which usually is \(C_0 >> C_p\)\,. However, only the admittance model 1 is considered in~\cite{marsland1987dielectric}. Applying a simple linear transformation to equation~\ref{eq: admittance model 1}, we obtain:
+called the admittance model 1 and admittance model 2 respectively, where \(\omega\) is the angular frequency, \(\varepsilon_r\) is the relative permittivity of the material in which the probe is embedded/immersed in, \(G_0\) is the free-space radiation conductance, \(\varepsilon_r C_0\) is the capacitance which represents the fringing field in the external dielectric material, \(C_f\) is the capacitance which represents the fringing field in the Teflon dielectric of the cable, which usually is \(C_0 \gg C_f\)\,. However, only the admittance model 1 is considered in~\cite{marsland1987dielectric}. Applying a simple linear transformation to the equation~\ref{eq: admittance model 1}, we obtain:
 \begin{equation}
     y^{\prime}(\omega, \varepsilon_r) = \left(\frac{1}{j \omega C_0 Z_0}\right)\, \cdot \,y(\omega , \varepsilon_r) - \left(\frac{C_f}{C_0}\right) , \label{eq: admittance model 1 transformed}
 \end{equation}
@@ -63,31 +61,27 @@ where \(G_n = \frac{G_0}{j\omega C_0}\). This satisfies the linear transformatio
     \frac{(\rho_m - \rho_1)(\rho_3 - \rho_1)}{(\rho_m - \rho_2)(\rho_1 - \rho_3)} = \frac{(y^{\prime}_m - y^{\prime}_1)(y^{\prime}_3 - y^{\prime}_2)}{(y^{\prime}_m - y^{\prime}_2)(y^{\prime}_1 - y^{\prime}_2)}\,. \label{eq: opening model 1 subs}
 \end{equation}
 Expanding equation~\ref{eq: opening model 1 subs} to its \(5^{\text{th}}\) order polynomial, we obtain:
-\begin{multline}
-    G_n \varepsilon_m^{\frac{5}{2}} + \varepsilon_m + \\\left[\frac{\Delta_{m1} \Delta_{32} y^{\prime}_3 y^{\prime}_2 + \Delta_{m2} \Delta_{13} y^{\prime}_1 y^{\prime}_3 + \Delta_{m3} \Delta_{21} y^{\prime}_2 y^{\prime}_1}{\Delta_{m1} \Delta{32} y^{\prime}_1 + \Delta_{m2} \Delta{12} y^{\prime}_2 + \Delta_{m3} \Delta{21} y^{\prime}_3}\right]\\ = 0\,. \label{eq: big substitution}
-\end{multline}
+\begin{equation}
+    G_n \varepsilon_m^{\frac{5}{2}} + \varepsilon_m + \left[\frac{\Delta_{m1} \Delta_{32} y^{\prime}_3 y^{\prime}_2 + \Delta_{m2} \Delta_{13} y^{\prime}_1 y^{\prime}_3 + \Delta_{m3} \Delta_{21} y^{\prime}_2 y^{\prime}_1}{\Delta_{m1} \Delta{32} y^{\prime}_1 + \Delta_{m2} \Delta{12} y^{\prime}_2 + \Delta_{m3} \Delta{21} y^{\prime}_3}\right] = 0\,. \label{eq: big substitution}
+\end{equation}
 By applying the short-circuit simplification and setting the termination 1 as a short circuit we obtain:
-\begin{multline}
-    G_n \varepsilon_m^{\frac{5}{2}} + \varepsilon_m + \left[\frac{\Delta_{m2}\Delta_{13}}{\Delta_{m1}\Delta_{32}} y^{\prime}_3 + \frac{\Delta_{m3}\Delta_{21}}{\Delta_{m1}\Delta_{32}} y^{\prime}_2\right] \\ = 0 \, \label{eq: simplification of big subsitution}
-\end{multline}
+\begin{equation}
+    G_n \varepsilon_m^{\frac{5}{2}} + \varepsilon_m + \left[\frac{\Delta_{m2}\Delta_{13}}{\Delta_{m1}\Delta_{32}} y^{\prime}_3 + \frac{\Delta_{m3}\Delta_{21}}{\Delta_{m1}\Delta_{32}} y^{\prime}_2\right] = 0 \, \label{eq: simplification of big subsitution}
+\end{equation}
 as \(y^{\prime}_1 \rightarrow \infty\). By omitting the \(G_n\) in equation~\ref{eq: simplification of big subsitution} and in \(y^{\prime}(\omega, \varepsilon_r) = \varepsilon_r + G_n \varepsilon_r^{\frac{5}{2}}\) we obtain:
 \begin{equation}
-    \varepsilon_m = - \frac{\Delta_{m2}\Delta_{13}}{\Delta_{m1}\Delta_{32}} \varepsilon_3 - \frac{\Delta_{m3}\Delta_{21}}{\Delta_{m1}\Delta_{32}} \varepsilon_2 \,.
+    \varepsilon_m = - \frac{\Delta_{m2}\Delta_{13}}{\Delta_{m1}\Delta_{32}} \varepsilon_3 - \frac{\Delta_{m3}\Delta_{21}}{\Delta_{m1}\Delta_{32}} \varepsilon_2 \,. \label{eq: final equation}
 \end{equation}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.45\textwidth]{Plot1.png}\caption{A graph of the complex permittivity at each frequency for Methanol}\label{fig: Methanol Graph}
-\end{figure}
+The complex permittivity of methanol was calculated by first finding the averages of the real and imaginary parts provided in the given data. These averages were then used in order to calculate the \(\rho\) of each material and this was then inputted in equation~\ref{eq: final equation}. One should note that the start of the data points obtained correlate with the averages of the complex permittivity provided in the data given. However, the data points veer off course from the trendline of the given data for the complex permittivity as can be seen in figure~\ref{fig: Methanol Graph}, where the dotted line is the trendline for the given data, while the whole line is the calculated trendline. This can be seen as well in the data in table~\ref{tab: Table 1} where the values start off similar but then vary at higher frequencies. These variations may have arisen due to the errors as mentioned in~\cite{marsland1987dielectric}, i.e.\,the simplification of the admittance model 1. 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.45\textwidth]{Plot2.png}\caption{A graph of the complex permittivity at each frequency for Sodium Chloride}\label{fig: NaCl Graph}
+    \includegraphics[width = 0.7\textwidth]{Plot1.png}\caption{A graph of the complex permittivity at each frequency for Methanol}\label{fig: Methanol Graph}
 \end{figure}
 
 \begin{table}[H]
     \centering
-    \resizebox{0.45\textwidth}{!}{%
     \begin{tabular}{ccccc}
     \hline
     Frequency/Hz &
@@ -99,14 +93,19 @@ as \(y^{\prime}_1 \rightarrow \infty\). By omitting the \(G_n\) in equation~\ref
       87.65  & \(20.85+0.76j\)  & \(10.17-8.99j\)  \\
       100.00 & \(11.89+1.19j\)  & \(9.49-8.14j\)   \\
       \hline
-    \end{tabular}%
-    }
+    \end{tabular}
     \caption{A table of four different data points for methanol}\label{tab: Table 1}
 \end{table}
 
+The complex permittivity of NaCl was found in the same way as the complex permittivity of methanol, but, it can be clearly seen from both the graph and the tabulated results that they do not match the given values of permittivity, figure~\ref{fig: NaCl Graph}, table~\ref{tab: Table 2} respectively. These large variations may not only be the result of the simplification mentioned in~\cite{marsland1987dielectric}, but also the procedure might not have been adhered to correctly. Furthermore, if the setup was not set up as indicated in the diagram as seen in \cite{marsland1987dielectric}, any gaps introduced in the setup will have directly affected the reflection-coefficient, as less of the wave will have been reflected. Furthermore, as \cite{marsland1987dielectric} suggest, the probe must be cleaned between each measurement. These precautions mentioned in~\cite{marsland1987dielectric} would help to reduce the compounding effect of errors in the experiment and would thus help in obtaining a more accurate result. Therefore, it is suggested that the experiment should be repeated with these precautions in mind in order to obtain new data. However, if the precautions obtained by this repetition match what is seen here it would suggest that the given data for the complex permittivity of NaCl would have been the issue and would thus have to be investigated further.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{Plot2.png}\caption{A graph of the complex permittivity at each frequency for Sodium Chloride}\label{fig: NaCl Graph}
+\end{figure}
+
 \begin{table}[H]
     \centering
-    \resizebox{0.45\textwidth}{!}{%
     \begin{tabular}{ccc}
     \hline
     Frequency/Hz &
@@ -117,12 +116,12 @@ as \(y^{\prime}_1 \rightarrow \infty\). By omitting the \(G_n\) in equation~\ref
       40.15  & \(80.60+4.30j\)  & \(82.00-21.69j\) \\
       87.65  & \(80.93+1.69j\)  & \(71.63-32.25j\) \\
       100.00 & \(81.91+2.70j\)  & \(68.40-34.31j\) \\ \hline
-    \end{tabular}%
-    }
+    \end{tabular}
     \caption{A table of four different data points for NaCl}\label{tab: Table 2}
 \end{table}
 
-\end{multicols*}
+\section{Conclusion}
+In conclusion, by following the methodology and precautions outlined by~\cite{marsland1987dielectric} one can obtain the complex permittivity of materials. From the data set given, one can conclude that the calculated methanol complex permittivity somewhat resembles the trend of the given complex permittivity although at higher frequencies it does veer away from the given trendline. However, in the case of the calculated complex permittivity of NaCl the trendline is extremely inaccurate when compared to the given complex permittivity which can be the result of compounding errors as discussed above. Thus, the readings for NaCl should be retaken in order to obtain better results.
 
 \section{References}
 \printbibliography[heading = none]
@@ -316,6 +315,5 @@ plt.savefig('Plot2.pdf', dpi=800)
 plt.show()
 
 \end{minted}
-
 
 \end{document}

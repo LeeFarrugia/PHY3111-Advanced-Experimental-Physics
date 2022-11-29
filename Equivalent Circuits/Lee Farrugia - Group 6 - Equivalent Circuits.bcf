@@ -2797,10 +2797,16 @@
     <bcf:citekey order="4">marsland1987dielectric</bcf:citekey>
     <bcf:citekey order="5">marsland1987dielectric</bcf:citekey>
     <bcf:citekey order="6">marsland1987dielectric</bcf:citekey>
-    <bcf:citekey order="7">liao2011accurate</bcf:citekey>
-    <bcf:citekey order="8">stuchly1982equivalent</bcf:citekey>
-    <bcf:citekey order="9">zajivcek2006evaluation</bcf:citekey>
+    <bcf:citekey order="7">marsland1987dielectric</bcf:citekey>
+    <bcf:citekey order="8">marsland1987dielectric</bcf:citekey>
+    <bcf:citekey order="9">marsland1987dielectric</bcf:citekey>
     <bcf:citekey order="10">marsland1987dielectric</bcf:citekey>
+    <bcf:citekey order="11">marsland1987dielectric</bcf:citekey>
+    <bcf:citekey order="12">marsland1987dielectric</bcf:citekey>
+    <bcf:citekey order="13">liao2011accurate</bcf:citekey>
+    <bcf:citekey order="14">stuchly1982equivalent</bcf:citekey>
+    <bcf:citekey order="15">zajivcek2006evaluation</bcf:citekey>
+    <bcf:citekey order="16">marsland1987dielectric</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">
