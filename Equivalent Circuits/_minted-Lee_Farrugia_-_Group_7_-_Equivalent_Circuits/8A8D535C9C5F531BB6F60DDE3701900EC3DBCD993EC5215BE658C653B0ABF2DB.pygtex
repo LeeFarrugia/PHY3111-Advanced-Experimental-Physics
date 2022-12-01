@@ -1,0 +1,188 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+
+\PYG{c+c1}{\PYGZsh{} importing data to different dataframes for each sheet}
+\PYG{n}{data\PYGZus{}air} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Data.xlsx\PYGZsq{}}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}short} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Data.xlsx\PYGZsq{}}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}water} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Data.xlsx\PYGZsq{}}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}methanol} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Data.xlsx\PYGZsq{}}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{()}
+\PYG{n}{data\PYGZus{}NaCl} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Data.xlsx\PYGZsq{}}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{)}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{()}
+\PYG{n}{e\PYGZus{}methanol} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Data.xlsx\PYGZsq{}}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{)}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{()}
+\PYG{n}{e\PYGZus{}NaCl} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Data.xlsx\PYGZsq{}}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}\PYG{o}{.}\PYG{n}{dropna}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} defining the frequency variable}
+\PYG{n}{frequency} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{data\PYGZus{}air}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+si}{\PYGZpc{}f}\PYG{l+s+s1}{req[Hz]\PYGZsq{}}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the real part of air}
+\PYG{n}{air\PYGZus{}real\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}air}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Real (S11) R1\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R2\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R3\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R4\PYGZsq{}} \PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R5\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R6\PYGZsq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}air}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{air\PYGZus{}real\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the imaginary part of air}
+\PYG{n}{air\PYGZus{}imaginary\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}air}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Imag (S11) R1\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R2\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R3\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R4\PYGZsq{}} \PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R5\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R6\PYGZsq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}air}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{air\PYGZus{}imaginary\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the real part of water}
+\PYG{n}{water\PYGZus{}real\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}water}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Real (S11) R1\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R2\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R3\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R4\PYGZsq{}} \PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R5\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R6\PYGZsq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}water}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{water\PYGZus{}real\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the imaginary part of water}
+\PYG{n}{water\PYGZus{}imaginary\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}water}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Imag (S11) R1\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R2\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R3\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R4\PYGZsq{}} \PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R5\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R6\PYGZsq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}water}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{water\PYGZus{}imaginary\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the real part of methanol}
+\PYG{n}{methanol\PYGZus{}real\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}methanol}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Real (S11) R1\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R2\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R3\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R4\PYGZsq{}} \PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R5\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R6\PYGZsq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}methanol}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{methanol\PYGZus{}real\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the imaginary part of methanol}
+\PYG{n}{methanol\PYGZus{}imaginary\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}methanol}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Imag (S11) R1\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R2\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R3\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R4\PYGZsq{}} \PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R5\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R6\PYGZsq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}methanol}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{methanol\PYGZus{}imaginary\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the real part of NaCl}
+\PYG{n}{NaCl\PYGZus{}real\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}NaCl}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Real (S11) R1\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R2\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R3\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R4\PYGZsq{}} \PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R5\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Real (S11) R6\PYGZsq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}NaCl}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{NaCl\PYGZus{}real\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the imaginary part of NaCl}
+\PYG{n}{NaCl\PYGZus{}imaginary\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}NaCl}\PYG{p}{[[}\PYG{l+s+s1}{\PYGZsq{}Imag (S11) R1\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R2\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R3\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R4\PYGZsq{}} \PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R5\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Imag (S11) R6\PYGZsq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{data\PYGZus{}NaCl}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{NaCl\PYGZus{}imaginary\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the given real permittivity of methanol}
+\PYG{n}{e\PYGZus{}methanol\PYGZus{}real\PYGZus{}avg} \PYG{o}{=} \PYG{n}{e\PYGZus{}methanol}\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZus{}R1\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZus{}R2\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZus{}R3\PYGZdq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}methanol}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{e\PYGZus{}methanol\PYGZus{}real\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the given imaginary permittivity of methanol}
+\PYG{n}{e\PYGZus{}methanol\PYGZus{}imaginary\PYGZus{}avg} \PYG{o}{=} \PYG{n}{e\PYGZus{}methanol}\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZsq{}\PYGZus{}R1\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZsq{}\PYGZus{}R2\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZsq{}\PYGZus{}R3\PYGZdq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}methanol}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{e\PYGZus{}methanol\PYGZus{}imaginary\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the given real permittivity of NaCl}
+\PYG{n}{e\PYGZus{}NaCl\PYGZus{}real\PYGZus{}avg} \PYG{o}{=} \PYG{n}{e\PYGZus{}NaCl}\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZus{}R1\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZus{}R2\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZus{}R3\PYGZdq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}NaCl}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{e\PYGZus{}NaCl\PYGZus{}real\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} finding the average of the given imaginary permittivity of NaCl}
+\PYG{n}{e\PYGZus{}NaCl\PYGZus{}imaginary\PYGZus{}avg} \PYG{o}{=} \PYG{n}{e\PYGZus{}NaCl}\PYG{p}{[[}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZsq{}\PYGZus{}R1\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZsq{}\PYGZus{}R2\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}e\PYGZsq{}\PYGZsq{}\PYGZus{}R3\PYGZdq{}}\PYG{p}{]]}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}NaCl}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{n}{e\PYGZus{}NaCl\PYGZus{}imaginary\PYGZus{}avg}
+
+\PYG{c+c1}{\PYGZsh{} defining the different perimittivity as numpy array}
+\PYG{n}{short\PYGZus{}r\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}short}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}re:Trc1\PYGZus{}S11\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{short\PYGZus{}i\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}short}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}im:Trc1\PYGZus{}S11\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+
+\PYG{n}{air\PYGZus{}r\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}air}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{air\PYGZus{}i\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}air}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+
+\PYG{n}{water\PYGZus{}r\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}water}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{water\PYGZus{}i\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}water}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+
+\PYG{n}{methanol\PYGZus{}r\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}methanol}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{methanol\PYGZus{}i\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}methanol}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+
+\PYG{n}{NaCl\PYGZus{}r\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}NaCl}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{NaCl\PYGZus{}i\PYGZus{}avg} \PYG{o}{=} \PYG{n}{data\PYGZus{}NaCl}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+
+\PYG{n}{e\PYGZus{}methanol\PYGZus{}r\PYGZus{}avg} \PYG{o}{=} \PYG{n}{e\PYGZus{}methanol}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{e\PYGZus{}methanol\PYGZus{}i\PYGZus{}avg} \PYG{o}{=} \PYG{n}{e\PYGZus{}methanol}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+
+\PYG{n}{e\PYGZus{}NaCl\PYGZus{}r\PYGZus{}avg} \PYG{o}{=} \PYG{n}{e\PYGZus{}NaCl}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Real Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+\PYG{n}{e\PYGZus{}NaCl\PYGZus{}i\PYGZus{}avg} \PYG{o}{=} \PYG{n}{e\PYGZus{}NaCl}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Imag Avg\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{to\PYGZus{}numpy}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} creating the complex numbers from the averages}
+\PYG{n}{air\PYGZus{}complex} \PYG{o}{=} \PYG{n}{air\PYGZus{}r\PYGZus{}avg} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{j} \PYG{o}{*} \PYG{n}{air\PYGZus{}i\PYGZus{}avg}\PYG{p}{)}
+\PYG{n}{short\PYGZus{}complex} \PYG{o}{=} \PYG{n}{short\PYGZus{}r\PYGZus{}avg} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{j} \PYG{o}{*} \PYG{n}{short\PYGZus{}i\PYGZus{}avg}\PYG{p}{)}
+\PYG{n}{water\PYGZus{}complex} \PYG{o}{=} \PYG{n}{water\PYGZus{}r\PYGZus{}avg} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{j} \PYG{o}{*} \PYG{n}{water\PYGZus{}i\PYGZus{}avg}\PYG{p}{)}
+\PYG{n}{methanol\PYGZus{}complex} \PYG{o}{=} \PYG{n}{methanol\PYGZus{}r\PYGZus{}avg} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{j} \PYG{o}{*} \PYG{n}{methanol\PYGZus{}i\PYGZus{}avg}\PYG{p}{)}
+\PYG{n}{NaCl\PYGZus{}complex} \PYG{o}{=} \PYG{n}{NaCl\PYGZus{}r\PYGZus{}avg} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{j} \PYG{o}{*} \PYG{n}{NaCl\PYGZus{}i\PYGZus{}avg}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}methanol\PYGZus{}c} \PYG{o}{=} \PYG{n}{e\PYGZus{}methanol\PYGZus{}r\PYGZus{}avg} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{j} \PYG{o}{*} \PYG{n}{e\PYGZus{}methanol\PYGZus{}i\PYGZus{}avg}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}NaCl\PYGZus{}c} \PYG{o}{=} \PYG{n}{e\PYGZus{}NaCl\PYGZus{}r\PYGZus{}avg} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{j} \PYG{o}{*} \PYG{n}{e\PYGZus{}NaCl\PYGZus{}i\PYGZus{}avg}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} calculating the different deltas required in the equation}
+\PYG{n}{delta\PYGZus{}13} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{short\PYGZus{}complex}\PYG{p}{,} \PYG{n}{water\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}21} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{air\PYGZus{}complex}\PYG{p}{,} \PYG{n}{short\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}23} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{air\PYGZus{}complex}\PYG{p}{,} \PYG{n}{water\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}32} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{water\PYGZus{}complex}\PYG{p}{,} \PYG{n}{air\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}m1\PYGZus{}methanol} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{methanol\PYGZus{}complex}\PYG{p}{,} \PYG{n}{short\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}m2\PYGZus{}methanol} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{methanol\PYGZus{}complex}\PYG{p}{,} \PYG{n}{air\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}m3\PYGZus{}methanol} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{methanol\PYGZus{}complex}\PYG{p}{,} \PYG{n}{water\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}m1\PYGZus{}NaCl} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{NaCl\PYGZus{}complex}\PYG{p}{,} \PYG{n}{short\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}m2\PYGZus{}NaCl} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{NaCl\PYGZus{}complex}\PYG{p}{,} \PYG{n}{air\PYGZus{}complex}\PYG{p}{)}
+\PYG{n}{delta\PYGZus{}m3\PYGZus{}NaCl} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{NaCl\PYGZus{}complex}\PYG{p}{,} \PYG{n}{water\PYGZus{}complex}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} using the equation and values to calculate the complex permittivity}
+\PYG{n}{e\PYGZus{}methanol} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1} \PYG{o}{*} \PYG{p}{(((}\PYG{n}{delta\PYGZus{}m2\PYGZus{}methanol} \PYG{o}{*} \PYG{n}{delta\PYGZus{}13}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{n}{delta\PYGZus{}m1\PYGZus{}methanol} \PYG{o}{*} \PYG{n}{delta\PYGZus{}32}\PYG{p}{))} \PYG{o}{*} \PYG{l+m+mf}{80.5}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{p}{(((}\PYG{n}{delta\PYGZus{}m3\PYGZus{}methanol} \PYG{o}{*} \PYG{n}{delta\PYGZus{}21}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{n}{delta\PYGZus{}m1\PYGZus{}methanol} \PYG{o}{*} \PYG{n}{delta\PYGZus{}32}\PYG{p}{))} \PYG{o}{*} \PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}NaCl} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1} \PYG{o}{*} \PYG{p}{(((}\PYG{n}{delta\PYGZus{}m2\PYGZus{}NaCl} \PYG{o}{*} \PYG{n}{delta\PYGZus{}13}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{n}{delta\PYGZus{}m1\PYGZus{}NaCl} \PYG{o}{*} \PYG{n}{delta\PYGZus{}32}\PYG{p}{))} \PYG{o}{*} \PYG{l+m+mf}{80.5}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{p}{(((}\PYG{n}{delta\PYGZus{}m3\PYGZus{}NaCl} \PYG{o}{*} \PYG{n}{delta\PYGZus{}21}\PYG{p}{)} \PYG{o}{/} \PYG{p}{(}\PYG{n}{delta\PYGZus{}m1\PYGZus{}NaCl} \PYG{o}{*} \PYG{n}{delta\PYGZus{}32}\PYG{p}{))} \PYG{o}{*} \PYG{l+m+mi}{1}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} taking the real parts only}
+\PYG{n}{methanol\PYGZus{}real} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{real}\PYG{p}{(}\PYG{n}{e\PYGZus{}methanol}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}methanol\PYGZus{}real} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{real}\PYG{p}{(}\PYG{n}{e\PYGZus{}methanol\PYGZus{}c}\PYG{p}{)}
+\PYG{n}{NaCl\PYGZus{}real} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{real}\PYG{p}{(}\PYG{n}{e\PYGZus{}NaCl}\PYG{p}{)}
+\PYG{n}{e\PYGZus{}NaCl\PYGZus{}real} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{real}\PYG{p}{(}\PYG{n}{e\PYGZus{}NaCl\PYGZus{}c}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} polyfit calculated methanol}
+\PYG{n}{coefficients}\PYG{p}{,} \PYG{n}{cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{polyfit}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{methanol\PYGZus{}real}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{cov}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{poly\PYGZus{}function} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{poly1d}\PYG{p}{(}\PYG{n}{coefficients}\PYG{p}{)}
+\PYG{n}{trendline\PYGZus{}c\PYGZus{}m} \PYG{o}{=} \PYG{n}{poly\PYGZus{}function}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} polyfit given methanol}
+\PYG{n}{coefficients}\PYG{p}{,} \PYG{n}{cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{polyfit}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{e\PYGZus{}methanol\PYGZus{}real}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{cov}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{poly\PYGZus{}function} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{poly1d}\PYG{p}{(}\PYG{n}{coefficients}\PYG{p}{)}
+\PYG{n}{trendline\PYGZus{}g\PYGZus{}m} \PYG{o}{=} \PYG{n}{poly\PYGZus{}function}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} polyfit calculated NaCl}
+\PYG{n}{coefficients}\PYG{p}{,} \PYG{n}{cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{polyfit}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{NaCl\PYGZus{}real}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{cov}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{poly\PYGZus{}function} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{poly1d}\PYG{p}{(}\PYG{n}{coefficients}\PYG{p}{)}
+\PYG{n}{trendline\PYGZus{}c\PYGZus{}n} \PYG{o}{=} \PYG{n}{poly\PYGZus{}function}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} polyfit given NaCl}
+\PYG{n}{coefficients}\PYG{p}{,} \PYG{n}{cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{polyfit}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{e\PYGZus{}NaCl\PYGZus{}real}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{cov}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{poly\PYGZus{}function} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{poly1d}\PYG{p}{(}\PYG{n}{coefficients}\PYG{p}{)}
+\PYG{n}{trendline\PYGZus{}g\PYGZus{}n} \PYG{o}{=} \PYG{n}{poly\PYGZus{}function}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} value comparisons}
+\PYG{n}{positions} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{74}\PYG{p}{,} \PYG{l+m+mi}{174}\PYG{p}{,} \PYG{l+m+mi}{200}\PYG{p}{)}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{positions}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The calculated permittivity at data point }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{ for methanol is:}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{e\PYGZus{}methanol}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{, while the given value is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{e\PYGZus{}methanol\PYGZus{}c}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}The calculated permittivity at data point }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{ for NaCl is:}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{e\PYGZus{}NaCl}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{, while the given value is: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{e\PYGZus{}NaCl\PYGZus{}c}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s1}{.2f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} plotting the data for methanol}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{methanol\PYGZus{}real}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Calculated\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{trendline\PYGZus{}c\PYGZus{}m}\PYG{p}{,} \PYG{n}{color} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Calculated\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{e\PYGZus{}methanol\PYGZus{}real}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}grey\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Given\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{trendline\PYGZus{}g\PYGZus{}m}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,}  \PYG{n}{color} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}Given\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}f/Hz\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}epsilon\PYGZus{}}\PYG{l+s+si}{\PYGZob{}methanol\PYGZcb{}}\PYG{l+s+s1}{\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Complex Permittivity of Methanol vs Frequency\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Plot1.pdf\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} plotting the data of NaCl}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{NaCl\PYGZus{}real}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Calculated\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{trendline\PYGZus{}c\PYGZus{}n}\PYG{p}{,} \PYG{n}{color} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Calculated\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{e\PYGZus{}NaCl\PYGZus{}real}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}grey\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Given\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{frequency}\PYG{p}{,} \PYG{n}{trendline\PYGZus{}g\PYGZus{}n}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,}  \PYG{n}{color} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}Given\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}f/Hz\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}epsilon\PYGZus{}}\PYG{l+s+si}{\PYGZob{}NaCl\PYGZcb{}}\PYG{l+s+s1}{\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Complex Permittivity of NaCl vs Frequency\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Plot2.pdf\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\end{Verbatim}

@@ -44,10 +44,10 @@
   <internal package="biblatex" priority="9" active="0">
     <generic>latex</generic>
     <provides type="dynamic">
-      <file>"Lee Farrugia - Group 6 - Equivalent Circuits".bcf</file>
+      <file>"Lee Farrugia - Group 7 - Pendulum Project".bcf</file>
     </provides>
     <requires type="dynamic">
-      <file>"Lee Farrugia - Group 6 - Equivalent Circuits".bbl</file>
+      <file>"Lee Farrugia - Group 7 - Pendulum Project".bbl</file>
     </requires>
     <requires type="static">
       <file>blx-dm.def</file>
@@ -68,19 +68,19 @@
     <generic>biber</generic>
     <cmdline>
       <binary>biber</binary>
-      <infile>"Lee Farrugia - Group 6 - Equivalent Circuits"</infile>
+      <infile>"Lee Farrugia - Group 7 - Pendulum Project"</infile>
     </cmdline>
     <input>
-      <file>"Lee Farrugia - Group 6 - Equivalent Circuits".bcf</file>
+      <file>"Lee Farrugia - Group 7 - Pendulum Project".bcf</file>
     </input>
     <output>
-      <file>"Lee Farrugia - Group 6 - Equivalent Circuits".bbl</file>
+      <file>"Lee Farrugia - Group 7 - Pendulum Project".bbl</file>
     </output>
     <provides type="dynamic">
-      <file>"Lee Farrugia - Group 6 - Equivalent Circuits".bbl</file>
+      <file>"Lee Farrugia - Group 7 - Pendulum Project".bbl</file>
     </provides>
     <requires type="dynamic">
-      <file>"Lee Farrugia - Group 6 - Equivalent Circuits".bcf</file>
+      <file>"Lee Farrugia - Group 7 - Pendulum Project".bcf</file>
     </requires>
     <requires type="editable">
       <file>Bibliography.bib</file>
