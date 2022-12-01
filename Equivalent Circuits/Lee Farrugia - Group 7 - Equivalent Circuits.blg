@@ -1,0 +1,15 @@
+[0] Config.pm:307> INFO - This is Biber 2.17
+[0] Config.pm:310> INFO - Logfile is 'Lee Farrugia - Group 7 - Equivalent Circuits.blg'
+[146] biber-MSWIN32:340> INFO - === 
+[193] Biber.pm:418> INFO - Reading 'Lee Farrugia - Group 7 - Equivalent Circuits.bcf'
+[354] Biber.pm:972> INFO - Found 4 citekeys in bib section 0
+[378] Biber.pm:4383> INFO - Processing section 0
+[398] Biber.pm:4574> INFO - Looking for bibtex file 'Bibliography.bib' for section 0
+[452] bibtex.pm:1713> INFO - LaTeX decoding ...
+[466] bibtex.pm:1518> INFO - Found BibTeX data source 'Bibliography.bib'
+[546] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[546] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[546] Biber.pm:4203> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[546] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
+[553] bbl.pm:654> INFO - Writing 'Lee Farrugia - Group 7 - Equivalent Circuits.bbl' with encoding 'UTF-8'
+[558] bbl.pm:757> INFO - Output to Lee Farrugia - Group 7 - Equivalent Circuits.bbl
