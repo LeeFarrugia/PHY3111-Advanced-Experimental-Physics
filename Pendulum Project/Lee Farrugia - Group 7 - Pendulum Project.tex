@@ -18,11 +18,24 @@
 
 \section{Materials \& Methods}
 \subsection{Language and Packages}
-
+Python 3.10.8, Numpy, Sympy, Scipy, Matplotlib.pyplot
 \subsection{Methodology}
 
 \section{Results \& Discussion}
-
+\begin{align}
+    T_{rec} &= \frac{1}{2} m v^2\,, \notag\\
+    &= \frac{1}{2} m \left(\dot{x}^2 + \dot{y}^2 \right)\,,\\
+    T_{rot} &= \frac{1}{2} i \dot{\theta}^2\,,\\
+    T &= \frac{1}{2} \left(m \dot{x}^2 + m \dot{y}^2 + i \dot{\theta}^2 \right)\,.\\
+    x &= r \sin(\theta)\,,\\
+    y &= -r \cos(\theta)\,.\\
+    T &= \frac{1}{2} m r^2 \dot{\theta}^2 + \frac{1}{2} i \dot{\theta}^2 \,, \notag\\
+    &= \frac{1}{2}\left(mr^2 \right) \dot{\theta}^2 \,.\\
+    U &= m g r - m g r(\cos\theta) \notag\,,\\
+    &= m g r(1 - \cos\theta)\,.\\
+    L &= T - U\,, \notag\\
+    &= \frac{1}{2} m r^2 \dot{\theta}^2 + \frac{1}{2} i \dot{\theta}^2 - m g r(1 - \cos\theta)
+\end{align}
 \section{Conclusion}
 
 \section{References}
