@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 from math import *
 from sympy import *
 from scipy.integrate import odeint
+from scipy.fft import fft, fftfreq
 
-x,y,r,t,m,v,i,g= symbols('x,y,r,t,m,v,i,g')#type:ignore
+x,y,r,t,m,v,i,g = symbols('x,y,r,t,m,v,i,g')#type:ignore
 theta = Function('theta')(t)
 y = (-1*r) * cos(theta)
 theta_dot = diff(theta, t)
@@ -24,7 +25,9 @@ L = T - U
 Q = diff(diff(L, theta_dot),t) - diff(L, theta)
 
 def ode_func(theta,t,m,g,r,i):
+    #theta
     theta1=theta[0]
+    #theat_dot
     theta2=theta[1]
     #first ode
     dtheta1_dt=theta2
@@ -43,8 +46,8 @@ theta_0 = [(np.pi/2),0, (np.pi/2), (np.pi/2), (np.pi/4), 0, (np.pi/4)]
 t = np.linspace(0, 10, 1000)
 #T = len(t)
 # solving the ode
-for a in range(len(theta_0)):
-    theta = odeint(ode_func,theta_0[a:a+2],t,args=(m,g,r,i,a))
+for a in range(len(theta_0)-1):
+    theta = odeint(ode_func,theta_0[a:a+2],t,args=(m,g,r,i))
 
     plt.figure(figsize=(7.5, 10.5))
     plt.rcParams['font.family'] = 'STIXGeneral'
@@ -64,4 +67,36 @@ for a in range(len(theta_0)):
 
     plt.legend()
     plt.tight_layout()
-    plt.savefig(f'Plot 1.{a+1}.png', dpi=800)
+    #plt.savefig(f'Plot 1.{a+1}.png', dpi=800)
+    plt.close()
+
+    # Fourier transformation
+    # Sampling space = Frequency * total time
+    N = 100 * 10
+    # theta
+    x = theta[:,0]
+    # theta_dot
+    y = theta[:,1]
+    # Periodic Time (maybe ?)
+    T = 1/N
+    yf = fft(y)
+    xf = fftfreq(N, T)[:N//2]
+
+    # Plotting conditions
+    plt.figure(figsize=(7.5, 10.5))
+    plt.rcParams['font.family'] = 'STIXGeneral'
+    plt.rcParams['mathtext.fontset'] = 'stix'
+    plt.rcParams['font.size'] = 12
+    plt.rcParams['font.weight'] = 'normal'
+    plt.minorticks_on()
+    plt.grid(visible=True, which='major', linestyle='-')
+    plt.grid(visible=True, which='minor', linestyle='--')
+    # Plotting the data
+    plt.plot(xf, 2/N * np.abs(yf[0:(N//2)]))
+    plt.xlabel('Frequency')
+    plt.ylabel(r'$\Delta \theta$/rads')
+    plt.title('Fourier transformation of the Single Pendulum')
+    plt.tight_layout()
+    # Saving the figure
+    plt.savefig(f'Plot 2.{a+1}.png', dpi=800)
+    plt.close()
