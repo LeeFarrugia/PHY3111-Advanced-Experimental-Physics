@@ -5,6 +5,7 @@ from math import *
 from sympy import *
 from scipy.integrate import odeint
 from scipy.fft import fft, fftfreq
+import matplotlib.animation as ani
 
 x,y,r,t,m,v,i,g = symbols('x,y,r,t,m,v,i,g')#type:ignore
 theta = Function('theta')(t)
@@ -35,16 +36,36 @@ def ode_func(theta,t,m,g,r,i):
     dtheta2_dt = (-m*g*r*(np.sin(theta1)))/(i+(m*(r**2)))
     dtheta_dt = [dtheta1_dt, dtheta2_dt]
     return dtheta_dt
+
+    
 g = 9.81 # acceleration due to the gravity
 i = 0.025
 r = 0.5 # radius of pendulum
 m = 1 # mass 
+l = 1 # length of pendulum  
+
+def animate_arm(state,t):
+    l = 1
+    plt.plot(0,0,l)
+    x = l * np.sin(state[0])
+    y = -l * np.cos(state[0])
+    p, = plt.plot(x, y, 'k-')
+    tt=plt.title("{:.2} sec".format(0.00))
+    plt.xlim([-0.25, 0.25])
+    plt.ylim([-l, .10])
+    for i in range(1, len(state)-10,3):
+        p.set_xdata((0,l*np.sin(state[i])))
+        p.set_ydata((0,-l*np.cos(state[i])))
+        tt.set_text("{:.2} sec".format(i*0.01))
+        plt.draw()
+        plt.pause(0.1)
+
 
 # initial conditions
 theta_0 = [(np.pi/2),0, (np.pi/2), (np.pi/2), (np.pi/4), 0, (np.pi/4)]
 # time plot
 t = np.linspace(0, 10, 1000)
-#T = len(t)
+
 # solving the ode
 for a in range(len(theta_0)-1):
     theta = odeint(ode_func,theta_0[a:a+2],t,args=(m,g,r,i))
@@ -92,11 +113,14 @@ for a in range(len(theta_0)-1):
     plt.grid(visible=True, which='major', linestyle='-')
     plt.grid(visible=True, which='minor', linestyle='--')
     # Plotting the data
-    plt.plot(xf, 2/N * np.abs(yf[0:(N//2)]))
+    plt.plot(xf, 2/N * np.abs(yf[0:(N//2)]))#type:ignore
     plt.xlabel('Frequency')
     plt.ylabel(r'$\Delta \theta$/rads')
     plt.title('Fourier transformation of the Single Pendulum')
     plt.tight_layout()
     # Saving the figure
-    plt.savefig(f'Plot 2.{a+1}.png', dpi=800)
+    #plt.savefig(f'Plot 2.{a+1}.png', dpi=800)
     plt.close()
+
+plt.figure()
+animate_arm(theta[:,0],t)
