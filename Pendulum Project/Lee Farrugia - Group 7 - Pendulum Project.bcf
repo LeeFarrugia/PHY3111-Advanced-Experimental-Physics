@@ -2791,6 +2791,11 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">Bibliography.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey order="1">pedersen1977compound</bcf:citekey>
+    <bcf:citekey order="2">chaos</bcf:citekey>
+    <bcf:citekey order="3">chaos</bcf:citekey>
+    <bcf:citekey order="4">pedersen1977compound</bcf:citekey>
+    <bcf:citekey order="5">chaos</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">
