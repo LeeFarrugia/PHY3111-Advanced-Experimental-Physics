@@ -1,0 +1,329 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{scipy} \PYG{k}{as} \PYG{n+nn}{sc}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{math} \PYG{k+kn}{import} \PYG{n}{sin}\PYG{p}{,} \PYG{n}{cos}
+\PYG{k+kn}{from} \PYG{n+nn}{sympy} \PYG{k+kn}{import} \PYG{o}{*}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.integrate} \PYG{k+kn}{import} \PYG{n}{odeint}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.fft} \PYG{k+kn}{import} \PYG{n}{fft}\PYG{p}{,} \PYG{n}{fftfreq}
+\PYG{k+kn}{from} \PYG{n+nn}{matplotlib.patches} \PYG{k+kn}{import} \PYG{n}{Circle}
+
+\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{,}\PYG{n}{r}\PYG{p}{,}\PYG{n}{t}\PYG{p}{,}\PYG{n}{m}\PYG{p}{,}\PYG{n}{v}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{g} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}x,y,r,t,m,v,i,g\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{theta} \PYG{o}{=} \PYG{n}{Function}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}theta\PYGZsq{}}\PYG{p}{)(}\PYG{n}{t}\PYG{p}{)}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{r} \PYG{o}{*} \PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{r}\PYG{p}{)} \PYG{o}{*} \PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{)}
+\PYG{n}{theta\PYGZus{}dot} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+
+\PYG{n}{vx} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{t}\PYG{p}{)}
+\PYG{n}{vy} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,}\PYG{n}{t}\PYG{p}{)}
+
+\PYG{n}{vt} \PYG{o}{=} \PYG{n}{vx}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n}{vy}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{T\PYGZus{}rec} \PYG{o}{=} \PYG{l+m+mf}{0.5}\PYG{o}{*} \PYG{n}{m}\PYG{o}{*} \PYG{n}{v}\PYG{o}{.}\PYG{n}{subs}\PYG{p}{(}\PYG{n}{v}\PYG{p}{,} \PYG{n}{vt}\PYG{p}{)}
+\PYG{n}{T\PYGZus{}rot} \PYG{o}{=} \PYG{l+m+mf}{0.5}\PYG{o}{*} \PYG{n}{i}\PYG{o}{*} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,}\PYG{n}{t}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+
+\PYG{n}{T} \PYG{o}{=} \PYG{n}{T\PYGZus{}rec} \PYG{o}{+} \PYG{n}{T\PYGZus{}rot}
+\PYG{n}{U} \PYG{o}{=} \PYG{n}{m}\PYG{o}{*}\PYG{n}{g}\PYG{o}{*}\PYG{n}{r}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{))}
+\PYG{n}{L} \PYG{o}{=} \PYG{n}{T} \PYG{o}{\PYGZhy{}} \PYG{n}{U}
+
+\PYG{n}{Q} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{theta\PYGZus{}dot}\PYG{p}{),}\PYG{n}{t}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,} \PYG{n}{theta}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{ode\PYGZus{}func}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,}\PYG{n}{t}\PYG{p}{,}\PYG{n}{m}\PYG{p}{,}\PYG{n}{g}\PYG{p}{,}\PYG{n}{r}\PYG{p}{,}\PYG{n}{i}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{}theta}
+    \PYG{n}{theta1}\PYG{o}{=}\PYG{n}{theta}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{}theta\PYGZus{}dot}
+    \PYG{n}{dtheta1\PYGZus{}dt}\PYG{o}{=}\PYG{n}{theta}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{}second ode}
+    \PYG{n}{dtheta2\PYGZus{}dt} \PYG{o}{=} \PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{m}\PYG{o}{*}\PYG{n}{g}\PYG{o}{*}\PYG{n}{r}\PYG{o}{*}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)))}\PYG{o}{/}\PYG{p}{(}\PYG{n}{i}\PYG{o}{+}\PYG{p}{(}\PYG{n}{m}\PYG{o}{*}\PYG{p}{(}\PYG{n}{r}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)))}
+    \PYG{n}{dtheta\PYGZus{}dt} \PYG{o}{=} \PYG{p}{[}\PYG{n}{dtheta1\PYGZus{}dt}\PYG{p}{,} \PYG{n}{dtheta2\PYGZus{}dt}\PYG{p}{]}
+    \PYG{k}{return} \PYG{n}{dtheta\PYGZus{}dt}
+
+
+\PYG{n}{g} \PYG{o}{=} \PYG{l+m+mf}{9.81} \PYG{c+c1}{\PYGZsh{} acceleration due to the gravity}
+\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mf}{0.025}
+\PYG{n}{r} \PYG{o}{=} \PYG{l+m+mf}{0.5} \PYG{c+c1}{\PYGZsh{} radius of pendulum}
+\PYG{n}{m} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{c+c1}{\PYGZsh{} mass}
+\PYG{n}{l} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{c+c1}{\PYGZsh{} length of pendulum}
+
+\PYG{c+c1}{\PYGZsh{} initial conditions}
+\PYG{n}{theta\PYGZus{}0} \PYG{o}{=} \PYG{p}{[(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{p}{),} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{p}{)]}
+\PYG{c+c1}{\PYGZsh{} time plot}
+\PYG{n}{t} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{1000}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} solving the ode}
+\PYG{k}{for} \PYG{n}{a} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{theta\PYGZus{}0}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}
+    \PYG{n}{theta} \PYG{o}{=} \PYG{n}{odeint}\PYG{p}{(}\PYG{n}{ode\PYGZus{}func}\PYG{p}{,}\PYG{n}{theta\PYGZus{}0}\PYG{p}{[}\PYG{n}{a}\PYG{p}{:}\PYG{n}{a}\PYG{o}{+}\PYG{l+m+mi}{2}\PYG{p}{],}\PYG{n}{t}\PYG{p}{,}\PYG{n}{args}\PYG{o}{=}\PYG{p}{(}\PYG{n}{m}\PYG{p}{,}\PYG{n}{g}\PYG{p}{,}\PYG{n}{r}\PYG{p}{,}\PYG{n}{i}\PYG{p}{))}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlim}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{10}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{n}{theta}\PYG{p}{[:,}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}dot\PYGZob{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}theta\PYGZcb{}\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{n}{theta}\PYG{p}{[:,}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}ddot\PYGZob{}\PYGZbs{}theta\PYGZcb{}\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}t/s\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}Delta \PYGZbs{}theta\PYGZdl{}/rads\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of the change in \PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}theta\PYGZcb{}\PYGZdl{} in time\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}plots/Plot 1.}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{a}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+    \PYG{c+c1}{\PYGZsh{} Fourier transformation}
+    \PYG{c+c1}{\PYGZsh{} Sampling space = Frequency * total time}
+    \PYG{n}{N} \PYG{o}{=} \PYG{l+m+mi}{100} \PYG{o}{*} \PYG{l+m+mi}{10}
+    \PYG{c+c1}{\PYGZsh{} theta}
+    \PYG{n}{x} \PYG{o}{=} \PYG{n}{theta}\PYG{p}{[:,}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{} theta\PYGZus{}dot}
+    \PYG{n}{y} \PYG{o}{=} \PYG{n}{theta}\PYG{p}{[:,}\PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{} Periodic Time}
+    \PYG{n}{T} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{N}
+    \PYG{n}{yf} \PYG{o}{=} \PYG{n}{fft}\PYG{p}{(}\PYG{n}{y}\PYG{p}{)}
+    \PYG{n}{xf} \PYG{o}{=} \PYG{n}{fftfreq}\PYG{p}{(}\PYG{n}{N}\PYG{p}{,} \PYG{n}{T}\PYG{p}{)[:}\PYG{n}{N}\PYG{o}{//}\PYG{l+m+mi}{2}\PYG{p}{]}
+
+    \PYG{c+c1}{\PYGZsh{} Plotting conditions}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Plotting the data}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{xf}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{o}{/}\PYG{n}{N} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{yf}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:(}\PYG{n}{N}\PYG{o}{//}\PYG{l+m+mi}{2}\PYG{p}{)]),} \PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Frequency\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}Delta \PYGZbs{}theta\PYGZdl{}/rads\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Fourier transformation of the Single Pendulum\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+    \PYG{c+c1}{\PYGZsh{} Saving the figure}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}plots/Plot 2.}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{a}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{()}
+
+\PYG{n}{theta} \PYG{o}{=} \PYG{n}{odeint}\PYG{p}{(}\PYG{n}{ode\PYGZus{}func}\PYG{p}{,}\PYG{n}{theta\PYGZus{}0}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mi}{2}\PYG{p}{],}\PYG{n}{t}\PYG{p}{,}\PYG{n}{args}\PYG{o}{=}\PYG{p}{(}\PYG{n}{m}\PYG{p}{,}\PYG{n}{g}\PYG{p}{,}\PYG{n}{r}\PYG{p}{,}\PYG{n}{i}\PYG{p}{))}
+\PYG{n}{theta\PYGZus{}a} \PYG{o}{=} \PYG{n}{theta}\PYG{p}{[:,}\PYG{l+m+mi}{0}\PYG{p}{]}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{r} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta\PYGZus{}a}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{r}\PYG{p}{)} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta\PYGZus{}a}\PYG{p}{)}
+
+\PYG{n}{tmax}\PYG{p}{,} \PYG{n}{dt} \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mf}{0.01}
+\PYG{n}{t1} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{tmax}\PYG{o}{+}\PYG{n}{dt}\PYG{p}{,} \PYG{n}{dt}\PYG{p}{)}
+
+\PYG{n}{r} \PYG{o}{=} \PYG{l+m+mf}{0.05}
+\PYG{n}{trail\PYGZus{}secs} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{n}{max\PYGZus{}trail} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{trail\PYGZus{}secs} \PYG{o}{/} \PYG{n}{dt}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{make\PYGZus{}plot1}\PYG{p}{(}\PYG{n}{i}\PYG{p}{):}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{([}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{x}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]],} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{y}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]],} \PYG{n}{lw}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{c0} \PYG{o}{=} \PYG{n}{Circle}\PYG{p}{((}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{),} \PYG{n}{r}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{fc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{zorder}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+    \PYG{n}{c1} \PYG{o}{=} \PYG{n}{Circle}\PYG{p}{((}\PYG{n}{x}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{y}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]),} \PYG{n}{r}\PYG{p}{,} \PYG{n}{fc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}b\PYGZsq{}}\PYG{p}{,} \PYG{n}{ec}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}b\PYGZsq{}}\PYG{p}{,} \PYG{n}{zorder}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{add\PYGZus{}patch}\PYG{p}{(}\PYG{n}{c0}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{add\PYGZus{}patch}\PYG{p}{(}\PYG{n}{c1}\PYG{p}{)}
+
+    \PYG{n}{ns} \PYG{o}{=} \PYG{l+m+mi}{20}
+    \PYG{n}{s} \PYG{o}{=} \PYG{n}{max\PYGZus{}trail} \PYG{o}{//} \PYG{n}{ns}
+
+    \PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{ns}\PYG{p}{):}
+        \PYG{n}{imin} \PYG{o}{=} \PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{ns}\PYG{o}{\PYGZhy{}}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{n}{s}
+        \PYG{k}{if} \PYG{n}{imin} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{k}{continue}
+        \PYG{n}{imax} \PYG{o}{=} \PYG{n}{imin} \PYG{o}{+} \PYG{n}{s} \PYG{o}{+} \PYG{l+m+mi}{1}
+        \PYG{n}{alpha} \PYG{o}{=} \PYG{p}{(}\PYG{n}{j}\PYG{o}{/}\PYG{n}{ns}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+        \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{[}\PYG{n}{imin}\PYG{p}{:}\PYG{n}{imax}\PYG{p}{],} \PYG{n}{y}\PYG{p}{[}\PYG{n}{imin}\PYG{p}{:}\PYG{n}{imax}\PYG{p}{],} \PYG{n}{c}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}r\PYGZsq{}}\PYG{p}{,} \PYG{n}{solid\PYGZus{}capstyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}butt\PYGZsq{}}\PYG{p}{,} \PYG{n}{lw}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{n}{alpha}\PYG{p}{)}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlim}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{l}\PYG{o}{\PYGZhy{}}\PYG{n}{r}\PYG{p}{,} \PYG{n}{l}\PYG{o}{+}\PYG{n}{r}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylim}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{l}\PYG{o}{\PYGZhy{}}\PYG{n}{r}\PYG{p}{,} \PYG{n}{l}\PYG{o}{+}\PYG{n}{r}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}aspect}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}equal\PYGZsq{}}\PYG{p}{,} \PYG{n}{adjustable}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}box\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{axis}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}off\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}frames1/\PYGZus{}img}\PYG{l+s+si}{\PYGZob{}:04d\PYGZcb{}}\PYG{l+s+s1}{.png\PYGZsq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{i}\PYG{o}{//}\PYG{n}{di}\PYG{p}{),} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{cla}\PYG{p}{()}
+
+
+\PYG{n}{fps} \PYG{o}{=} \PYG{l+m+mi}{10}
+\PYG{n}{di} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{fps}\PYG{o}{/}\PYG{n}{dt}\PYG{p}{)}
+\PYG{n}{fig} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{8.3333}\PYG{p}{,} \PYG{l+m+mf}{6.25}\PYG{p}{),} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{72}\PYG{p}{)}
+\PYG{n}{ax} \PYG{o}{=} \PYG{n}{fig}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{l+m+mi}{111}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{t1}\PYG{o}{.}\PYG{n}{size}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{di}\PYG{p}{):}
+    \PYG{n}{make\PYGZus{}plot1}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)}
+
+\PYG{n}{x1}\PYG{p}{,}\PYG{n}{y1}\PYG{p}{,}\PYG{n}{x2}\PYG{p}{,}\PYG{n}{y2}\PYG{p}{,}\PYG{n}{l1}\PYG{p}{,}\PYG{n}{l2}\PYG{p}{,}\PYG{n}{v1}\PYG{p}{,}\PYG{n}{v2}\PYG{p}{,}\PYG{n}{t}\PYG{p}{,}\PYG{n}{m1}\PYG{p}{,}\PYG{n}{m2}\PYG{p}{,}\PYG{n}{i1}\PYG{p}{,}\PYG{n}{i2}\PYG{p}{,}\PYG{n}{g} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}x1,y1,x2,y2,l1,l2,v1,v2,t,m1,m2,i1,i2,g\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{theta1} \PYG{o}{=} \PYG{n}{Function}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}theta1\PYGZsq{}}\PYG{p}{)(}\PYG{n}{t}\PYG{p}{)}
+\PYG{n}{theta2} \PYG{o}{=} \PYG{n}{Function}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}theta2\PYGZsq{}}\PYG{p}{)(}\PYG{n}{t}\PYG{p}{)}
+
+\PYG{n}{theta\PYGZus{}dot1} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+\PYG{n}{theta\PYGZus{}dot2} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+
+\PYG{n}{x1} \PYG{o}{=} \PYG{p}{(}\PYG{n}{l1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)}
+\PYG{n}{x2} \PYG{o}{=} \PYG{n}{l1}\PYG{o}{*}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)} \PYG{o}{+} \PYG{p}{(}\PYG{n}{l2}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{)}
+\PYG{n}{y1} \PYG{o}{=} \PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{p}{(}\PYG{n}{l1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{))}\PYG{o}{*}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)}
+\PYG{n}{y2} \PYG{o}{=} \PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{p}{(}\PYG{n}{l1}\PYG{o}{*}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)))}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{l2}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{)}
+
+\PYG{n}{vx1} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{x1}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+\PYG{n}{vx2} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{x2}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+\PYG{n}{vy1} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{y1}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+\PYG{n}{vy2} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{y2}\PYG{p}{,} \PYG{n}{t}\PYG{p}{)}
+
+\PYG{n}{vt1} \PYG{o}{=} \PYG{n}{vx1}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n}{vy1}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{vt2} \PYG{o}{=} \PYG{n}{vx2}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n}{vy2}\PYG{o}{**}\PYG{l+m+mi}{2}
+
+\PYG{n}{Trec1} \PYG{o}{=} \PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{m1} \PYG{o}{*} \PYG{n}{v1}\PYG{o}{.}\PYG{n}{subs}\PYG{p}{(}\PYG{n}{v1}\PYG{p}{,} \PYG{n}{vt1}\PYG{p}{)}
+\PYG{n}{Trec2} \PYG{o}{=} \PYG{l+m+mf}{0.5} \PYG{o}{*} \PYG{n}{m2} \PYG{o}{*} \PYG{n}{v1}\PYG{o}{.}\PYG{n}{subs}\PYG{p}{(}\PYG{n}{v2}\PYG{p}{,} \PYG{n}{vt2}\PYG{p}{)}
+
+\PYG{n}{Trot1} \PYG{o}{=} \PYG{l+m+mf}{0.5}\PYG{o}{*} \PYG{n}{i1}\PYG{o}{*} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{,}\PYG{n}{t}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n}{Trot2} \PYG{o}{=} \PYG{l+m+mf}{0.5}\PYG{o}{*} \PYG{n}{i2}\PYG{o}{*} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{,}\PYG{n}{t}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+
+\PYG{n}{T} \PYG{o}{=} \PYG{n}{Trec1} \PYG{o}{+} \PYG{n}{Trot1} \PYG{o}{+}\PYG{n}{Trec2} \PYG{o}{+} \PYG{n}{Trot2}
+\PYG{n}{U1} \PYG{o}{=} \PYG{p}{((}\PYG{n}{m1}\PYG{o}{*}\PYG{n}{g}\PYG{o}{*}\PYG{n}{l1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)}
+\PYG{n}{U2} \PYG{o}{=} \PYG{p}{((}\PYG{n}{m2}\PYG{o}{*}\PYG{n}{g}\PYG{p}{)}\PYG{o}{*}\PYG{p}{((}\PYG{n}{l1}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{))))}\PYG{o}{+}\PYG{p}{((}\PYG{n}{l2}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{))))}
+\PYG{n}{U} \PYG{o}{=} \PYG{n}{U1} \PYG{o}{+} \PYG{n}{U2}
+\PYG{n}{L} \PYG{o}{=} \PYG{n}{T} \PYG{o}{\PYGZhy{}} \PYG{n}{U}
+
+\PYG{n}{Q1} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,}\PYG{n}{theta\PYGZus{}dot1}\PYG{p}{),}\PYG{n}{t}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,}\PYG{n}{theta1}\PYG{p}{)}
+\PYG{n}{Q2} \PYG{o}{=} \PYG{n}{diff}\PYG{p}{(}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,}\PYG{n}{theta\PYGZus{}dot2}\PYG{p}{),}\PYG{n}{t}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{n}{diff}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,}\PYG{n}{theta2}\PYG{p}{)}
+
+\PYG{n}{l1}\PYG{p}{,} \PYG{n}{l2} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}
+\PYG{n}{m1}\PYG{p}{,} \PYG{n}{m2} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}
+\PYG{n}{g} \PYG{o}{=} \PYG{l+m+mf}{9.81}
+
+\PYG{k}{def} \PYG{n+nf}{ode\PYGZus{}func\PYGZus{}2}\PYG{p}{(}\PYG{n}{y}\PYG{p}{,} \PYG{n}{t}\PYG{p}{,} \PYG{n}{l1}\PYG{p}{,} \PYG{n}{l2}\PYG{p}{,} \PYG{n}{m1}\PYG{p}{,} \PYG{n}{m2}\PYG{p}{):}
+    \PYG{n}{theta1}\PYG{p}{,} \PYG{n}{z1}\PYG{p}{,} \PYG{n}{theta2}\PYG{p}{,} \PYG{n}{z2} \PYG{o}{=} \PYG{n}{y}
+
+    \PYG{n}{c}\PYG{p}{,} \PYG{n}{s} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta1}\PYG{o}{\PYGZhy{}}\PYG{n}{theta2}\PYG{p}{),} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta1}\PYG{o}{\PYGZhy{}}\PYG{n}{theta2}\PYG{p}{)}
+
+    \PYG{n}{theta1dot} \PYG{o}{=} \PYG{n}{z1}
+    \PYG{n}{z1dot} \PYG{o}{=} \PYG{p}{(}\PYG{n}{m2}\PYG{o}{*}\PYG{n}{g}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{c} \PYG{o}{\PYGZhy{}} \PYG{n}{m2}\PYG{o}{*}\PYG{n}{s}\PYG{o}{*}\PYG{p}{(}\PYG{n}{l1}\PYG{o}{*}\PYG{n}{z1}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{c} \PYG{o}{+} \PYG{n}{l2}\PYG{o}{*}\PYG{n}{z2}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{m1}\PYG{o}{+}\PYG{n}{m2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{g}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{))} \PYG{o}{/} \PYG{n}{l1} \PYG{o}{/} \PYG{p}{(}\PYG{n}{m1} \PYG{o}{+} \PYG{n}{m2}\PYG{o}{*}\PYG{n}{s}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{n}{theta2dot} \PYG{o}{=} \PYG{n}{z2}
+    \PYG{n}{z2dot} \PYG{o}{=} \PYG{p}{((}\PYG{n}{m1}\PYG{o}{+}\PYG{n}{m2}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{l1}\PYG{o}{*}\PYG{n}{z1}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{s} \PYG{o}{\PYGZhy{}} \PYG{n}{g}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{)} \PYG{o}{+} \PYG{n}{g}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)}\PYG{o}{*}\PYG{n}{c}\PYG{p}{)} \PYG{o}{+} \PYG{n}{m2}\PYG{o}{*}\PYG{n}{l2}\PYG{o}{*}\PYG{n}{z2}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{s}\PYG{o}{*}\PYG{n}{c}\PYG{p}{)} \PYG{o}{/} \PYG{n}{l2} \PYG{o}{/} \PYG{p}{(}\PYG{n}{m1} \PYG{o}{+} \PYG{n}{m2}\PYG{o}{*}\PYG{n}{s}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{theta1dot}\PYG{p}{,} \PYG{n}{z1dot}\PYG{p}{,} \PYG{n}{theta2dot}\PYG{p}{,} \PYG{n}{z2dot}
+
+\PYG{k}{def} \PYG{n+nf}{total\PYGZus{}E}\PYG{p}{(}\PYG{n}{y}\PYG{p}{):}
+    \PYG{n}{th1}\PYG{p}{,} \PYG{n}{th1d}\PYG{p}{,} \PYG{n}{th2}\PYG{p}{,} \PYG{n}{th2d} \PYG{o}{=} \PYG{n}{y}\PYG{o}{.}\PYG{n}{T}
+    \PYG{n}{V} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{m1}\PYG{o}{+}\PYG{n}{m2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{l1}\PYG{o}{*}\PYG{n}{g}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{th1}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{m2}\PYG{o}{*}\PYG{n}{l2}\PYG{o}{*}\PYG{n}{g}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{th2}\PYG{p}{)}
+    \PYG{n}{T} \PYG{o}{=} \PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{n}{m1}\PYG{o}{*}\PYG{p}{(}\PYG{n}{l1}\PYG{o}{*}\PYG{n}{th1d}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{n}{m2}\PYG{o}{*}\PYG{p}{((}\PYG{n}{l1}\PYG{o}{*}\PYG{n}{th1d}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{p}{(}\PYG{n}{l2}\PYG{o}{*}\PYG{n}{th2d}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{l1}\PYG{o}{*}\PYG{n}{l2}\PYG{o}{*}\PYG{n}{th1d}\PYG{o}{*}\PYG{n}{th2d}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{th1}\PYG{o}{\PYGZhy{}}\PYG{n}{th2}\PYG{p}{))}
+    \PYG{k}{return} \PYG{n}{T} \PYG{o}{+} \PYG{n}{V}
+
+\PYG{n}{tmax}\PYG{p}{,} \PYG{n}{dt} \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mf}{0.01}
+\PYG{n}{t} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{tmax}\PYG{o}{+}\PYG{n}{dt}\PYG{p}{,} \PYG{n}{dt}\PYG{p}{)}
+\PYG{n}{y0} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{])}
+
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{odeint}\PYG{p}{(}\PYG{n}{ode\PYGZus{}func\PYGZus{}2}\PYG{p}{,} \PYG{n}{y0}\PYG{p}{,} \PYG{n}{t}\PYG{p}{,} \PYG{n}{args}\PYG{o}{=}\PYG{p}{(}\PYG{n}{l1}\PYG{p}{,} \PYG{n}{l2}\PYG{p}{,} \PYG{n}{m1}\PYG{p}{,} \PYG{n}{m2}\PYG{p}{))}
+
+\PYG{n}{theta1}\PYG{p}{,} \PYG{n}{theta2} \PYG{o}{=} \PYG{n}{y}\PYG{p}{[:,}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{y}\PYG{p}{[:,}\PYG{l+m+mi}{2}\PYG{p}{]}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}all\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{n}{theta1}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Pendulum 1\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{n}{theta2}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}} \PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Pendulum 2\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}t/s\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}Delta \PYGZbs{}theta\PYGZdl{}/rads\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of the change in \PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}theta\PYGZcb{}\PYGZdl{} in time\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}plots/Plot 3.1.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}all\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{x1} \PYG{o}{=} \PYG{n}{l1} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)}
+\PYG{n}{y1} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{n}{l1} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{)}
+\PYG{n}{x2} \PYG{o}{=} \PYG{n}{x1} \PYG{o}{+} \PYG{n}{l2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{)}
+\PYG{n}{y2} \PYG{o}{=} \PYG{n}{y1} \PYG{o}{\PYGZhy{}} \PYG{n}{l2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{theta2}\PYG{p}{)}
+
+\PYG{n}{r} \PYG{o}{=} \PYG{l+m+mf}{0.05}
+\PYG{n}{trail\PYGZus{}secs} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{n}{max\PYGZus{}trail} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{trail\PYGZus{}secs} \PYG{o}{/} \PYG{n}{dt}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{make\PYGZus{}plot2}\PYG{p}{(}\PYG{n}{i}\PYG{p}{):}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{([}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{x1}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{x2}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]],} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{y1}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{y2}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]],} \PYG{n}{lw}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{c}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{c0} \PYG{o}{=} \PYG{n}{Circle}\PYG{p}{((}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{),} \PYG{n}{r}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{fc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{zorder}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+    \PYG{n}{c1} \PYG{o}{=} \PYG{n}{Circle}\PYG{p}{((}\PYG{n}{x1}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{y1}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]),} \PYG{n}{r}\PYG{p}{,} \PYG{n}{fc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}b\PYGZsq{}}\PYG{p}{,} \PYG{n}{ec}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}b\PYGZsq{}}\PYG{p}{,} \PYG{n}{zorder}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+    \PYG{n}{c2} \PYG{o}{=} \PYG{n}{Circle}\PYG{p}{((}\PYG{n}{x2}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{y2}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]),} \PYG{n}{r}\PYG{p}{,} \PYG{n}{fc}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}r\PYGZsq{}}\PYG{p}{,} \PYG{n}{ec}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}r\PYGZsq{}}\PYG{p}{,} \PYG{n}{zorder}\PYG{o}{=}\PYG{l+m+mi}{10}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{add\PYGZus{}patch}\PYG{p}{(}\PYG{n}{c0}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{add\PYGZus{}patch}\PYG{p}{(}\PYG{n}{c1}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{add\PYGZus{}patch}\PYG{p}{(}\PYG{n}{c2}\PYG{p}{)}
+
+    \PYG{n}{ns} \PYG{o}{=} \PYG{l+m+mi}{20}
+    \PYG{n}{s} \PYG{o}{=} \PYG{n}{max\PYGZus{}trail} \PYG{o}{//} \PYG{n}{ns}
+
+    \PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{ns}\PYG{p}{):}
+        \PYG{n}{imin} \PYG{o}{=} \PYG{n}{i} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{ns}\PYG{o}{\PYGZhy{}}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{n}{s}
+        \PYG{k}{if} \PYG{n}{imin} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{k}{continue}
+        \PYG{n}{imax} \PYG{o}{=} \PYG{n}{imin} \PYG{o}{+} \PYG{n}{s} \PYG{o}{+} \PYG{l+m+mi}{1}
+        \PYG{n}{alpha} \PYG{o}{=} \PYG{p}{(}\PYG{n}{j}\PYG{o}{/}\PYG{n}{ns}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+        \PYG{n}{ax}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x2}\PYG{p}{[}\PYG{n}{imin}\PYG{p}{:}\PYG{n}{imax}\PYG{p}{],} \PYG{n}{y2}\PYG{p}{[}\PYG{n}{imin}\PYG{p}{:}\PYG{n}{imax}\PYG{p}{],} \PYG{n}{c}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}r\PYGZsq{}}\PYG{p}{,} \PYG{n}{solid\PYGZus{}capstyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}butt\PYGZsq{}}\PYG{p}{,} \PYG{n}{lw}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{n}{alpha}\PYG{p}{)}
+
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlim}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{l1}\PYG{o}{\PYGZhy{}}\PYG{n}{l2}\PYG{o}{\PYGZhy{}}\PYG{n}{r}\PYG{p}{,} \PYG{n}{l1}\PYG{o}{+}\PYG{n}{l2}\PYG{o}{+}\PYG{n}{r}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylim}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{l1}\PYG{o}{\PYGZhy{}}\PYG{n}{l2}\PYG{o}{\PYGZhy{}}\PYG{n}{r}\PYG{p}{,} \PYG{n}{l1}\PYG{o}{+}\PYG{n}{l2}\PYG{o}{+}\PYG{n}{r}\PYG{p}{)}
+    \PYG{n}{ax}\PYG{o}{.}\PYG{n}{set\PYGZus{}aspect}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}equal\PYGZsq{}}\PYG{p}{,} \PYG{n}{adjustable}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}box\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{axis}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}off\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}frames2/\PYGZus{}img}\PYG{l+s+si}{\PYGZob{}:04d\PYGZcb{}}\PYG{l+s+s1}{.png\PYGZsq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{i}\PYG{o}{//}\PYG{n}{di}\PYG{p}{),} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{cla}\PYG{p}{()}
+
+
+\PYG{n}{fps} \PYG{o}{=} \PYG{l+m+mi}{10}
+\PYG{n}{di} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{fps}\PYG{o}{/}\PYG{n}{dt}\PYG{p}{)}
+\PYG{n}{fig} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{8.3333}\PYG{p}{,} \PYG{l+m+mf}{6.25}\PYG{p}{),} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{72}\PYG{p}{)}
+\PYG{n}{ax} \PYG{o}{=} \PYG{n}{fig}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{l+m+mi}{111}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{t}\PYG{o}{.}\PYG{n}{size}\PYG{p}{,} \PYG{n}{di}\PYG{p}{):}
+    \PYG{n}{make\PYGZus{}plot2}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{fourier}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{,}\PYG{n}{theta2}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} Fourier transformation}
+    \PYG{c+c1}{\PYGZsh{} Sampling space = Frequency * total time}
+    \PYG{n}{N} \PYG{o}{=} \PYG{l+m+mi}{100} \PYG{o}{*} \PYG{l+m+mi}{10}
+    \PYG{c+c1}{\PYGZsh{} theta}
+    \PYG{n}{x1} \PYG{o}{=} \PYG{n}{theta1}
+    \PYG{c+c1}{\PYGZsh{} theta\PYGZus{}dot}
+    \PYG{n}{y1} \PYG{o}{=} \PYG{n}{theta1}
+    \PYG{c+c1}{\PYGZsh{} Periodic Time}
+    \PYG{n}{T} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{N}
+    \PYG{n}{yf1} \PYG{o}{=} \PYG{n}{fft}\PYG{p}{(}\PYG{n}{y1}\PYG{p}{)}
+    \PYG{n}{xf1} \PYG{o}{=} \PYG{n}{fftfreq}\PYG{p}{(}\PYG{n}{N}\PYG{p}{,} \PYG{n}{T}\PYG{p}{)[:}\PYG{n}{N}\PYG{o}{//}\PYG{l+m+mi}{2}\PYG{p}{]}
+
+    \PYG{c+c1}{\PYGZsh{} theta}
+    \PYG{n}{x2} \PYG{o}{=} \PYG{n}{theta2}
+    \PYG{c+c1}{\PYGZsh{} theta\PYGZus{}dot}
+    \PYG{n}{y2} \PYG{o}{=} \PYG{n}{theta2}
+    \PYG{c+c1}{\PYGZsh{} Periodic Time}
+    \PYG{n}{T} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{N}
+    \PYG{n}{yf2} \PYG{o}{=} \PYG{n}{fft}\PYG{p}{(}\PYG{n}{y2}\PYG{p}{)}
+    \PYG{n}{xf2} \PYG{o}{=} \PYG{n}{fftfreq}\PYG{p}{(}\PYG{n}{N}\PYG{p}{,} \PYG{n}{T}\PYG{p}{)[:}\PYG{n}{N}\PYG{o}{//}\PYG{l+m+mi}{2}\PYG{p}{]}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{xf1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{o}{/}\PYG{n}{N} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{yf1}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:(}\PYG{n}{N}\PYG{o}{//}\PYG{l+m+mi}{2}\PYG{p}{)]),} \PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Pendulum 1\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{xf2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{o}{/}\PYG{n}{N} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{yf2}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:(}\PYG{n}{N}\PYG{o}{//}\PYG{l+m+mi}{2}\PYG{p}{)]),} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Pendulum 2\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Frequency\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}Delta \PYGZbs{}theta\PYGZdl{}/rads\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Fourier transformation of the Double Pendulum\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+    \PYG{c+c1}{\PYGZsh{} Saving the figure}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}plots/Plot 3.2.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{n}{fourier}\PYG{p}{(}\PYG{n}{theta1}\PYG{p}{,} \PYG{n}{theta2}\PYG{p}{)}
+
+\end{Verbatim}
