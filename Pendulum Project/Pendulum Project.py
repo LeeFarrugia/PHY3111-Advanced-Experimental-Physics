@@ -188,8 +188,8 @@ L = T - U
 Q1 = diff(diff(L,theta_dot1),t)-diff(L,theta1)
 Q2 = diff(diff(L,theta_dot2),t)-diff(L,theta2)
 
-l1, l2 = 1, 1
-m1, m2 = 1, 1
+l1, l2 = 1, 1.5
+m1, m2 = 2, 1
 g = 9.81
 
 def ode_func_2(y, t, l1, l2, m1, m2):
