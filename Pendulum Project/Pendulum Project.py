@@ -1,7 +1,7 @@
 import numpy as np
 import scipy as sc
 import matplotlib.pyplot as plt
-from math import *
+from math import sin, cos
 from sympy import *
 from scipy.integrate import odeint
 from scipy.fft import fft, fftfreq
@@ -70,7 +70,7 @@ for a in range(len(theta_0)-1):
 
     plt.legend()
     plt.tight_layout()
-    # plt.savefig(f'Plot 1.{a+1}.png', dpi=800)
+    plt.savefig(f'plots/Plot 1.{a+1}.png', dpi=800)
     plt.close()
 
     # Fourier transformation
@@ -101,7 +101,7 @@ for a in range(len(theta_0)-1):
     plt.title('Fourier transformation of the Single Pendulum')
     plt.tight_layout()
     # Saving the figure
-    # plt.savefig(f'Plot 2.{a+1}.png', dpi=800)
+    plt.savefig(f'plots/Plot 2.{a+1}.png', dpi=800)
     plt.close()
 
 plt.figure()
@@ -112,18 +112,18 @@ x = r * np.sin(theta_a)
 y = (-1*r) * np.cos(theta_a)
 
 tmax, dt = 10, 0.01
-t = np.arange(0, tmax+dt, dt)
+t1 = np.arange(0, tmax+dt, dt)
 
 r = 0.05
 trail_secs = 1
 max_trail = int(trail_secs / dt)
 
 def make_plot1(i):
-    ax.plot([0,x[i]], [0, y[i]], lw=2, c='k')
+    ax.plot([0, x[i]], [0, y[i]], lw=2, c='k')
     c0 = Circle((0, 0), r/2, fc='k', zorder=10)
     c1 = Circle((x[i], y[i]), r, fc='b', ec='b', zorder=10)
-    ax.add_patch(c0)
-    ax.add_patch(c1)
+    ax.add_patch(c0)#type:ignore
+    ax.add_patch(c1)#type:ignore
 
     ns = 20
     s = max_trail // ns
@@ -150,7 +150,7 @@ di = int(1/fps/dt)
 fig = plt.figure(figsize=(8.3333, 6.25), dpi=72)
 ax = fig.add_subplot(111)
 
-for i in range(0, t.size, di):
+for i in range(0, t1.size-1, di):
     make_plot1(i)
 
 x1,y1,x2,y2,l1,l2,v1,v2,t,m1,m2,i1,i2,g = symbols('x1,y1,x2,y2,l1,l2,v1,v2,t,m1,m2,i1,i2,g')#type:ignore
@@ -181,8 +181,7 @@ Trot2 = 0.5* i2* diff(theta2,t)**2
 
 T = Trec1 + Trot1 +Trec2 + Trot2
 U1 = ((m1*g*l1)/2)*1-cos(theta1)
-U2 = ((m2*g)*((l1*(1-cos(theta1))))+((l2/2)*(1-cos(theta2))))
-
+U2 = ((m2*g)*((l1*(1-cos(theta1))))+((l2/2)*(1-cos(theta2))))#type:ignore
 U = U1 + U2
 L = T - U
 
@@ -221,6 +220,27 @@ y = odeint(ode_func_2, y0, t, args=(l1, l2, m1, m2))
 
 theta1, theta2 = y[:,0], y[:,2]
 
+plt.close('all')
+
+plt.figure(figsize=(7.5, 10.5))
+plt.rcParams['font.family'] = 'STIXGeneral'
+plt.rcParams['mathtext.fontset'] = 'stix'
+plt.rcParams['font.size'] = 12
+plt.rcParams['font.weight'] = 'normal'
+plt.minorticks_on()
+plt.grid(visible=True, which='major', linestyle='-')
+plt.grid(visible=True, which='minor', linestyle='--')
+
+plt.plot(t, theta1, color='k', label='Pendulum 1')
+plt.plot(t, theta2,'--' , color='k', label='Pendulum 2')
+plt.xlabel('t/s')
+plt.ylabel(r'$\Delta \theta$/rads')
+plt.title(r'A graph of the change in $\mathrm{\theta}$ in time')
+plt.legend()
+plt.savefig('plots/Plot 3.1.png', dpi=800)
+
+plt.close('all')
+
 x1 = l1 * np.sin(theta1)
 y1 = -l1 * np.cos(theta1)
 x2 = x1 + l2 * np.sin(theta2)
@@ -235,9 +255,9 @@ def make_plot2(i):
     c0 = Circle((0, 0), r/2, fc='k', zorder=10)
     c1 = Circle((x1[i], y1[i]), r, fc='b', ec='b', zorder=10)
     c2 = Circle((x2[i], y2[i]), r, fc='r', ec='r', zorder=10)
-    ax.add_patch(c0)
-    ax.add_patch(c1)
-    ax.add_patch(c2)
+    ax.add_patch(c0)#type:ignore
+    ax.add_patch(c1)#type:ignore
+    ax.add_patch(c2)#type:ignore
 
     ns = 20
     s = max_trail // ns
@@ -305,7 +325,7 @@ def fourier(theta1,theta2):
     plt.title('Fourier transformation of the Double Pendulum')
     plt.legend()
     # Saving the figure
-    plt.savefig('Plot 3.1.png', dpi=800)
+    plt.savefig('plots/Plot 3.2.png', dpi=800)
     plt.close()
 
 fourier(theta1, theta2)
