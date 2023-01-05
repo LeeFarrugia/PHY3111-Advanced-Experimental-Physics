@@ -13,10 +13,10 @@
 \pagestyle{mystyle}
 
 \section{Abstract}
-This project was done in order to simulate the different motions of a single compound pendulum and a double compound pendulum, while also deriving the equations of motion symbolically starting from the Cartesian coordinate relationship with the generalised coordinate \(\theta\). Furthermore, the fourier transformation of each system was found and plotted along with the changes of \(\theta\) and \(\dot{\theta}\).
+This project was undertaken in order to simulate the different motions of a single compound pendulum and a double compound pendulum, while also deriving the equations of motion symbolically starting from the Cartesian coordinate relationship with the generalised coordinate \(\theta\). Furthermore, the Fourier transformation of each system was found and plotted along with the changes of \(\theta\) and \(\dot{\theta}\).
 
 \section{Introduction \& Theoretical Background}
-As stated in \cite{hinrichsen1981practical}, compound pendulums in their many forms as outlined in \cite{harmographics1}, can be used to determine complex analysis of two parameters, their positions and their moment of inertia. One of the many uses of these compound pendulums both single and double can be seen in \cite{art}, where they state that they can be used in order to produce Lissajous figures. Furthermore, as \cite{hinrichsen1981practical} stated in their paper, the use of pendulums can be used to simulate the distribution of mass for astronauts, farm tractors and sailing boats in motion.
+As stated in \cite{hinrichsen1981practical}, compound pendulums in their many forms as outlined in \cite{harmographics1}, can be used to determine the complex analysis of two parameters, their positions and their moment of inertia. One of the many uses of these compound pendulums, including both single and double compound pendulums, can be seen in \cite{art}, where they state that they can be used in order to produce Lissajous figures. Furthermore, as \cite{hinrichsen1981practical} stated in their paper, pendulums can be used to simulate the distribution of mass for astronauts, farm tractors and sailing boats in motion.
 
 \section{Materials \& Methods}
 \subsection{Language and Packages}
@@ -26,7 +26,7 @@ Python 3.10.8, Numpy, Sympy, Scipy, Matplotlib.pyplot, Scipy.integrate, Scipy.ff
 \textbf{Single Compound Pendulum}
 \begin{enumerate}
     \item Use the Sympy package to define the relations between the Cartesian coordinates, \textit{x} and
-    \textit{y}, and the generalised coordinate \textit{\(\theta\)}. Determine the velocities in both the \textit{x} and \textit{y} directions. Furthermore, determine the rectilinear and rotational energies of the pendulum. By working out the total kinetic energy and potential energies of the system find the Lagrangian of the system. Assume that the zero-point for the potential energy is at the minimum heigh of the pendulum. Find the equation of motion using the Euler-Lagrange equation. 
+    \textit{y}, and the generalised coordinate \textit{\(\theta\)}. Determine the velocities in both the \textit{x} and \textit{y} directions. Then, determine the rectilinear and rotational energies of the pendulum. By working out the total kinetic energy and potential energies of the system find the Lagrangian of the system. Assume that the zero-point for the potential energy is at the minimum height of the pendulum. Find the equation of motion using the Euler-Lagrange equation. 
     \item Using the following initial conditions: \(m = \qty{1}{\kilogram}, l = \qty{1}{\meter}, i = \qty{0.025}{\kilogram\metre\squared}\), calculate \(\theta\) and \(\dot{\theta}\) over time, taking samples of \qty{100}{\hertz} for \qty{10}{\second}, taking \(\theta = \frac{\pi}{2}\)\unit{\radian} and \(\dot{\theta}\)=\qty{0}{\radian\per\second}. Take a Fourier transformation of the oscillating system and create an animation of the pendulum.
 \end{enumerate}
 \textbf{Double Compound Pendulum}
@@ -42,56 +42,56 @@ The simple compound pendulum equation of motion that was derived is as follows:
     \ddot{\theta} = \frac{-mgr\sin \theta}{i+mr^2}
 \end{align}
 
-where m is the mass of the pendulum, theta is the angle, i is the inertia, r is the radius of the oscillations and \(\ddot{\theta}\) is the acceleration in theta. By taking the system properties and initial conditions as mentioned in the method, the graph~\ref{fig: pendulum 1.1} was obtained. In this graph one can see that both the change in \(\dot{\theta}\) and \(\ddot{\theta}\) is harmonic with time. This corresponds to the positional change that ne observes when observing a pendulum.
+where m is the mass of the pendulum, theta is the angle, i is the inertia, r is the radius of the oscillations and \(\ddot{\theta}\) is the acceleration in theta. By taking the system properties and initial conditions as mentioned in the method, the graph~\ref{fig: pendulum 1.1} was obtained. In this graph, one can see that both the change in \(\dot{\theta}\) and \(\ddot{\theta}\) is harmonic with time. This corresponds to the positional change that one notes when observing a pendulum.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{plots/Plot 1.1.png}\caption{Plot of the outlined system properties and initial conditions}\label{fig: pendulum 1.1}
 \end{figure}
 
-However, if the system properties were kept constant and the initial conditions are changed, different change in \(\theta\) can be observed. For example if the initial conditions are changed to: \(\theta = \frac{\pi}{4}, \dot{\theta} = 0\), the following graph is obtained:
+However, if the system properties were kept constant and the initial conditions were changed, different changes in \(\theta\) would be observed. For example if the initial conditions are changed to: \(\theta = \frac{\pi}{4}, \dot{\theta} = 0\), the following graph is obtained:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{plots/Plot 1.5.png}\caption{\(\theta = \frac{\pi}{4}, \dot{\theta} = 0\)}\label{fig: pendulum 1.2}
 \end{figure}
 
-In graph~\ref{fig: pendulum 1.2}, one can see that the amplitude does not reach the previous extent as can be seen in graph~\ref{fig: pendulum 1.1} as the initial angle is halved. After which the Fourier transformation was applied on the system in order to observe the change in \(\theta\) with frequency. If the outlined initial are used the following graph is obtained:
+In graph~\ref{fig: pendulum 1.2}, one can see that the amplitude does not reach the previous extent as can be seen in graph~\ref{fig: pendulum 1.1} as the initial angle is halved. The Fourier transformation was then  applied on the system in order to observe the change in \(\theta\) with frequency. If the outlined initial conditions are used, then the following graph is obtained:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{plots/Plot 2.1.png}\caption{Fourier transformation of the initial conditions}\label{fig: foruier 1.1}
 \end{figure}
 
-Here, one can notice the initial high peak when the frequency is at \qty{10}{\hertz}, with additional smaller peaks at higher frequencies. This corresponds to the sampling frequency of \qty{100}{\hertz} in \qty{10}{\second}. However, if the conditions are changed to: \(\theta = \frac{\pi}{4}, \dot{\theta} = 0\), the following graph is obtained:
+Here, one can notice the initial high peak when the frequency is at \qty{10}{\hertz}, with additional smaller peaks at higher frequencies. This corresponds to the sampling frequency of \qty{100}{\hertz} in \qty{10}{\second}. However, if the conditions are changed to: \(\theta = \frac{\pi}{4}, \dot{\theta} = 0\), then the following graph is obtained:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{plots/Plot 2.5.png}\caption{Fourier transformation of \(\theta = \frac{\pi}{4}, \dot{\theta} = 0\)}\label{fig: fourier 1.2}
 \end{figure}
 
-One should observe a smaller high peak at ten seconds and less smaller peaks as the frequency increases. This, sheds light on the fact that with different initial conditions the amplitude will change accordingly and different peaks will be observed. All of these results correspond with the observation of a simple compound pendulum as mentioned in \cite{pedersen1977compound}. 
+One should observe a high peak at ten seconds and smaller peaks as the frequency increases. This sheds light on the fact that with different initial conditions, the amplitude will change accordingly and different peaks will be observed. All of these results correspond with the observation of a simple compound pendulum as mentioned in \cite{pedersen1977compound}. 
 
-Next the double compound pendulum was simulated with the given system properties and initial conditions. From this simulation the following graph was obtained:
+Following this, the double compound pendulum was simulated with the given system properties and initial conditions. From this simulation the following graph was obtained:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{plots/Plot 3.1.png}\caption{A graph of the given system properties and initial conditions for the double compound pendulum}\label{fig: pendulum 2.1}
 \end{figure}
 
-Here, one should note that the usual harmonic motion of the pendulum is lost in both parts opf the pendulum. Additionally not only is the harmonic nature lost but it is extremely lost in the second part of the pendulum. After this a Fourier transformation is applied on the initial system properties and conditions, in order to obtain the following graph:
+Here, one should note that the usual harmonic motion of the pendulum is lost in both parts of the pendulum. Additionally, not only is the harmonic nature of the pendulum lost but it is noted to be increasingly random in the second part of the pendulum. Following this, a Fourier transformation was applied on the initial system properties and conditions, in order to obtain the following graph:
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{plots/Plot 3.2.png}\caption{Fourier transformation the initial conditions for double compound pendulum}\label{fig: fourier 2.2}
 \end{figure}
 
-In this Fourier transformation one should note that there are two peaks at the \qty{100}{\hertz}, one for each pendulum part. Additionally one should not the increased amount of smaller peaks at higher frequency, which corresponds to the motion of the double compound pendulum. Furthermore, one should additionally not that at larger frequencies the second part of pendulum denoted as pendulum 2 in graph~\ref{fig: fourier 3.2}, have more peaks than the first part of the pendulum. 
+In this Fourier transformation, one should note that there are two peaks at the \qty{100}{\hertz}, one for each pendulum part. Additionally one should note the increased amount of smaller peaks at higher frequency, which correspond to the motion of the double compound pendulum. Furthermore, one should note that at larger frequencies, the second part of pendulum denoted as pendulum 2 in graph~\ref{fig: fourier 3.2}, has more peaks than the first part of the pendulum. 
 
-As stated in \cite{chaos}, the double compound pendulum relies heavily on the initial conditions, as a small change in these will effect the outcome. However, it should be noted that nonetheless double compound pendulum suffers from what is referred to chaos. As mentioned before a change in the initial conditions, will result in a change in the chaos of the system. This chaos can be seen in graph~\ref{fig: pendulum 1.1} where the second part of the pendulum that is denoted as pendulum 2, instantly loses any form of harmonic motion, which in turn will affect the motion of the first of the pendulum. \cite{chaos} also state that if two double pendulums are put in motion together with the same angle they will continue move in tandem but at ta point will they will no longer be in tandem. This separation in movement can be seen earlier if the initial angle is even larger. They, further stress that this is not due to any experimental set up mistakes but rather due to the chaotic nature of the pendulums.
+As stated in \cite{chaos}, the double compound pendulum relies heavily on the initial conditions used, as a small change in these will affect the outcome. However, it should be noted that nevertheless, the double compound pendulum suffers from what is referred to as chaos. As mentioned before a change in the initial conditions, will result in a change in the chaos of the system. This chaos can be seen in graph~\ref{fig: pendulum 1.1} where the second part of the pendulum that is denoted as pendulum 2, instantly loses any form of harmonic motion, which in turn, will affect the motion of the first of the pendulum. \cite{chaos} also state that if two double pendulums are put in motion together with the same angle they will continue to move in tandem but at a certain point they will no longer do so. This separation in movement can be seen earlier if the initial angle used is larger. They, further stress that this is not due to any experimental setup mistakes but rather due to the chaotic nature of the pendulums.
 
 \section{Conclusion}
-From this project we can see that the single compound pendulum follows the same harmonic motion as the simple pendulum. However, when a second compound pendulum is added to the system, the system no longer follows the harmonic nature of pendulums, rather chaos is introduced to the motion. This chaos, or unpredictability in the motion, would in crease if the initial angle of the pendulum is larger than the one out lined in the method.
+From this project we can see that the single compound pendulum follows the same harmonic motion as the simple pendulum. However, when a second compound pendulum is added to the system, it no longer follows the harmonic nature of pendulums, but rather chaos is introduced to the motion. This chaos, or unpredictability in the motion, would increase if the initial angle of the pendulum is larger than the one previously outlined in the method.
 
 \section{References}
 \printbibliography[heading = none]
