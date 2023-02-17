@@ -44,9 +44,9 @@ for i in range(vdiff):
 
 difflt = sum(difflist)
 sumlt = sum(sumlist)
-sol = sqrt(sum(soln))
+#sol = sqrt(sum(soln))
 
 # printing everything
 print(f'The partial derivative is: {difflt}')
 print(f'The numerical solution of the derivative is: {sumlt:.2E}')
-print(f'The solution is: {sol:.2E}')
+#print(f'The solution is: {sol:.2E}')
