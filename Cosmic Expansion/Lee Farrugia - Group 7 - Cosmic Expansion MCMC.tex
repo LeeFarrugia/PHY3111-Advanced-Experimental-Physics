@@ -82,12 +82,23 @@ It should be noted that the date for the redshift did not have any errors where 
     \label{fig:corner~plots}
 \end{figure}
 
-From the figure one can note that the best fit parameters were \(H_0 = 74.99 \pm 17.02\)~\unit{km.s^{-1}.Mpc^{-1}}, \(\Omega_{\mathrm{matter}} = 0.5 \pm 0.27\) and \(M = -21.18\). The points of intersection showed by the blue lines on the corner plots indicate where the best fit parameters can be found. 
+From the figure one can note that the best fit parameters were \(H_0 = 74.99 \pm 17.02\)~\unit{km.s^{-1}.Mpc^{-1}}, \(\Omega_{\mathrm{matter}} = 0.5 \pm 0.27\) and \(M = -21.18\). The points of intersection showed by the blue lines on the corner plots indicate where the best fit parameters can be found. These obtained best fit parameters were then used in conjunction with the scipy.optimize.curvefit to obtain the line the best fit for the SN dataset. The fit obtained can be seen in figure~\ref{fig:final~graph}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{Graph 5.png}
+    \label{fig:final~graph}
 \end{figure}
+
+The accuracy of the values obtained from the MCMC were calculated as follows:
+\begin{equation}
+    \mathrm{Accuracy} = \frac{\mathrm{Experimental}}{\mathrm{Actual}} - 1 \times 100\% \,,
+\end{equation}
+which resulted in an accuracy of \(11.26\%\) for the Hubble parameter and \(58.73\%\) for \(\Omega_{\mathrm{matter_0}}\).
+
+\section{Conclusion}
+
+In conclusion, one should note that the precision for both the Hubble parameter and \(\Omega_{\mathrm{matter_0}}\) are both above the 10\% cut off point which signifies that the values obtained are not that precise. This could be a result of the fact that the number of walker and iterations used in the MCMC was not optimized thus introducing errors in the calculations. The selection of the amount of walker and iterations could be further optimized but checking which is the lowest possible amount to produce the best fit parameters. Additionally, the correlation matrix of the SN dataset could be compared to the covariance matrix obtained from the curvefit function and see if the fit obtained is actually indicative of the data.
 
 \section{References}
 \printbibliography[heading = none]
