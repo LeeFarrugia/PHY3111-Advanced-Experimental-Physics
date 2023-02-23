@@ -35,11 +35,14 @@ In a binary system when one or both of the stars are white dwarves, one can obse
 \section{Results \& Discussion}
 
 As the core task was to determine the best fit parameters for the following equation:
+
 \begin{equation}
     \mu = 5\log_{10}[d_L]+25+M\,,
     \label{eq:mu~equation}
 \end{equation}
+
 The first step to determine the best fit parameters for equation~\ref{eq:mu~equation}, the P18 parameters where used for a range of redshift starting from \qty{0}{km.s^{-1}} to \qty{2.3}{km.s^{-1}} with a step of \qty{0.1}{km.s^{-1}} each time. In order to calculate \(H(z)\) the \(\mathrm{\Lambda}\)CDM mode was used which provided the following equation:
+
 \begin{equation}
     H(z)^2 = H_0^2[\Omega_{\mathrm{matter_0}}(1+z)^3+(1-\Omega_{\mathrm{matter_0}})]\,,
     \label{eq:Hz~equation}
@@ -82,7 +85,7 @@ It should be noted that the date for the redshift did not have any errors where 
     \label{fig:corner~plots}
 \end{figure}
 
-From the figure one can note that the best fit parameters were \(H_0 = 74.99 \pm 17.02\)~\unit{km.s^{-1}.Mpc^{-1}}, \(\Omega_{\mathrm{matter}} = 0.5 \pm 0.27\) and \(M = -21.18\). The points of intersection showed by the blue lines on the corner plots indicate where the best fit parameters can be found. These obtained best fit parameters were then used in conjunction with the scipy.optimize.curvefit to obtain the line the best fit for the SN dataset. The fit obtained can be seen in figure~\ref{fig:final~graph}.
+From the figure one can note that the best fit parameters were \(H_0 = 74.99 \pm 17.02\) \unit{km.s^{-1}.Mpc^{-1}}, \(\Omega_{\mathrm{matter}} = 0.5 \pm 0.27\) and \(M = -21.18\). The points of intersection showed by the blue lines on the corner plots indicate where the best fit parameters can be found. From the figure it should be noted that the distribution of \textit{M} has a normal probability distribution, while the distribution of \(H_0\) and \(\Omega_{\mathrm{matter}}\) show that the values are all equally probable. These obtained best fit parameters were then used in conjunction with the scipy.optimize.curvefit to obtain the line the best fit for the SN dataset. The fit obtained can be seen in figure~\ref{fig:final~graph}.
 
 \begin{figure}[H]
     \centering
@@ -98,7 +101,7 @@ which resulted in an accuracy of \(11.26\%\) for the Hubble parameter and \(58.7
 
 \section{Conclusion}
 
-In conclusion, one should note that the precision for both the Hubble parameter and \(\Omega_{\mathrm{matter_0}}\) are both above the 10\% cut off point which signifies that the values obtained are not that precise. This could be a result of the fact that the number of walker and iterations used in the MCMC was not optimized thus introducing errors in the calculations. The selection of the amount of walker and iterations could be further optimized but checking which is the lowest possible amount to produce the best fit parameters. Additionally, the correlation matrix of the SN dataset could be compared to the covariance matrix obtained from the curvefit function and see if the fit obtained is actually indicative of the data.
+In conclusion, one should note that the precision for both the Hubble parameter and \(\Omega_{\mathrm{matter_0}}\) are both above the 10\% cut off point which signifies that the values obtained are not that precise. This could be a result of the fact that the number of walker and iterations used in the MCMC was not optimized thus introducing errors in the calculations. The selection of the amount of walker and iterations could be further optimized but checking which is the lowest possible amount to produce the best fit parameters. This can be done by utilizing the mcmc error package in order to determine the error produced by the MCMC and compare it to the standard deviation, thus allowing for optimization\parencite{MCMCRelatedParameters}. Additionally, the correlation matrix of the SN dataset could be compared to the covariance matrix obtained from the curvefit function and see if the fit obtained is actually indicative of the data.
 
 \section{References}
 \printbibliography[heading = none]
