@@ -1,0 +1,230 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{batman}
+\PYG{k+kn}{import} \PYG{n+nn}{emcee}
+\PYG{k+kn}{import} \PYG{n+nn}{corner}
+\PYG{k+kn}{from} \PYG{n+nn}{math} \PYG{k+kn}{import} \PYG{o}{*}
+\PYG{k+kn}{from} \PYG{n+nn}{sympy} \PYG{k+kn}{import} \PYG{o}{*}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.integrate} \PYG{k+kn}{import} \PYG{n}{romberg}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy.optimize} \PYG{k+kn}{import} \PYG{n}{minimize}\PYG{p}{,} \PYG{n}{curve\PYGZus{}fit}
+
+\PYG{c+c1}{\PYGZsh{}Defining the redshift range and other constants to be used}
+\PYG{n}{z\PYGZus{}range} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mf}{2.4}\PYG{p}{,} \PYG{l+m+mf}{0.01}\PYG{p}{)}   \PYG{c+c1}{\PYGZsh{}redshift range}
+\PYG{n}{omega\PYGZus{}matter} \PYG{o}{=} \PYG{l+m+mf}{0.315}                \PYG{c+c1}{\PYGZsh{}P18 value for omega\PYGZus{}matter}
+\PYG{n}{omega\PYGZus{}matter\PYGZus{}delta} \PYG{o}{=} \PYG{l+m+mf}{0.007}          \PYG{c+c1}{\PYGZsh{}P18 value for the error of omega\PYGZus{}matter}
+\PYG{n}{H\PYGZus{}0} \PYG{o}{=} \PYG{l+m+mf}{67.4}                          \PYG{c+c1}{\PYGZsh{}P18 value for H\PYGZus{}0}
+\PYG{n}{H\PYGZus{}0\PYGZus{}delta} \PYG{o}{=} \PYG{l+m+mf}{0.5}                     \PYG{c+c1}{\PYGZsh{}P18 value for the error of H\PYGZus{}0}
+
+\PYG{c+c1}{\PYGZsh{}Working out the Hubble parameter and its error for each redshift}
+\PYG{n}{H\PYGZus{}z\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{k}{for} \PYG{n}{z} \PYG{o+ow}{in} \PYG{n}{z\PYGZus{}range}\PYG{p}{:}
+  \PYG{n}{H\PYGZus{}z} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{((}\PYG{n}{H\PYGZus{}0}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{n}{omega\PYGZus{}matter} \PYG{o}{*} \PYG{p}{((}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{z}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{)} \PYG{o}{+} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{omega\PYGZus{}matter}\PYG{p}{)))}  \PYG{c+c1}{\PYGZsh{}Hubble parameter}
+  \PYG{n}{H\PYGZus{}z\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{H\PYGZus{}z}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Generating the line of best fit using polyfit}
+\PYG{n}{coeffs\PYGZus{}H}\PYG{p}{,} \PYG{n}{cov} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{polyfit}\PYG{p}{(}\PYG{n}{z\PYGZus{}range}\PYG{p}{,} \PYG{n}{H\PYGZus{}z\PYGZus{}list}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{cov}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{poly\PYGZus{}function} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{poly1d}\PYG{p}{(}\PYG{n}{coeffs\PYGZus{}H}\PYG{p}{)}
+\PYG{n}{trendline\PYGZus{}H\PYGZus{}z} \PYG{o}{=} \PYG{n}{poly\PYGZus{}function}\PYG{p}{(}\PYG{n}{z\PYGZus{}range}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Plotting a graph of the Hubble parameter against redshift}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{z\PYGZus{}range}\PYG{p}{,} \PYG{n}{H\PYGZus{}z\PYGZus{}list}\PYG{p}{,} \PYG{n}{color} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{z\PYGZus{}range}\PYG{p}{,} \PYG{n}{trendline\PYGZus{}H\PYGZus{}z}\PYG{p}{,} \PYG{n}{color} \PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}z / km s\PYGZdl{}\PYGZca{}\PYGZob{}\PYGZhy{}1\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}H(z) / km s\PYGZdl{}\PYGZca{}\PYGZob{}\PYGZhy{}1\PYGZcb{}\PYGZdl{} Mpc\PYGZdl{}\PYGZca{}\PYGZob{}\PYGZhy{}1\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}A graph of H(z) against z\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Graph 1.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{}Defining the constant to be used}
+\PYG{n}{c} \PYG{o}{=} \PYG{l+m+mf}{299792.458}    \PYG{c+c1}{\PYGZsh{}speed of light}
+
+\PYG{c+c1}{\PYGZsh{}Working out the luminosity distance for each redshift using the integrate.romberg numerical integrator}
+\PYG{n}{luminosity\PYGZus{}list} \PYG{o}{=}\PYG{p}{[]}
+\PYG{n}{dL} \PYG{o}{=} \PYG{p}{[]}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{z\PYGZus{}range}\PYG{p}{)):}
+  \PYG{n}{dl\PYGZus{}func} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{dl}\PYG{p}{:} \PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(((}\PYG{n}{omega\PYGZus{}matter}\PYG{p}{)}\PYG{o}{*}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{z\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{))}\PYG{o}{+}\PYG{p}{((}\PYG{n}{H\PYGZus{}0}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{omega\PYGZus{}matter}\PYG{p}{))))}\PYG{o}{/}\PYG{p}{((}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H\PYGZus{}0}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{omega\PYGZus{}matter}\PYG{p}{)}\PYG{o}{+}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H\PYGZus{}0}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{omega\PYGZus{}matter}\PYG{o}{*}\PYG{n}{z\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{o}{+}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H\PYGZus{}0}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{omega\PYGZus{}matter}\PYG{o}{*}\PYG{p}{(}\PYG{n}{z\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)))}    \PYG{c+c1}{\PYGZsh{}first derivative of the Hubble parameter wrt z}
+  \PYG{n}{luminosity} \PYG{o}{=} \PYG{n}{romberg}\PYG{p}{(}\PYG{n}{dl\PYGZus{}func}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mf}{2.3}\PYG{p}{)}           \PYG{c+c1}{\PYGZsh{}integration of the first derivative of the Hubble parameter from 0 to z}
+  \PYG{n}{luminosity\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{luminosity}\PYG{p}{)}
+  \PYG{n}{const} \PYG{o}{=} \PYG{n}{c}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{z\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}                        \PYG{c+c1}{\PYGZsh{}constant}
+  \PYG{n}{luminosity} \PYG{o}{=} \PYG{n+nb}{float}\PYG{p}{(}\PYG{n}{luminosity\PYGZus{}list}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{o}{*}\PYG{n}{const}    \PYG{c+c1}{\PYGZsh{}luminosity distance}
+  \PYG{n}{dL}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{luminosity}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Plotting a graph of the luminosity distance against redshift}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{scatter}\PYG{p}{(}\PYG{n}{z\PYGZus{}range}\PYG{p}{,} \PYG{n}{dL}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}z / km s\PYGZdl{}\PYGZca{}\PYGZob{}\PYGZhy{}1\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}d\PYGZdl{}\PYGZus{}L\PYGZdl{} / pc\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of d\PYGZdl{}\PYGZus{}L\PYGZdl{} against z\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Graph 2.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{}Using pandas to load the SN data set}
+\PYG{n}{df} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}excel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}lcparams.xlsx\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{redshift} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}zcmb\PYGZsq{}}\PYG{p}{]}   \PYG{c+c1}{\PYGZsh{}redshift in the rest frame of the cosmic microwave background radiation}
+\PYG{n}{dm} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mb\PYGZsq{}}\PYG{p}{]}           \PYG{c+c1}{\PYGZsh{}distance modulus}
+\PYG{n}{delta\PYGZus{}dm} \PYG{o}{=} \PYG{n}{df}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}dmb\PYGZsq{}}\PYG{p}{]}    \PYG{c+c1}{\PYGZsh{}error of the distance modulus}
+
+\PYG{c+c1}{\PYGZsh{}Plotting a graph of the distance modulus, and its uncertainty, against redshift of the SN data set}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{errorbar}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{,} \PYG{n}{dm}\PYG{p}{,} \PYG{n}{xerr}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{yerr}\PYG{o}{=}\PYG{n}{delta\PYGZus{}dm}\PYG{p}{,} \PYG{n}{fmt}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}o\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{elinewidth}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{capthick}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{capsize}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{ecolor}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}grey\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}redshift\PYGZdl{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}SN\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}mu\PYGZcb{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}SN\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of \PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}mu\PYGZcb{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}SN\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{} against redshift\PYGZdl{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}SN\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Graph 3.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{}Implementing a general purpose MCMC from the emcee library to find the best fit theta parameters}
+
+\PYG{c+c1}{\PYGZsh{}Working out the luminosity distance for each redshift using the P18 values and the integrate.romberg numerical integrator}
+\PYG{k}{def} \PYG{n+nf}{dL\PYGZus{}func}\PYG{p}{(}\PYG{n}{z}\PYG{p}{,} \PYG{n}{H\PYGZus{}0}\PYG{p}{,} \PYG{n}{omega}\PYG{p}{):}
+  \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{)):}
+    \PYG{n}{dl\PYGZus{}func} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{dl}\PYG{p}{:} \PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(((}\PYG{n}{omega\PYGZus{}matter}\PYG{p}{)}\PYG{o}{*}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{z\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{))}\PYG{o}{+}\PYG{p}{((}\PYG{n}{H\PYGZus{}0}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{omega\PYGZus{}matter}\PYG{p}{))))}\PYG{o}{/}\PYG{p}{((}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H\PYGZus{}0}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{omega\PYGZus{}matter}\PYG{p}{)}\PYG{o}{+}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H\PYGZus{}0}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{omega\PYGZus{}matter}\PYG{o}{*}\PYG{n}{z\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{o}{+}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H\PYGZus{}0}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{omega\PYGZus{}matter}\PYG{o}{*}\PYG{p}{(}\PYG{n}{z\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)))}
+    \PYG{n}{luminosity} \PYG{o}{=} \PYG{n}{romberg}\PYG{p}{(}\PYG{n}{dl\PYGZus{}func}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mf}{2.3}\PYG{p}{)}
+    \PYG{n}{luminosity\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{luminosity}\PYG{p}{)}
+    \PYG{n}{const} \PYG{o}{=} \PYG{n}{c}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{z\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+    \PYG{n}{luminosity} \PYG{o}{=} \PYG{n+nb}{float}\PYG{p}{(}\PYG{n}{luminosity\PYGZus{}list}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}\PYG{o}{*}\PYG{n}{const}
+    \PYG{k}{return} \PYG{n}{luminosity}
+
+\PYG{c+c1}{\PYGZsh{}Working out the model distance modulus for each redshift using the dL\PYGZus{}func and the P18 values}
+\PYG{k}{def} \PYG{n+nf}{model}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{n}{redshift}\PYG{p}{):}
+    \PYG{n}{H\PYGZus{}0}\PYG{p}{,} \PYG{n}{omega\PYGZus{}matter}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{theta}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{)):}
+      \PYG{n}{dL\PYGZus{}model} \PYG{o}{=} \PYG{n}{dL\PYGZus{}func}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{H\PYGZus{}0}\PYG{p}{,} \PYG{n}{omega\PYGZus{}matter}\PYG{p}{)}
+      \PYG{n}{model} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log10}\PYG{p}{(}\PYG{n}{dL\PYGZus{}model}\PYG{p}{))} \PYG{o}{+} \PYG{l+m+mi}{25} \PYG{o}{+} \PYG{n}{M}
+      \PYG{k}{return} \PYG{n}{model}
+
+\PYG{c+c1}{\PYGZsh{}Setting the observed distance modulus for each redshift using the SN data set}
+\PYG{k}{def} \PYG{n+nf}{observed}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{n}{redshift}\PYG{p}{):}
+    \PYG{n}{H\PYGZus{}0}\PYG{p}{,} \PYG{n}{omega\PYGZus{}matter}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{theta}
+    \PYG{n}{observed} \PYG{o}{=} \PYG{n}{dm}
+    \PYG{k}{return} \PYG{n}{observed}
+
+\PYG{c+c1}{\PYGZsh{}Calculating the likeliness of fit of the theta parameters to the SN data set}
+\PYG{k}{def} \PYG{n+nf}{like}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{n}{redshift}\PYG{p}{,} \PYG{n}{y}\PYG{o}{=}\PYG{n}{dm}\PYG{p}{,} \PYG{n}{yerr}\PYG{o}{=}\PYG{n}{delta\PYGZus{}dm}\PYG{p}{):}
+    \PYG{n}{H\PYGZus{}0}\PYG{p}{,} \PYG{n}{omega\PYGZus{}matter}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{theta}
+    \PYG{n}{model2} \PYG{o}{=} \PYG{n}{model}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{n}{redshift}\PYG{p}{)}
+    \PYG{n}{observed2} \PYG{o}{=} \PYG{n}{observed}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{n}{redshift}\PYG{p}{)}
+    \PYG{n}{like} \PYG{o}{=} \PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.5}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(((}\PYG{n}{model2}\PYG{o}{\PYGZhy{}}\PYG{n}{observed2}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{/}\PYG{p}{(}\PYG{n}{yerr}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+    \PYG{k}{return} \PYG{n}{like}
+
+\PYG{c+c1}{\PYGZsh{}Setting the priors of the theta parameters then calling the function at every step to check if all arguments are within their respective priors}
+\PYG{k}{def} \PYG{n+nf}{prior}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{):}
+    \PYG{n}{H\PYGZus{}0}\PYG{p}{,} \PYG{n}{omega\PYGZus{}matter}\PYG{p}{,} \PYG{n}{M} \PYG{o}{=} \PYG{n}{theta}
+    \PYG{k}{if} \PYG{l+m+mi}{50} \PYG{o}{\PYGZlt{}} \PYG{n}{H\PYGZus{}0} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{100} \PYG{o+ow}{and} \PYG{l+m+mf}{0.1} \PYG{o}{\PYGZlt{}} \PYG{n}{omega\PYGZus{}matter} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{0.9} \PYG{o+ow}{and} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{50} \PYG{o}{\PYGZlt{}} \PYG{n}{M} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{50}\PYG{p}{:}
+        \PYG{k}{return} \PYG{l+m+mi}{0}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{k}{return} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{inf}
+
+\PYG{c+c1}{\PYGZsh{}Calling the prior function to check if it returns \PYGZhy{}infinity or 0, and returning \PYGZhy{}infinity or the likelihood function for the theta parameters in each respective case}
+\PYG{k}{def} \PYG{n+nf}{probability}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{n}{redshift}\PYG{p}{,} \PYG{n}{y}\PYG{o}{=}\PYG{n}{dm}\PYG{p}{,} \PYG{n}{yerr}\PYG{o}{=}\PYG{n}{delta\PYGZus{}dm}\PYG{p}{):}
+    \PYG{n}{prob} \PYG{o}{=} \PYG{n}{prior}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{)}
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{np}\PYG{o}{.}\PYG{n}{isfinite}\PYG{p}{(}\PYG{n}{prob}\PYG{p}{):}
+        \PYG{k}{return} \PYG{o}{\PYGZhy{}}\PYG{n}{np}\PYG{o}{.}\PYG{n}{inf}
+    \PYG{k}{return} \PYG{n}{prob} \PYG{o}{+} \PYG{n}{like}\PYG{p}{(}\PYG{n}{theta}\PYG{p}{,} \PYG{n}{x}\PYG{o}{=}\PYG{n}{z\PYGZus{}range}\PYG{p}{,} \PYG{n}{y}\PYG{o}{=}\PYG{n}{dm}\PYG{p}{,} \PYG{n}{yerr}\PYG{o}{=}\PYG{n}{delta\PYGZus{}dm}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Defining a tuple with the SN data set}
+\PYG{n}{data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{redshift}\PYG{p}{,} \PYG{n}{dm}\PYG{p}{,} \PYG{n}{delta\PYGZus{}dm}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}Setting the number of walkers}
+\PYG{n}{n\PYGZus{}walkers} \PYG{o}{=} \PYG{l+m+mi}{100}
+\PYG{c+c1}{\PYGZsh{}Setting the number of iterations}
+\PYG{n}{n\PYGZus{}iter} \PYG{o}{=} \PYG{l+m+mi}{60000}
+\PYG{c+c1}{\PYGZsh{}Setting an array with the initial positions}
+\PYG{n}{initial} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{l+m+mi}{70}\PYG{p}{,} \PYG{l+m+mf}{0.3}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{19}\PYG{p}{])}
+\PYG{c+c1}{\PYGZsh{}Setting the dimension}
+\PYG{n}{n\PYGZus{}dim} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{initial}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Calculating the step methodology across the parameter space from one place of the grid to the next}
+\PYG{k}{def} \PYG{n+nf}{p\PYGZus{}0}\PYG{p}{(}\PYG{n}{initial}\PYG{p}{,} \PYG{n}{n\PYGZus{}dim}\PYG{p}{,} \PYG{n}{n\PYGZus{}walkers}\PYG{p}{):}
+      \PYG{k}{return} \PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{initial}\PYG{p}{)} \PYG{o}{+} \PYG{p}{[}\PYG{l+m+mf}{1e\PYGZhy{}4}\PYG{p}{,} \PYG{l+m+mf}{75e\PYGZhy{}3}\PYG{p}{,} \PYG{l+m+mf}{1e\PYGZhy{}2}\PYG{p}{]} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{n\PYGZus{}dim}\PYG{p}{)} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n\PYGZus{}walkers}\PYG{p}{)]}
+
+\PYG{n}{p0} \PYG{o}{=} \PYG{n}{p\PYGZus{}0}\PYG{p}{(}\PYG{n}{initial}\PYG{p}{,} \PYG{n}{n\PYGZus{}dim}\PYG{p}{,} \PYG{n}{n\PYGZus{}walkers}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Defining and implementing the MCMC}
+\PYG{k}{def} \PYG{n+nf}{mcmc}\PYG{p}{(}\PYG{n}{p0}\PYG{p}{,} \PYG{n}{n\PYGZus{}walkers}\PYG{p}{,} \PYG{n}{n\PYGZus{}iter}\PYG{p}{,} \PYG{n}{n\PYGZus{}dim}\PYG{p}{,} \PYG{n}{probability}\PYG{p}{,} \PYG{n}{data}\PYG{p}{):}
+    \PYG{n}{sampler} \PYG{o}{=} \PYG{n}{emcee}\PYG{o}{.}\PYG{n}{EnsembleSampler}\PYG{p}{(}\PYG{n}{n\PYGZus{}walkers}\PYG{p}{,} \PYG{n}{n\PYGZus{}dim}\PYG{p}{,} \PYG{n}{probability}\PYG{p}{,} \PYG{n}{args}\PYG{o}{=}\PYG{p}{[}\PYG{n}{data}\PYG{p}{])}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Running sample run\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{p0}\PYG{p}{,} \PYG{n}{\PYGZus{}}\PYG{p}{,} \PYG{n}{\PYGZus{}} \PYG{o}{=} \PYG{n}{sampler}\PYG{o}{.}\PYG{n}{run\PYGZus{}mcmc}\PYG{p}{(}\PYG{n}{p0}\PYG{p}{,} \PYG{l+m+mi}{2000}\PYG{p}{,} \PYG{n}{progress}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+    \PYG{n}{sampler}\PYG{o}{.}\PYG{n}{reset}\PYG{p}{()}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Running full mcmc\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{posteriors}\PYG{p}{,} \PYG{n}{probability}\PYG{p}{,} \PYG{n}{state} \PYG{o}{=} \PYG{n}{sampler}\PYG{o}{.}\PYG{n}{run\PYGZus{}mcmc}\PYG{p}{(}\PYG{n}{p0}\PYG{p}{,} \PYG{n}{n\PYGZus{}iter}\PYG{p}{,} \PYG{n}{progress}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{sampler}\PYG{p}{,} \PYG{n}{posteriors}\PYG{p}{,} \PYG{n}{probability}\PYG{p}{,} \PYG{n}{state}
+
+\PYG{n}{sampler}\PYG{p}{,} \PYG{n}{posteriors}\PYG{p}{,} \PYG{n}{probability}\PYG{p}{,} \PYG{n}{state} \PYG{o}{=} \PYG{n}{mcmc}\PYG{p}{(}\PYG{n}{p0}\PYG{p}{,} \PYG{n}{n\PYGZus{}walkers}\PYG{p}{,} \PYG{n}{n\PYGZus{}iter}\PYG{p}{,} \PYG{n}{n\PYGZus{}dim}\PYG{p}{,} \PYG{n}{probability}\PYG{p}{,} \PYG{n}{data}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}Flattening the outputted samples to be able to plot a corner plot with the outputted theta parameters}
+\PYG{n}{samples} \PYG{o}{=} \PYG{n}{sampler}\PYG{o}{.}\PYG{n}{flatchain}
+
+\PYG{c+c1}{\PYGZsh{}Calculating the mean values of the outputted theta parameters}
+\PYG{n}{mean\PYGZus{}H\PYGZus{}0} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{samples}\PYG{p}{[:,}\PYG{l+m+mi}{0}\PYG{p}{])}
+\PYG{n}{mean\PYGZus{}omega} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{samples}\PYG{p}{[:,}\PYG{l+m+mi}{1}\PYG{p}{])}
+\PYG{n}{mean\PYGZus{}M} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{samples}\PYG{p}{[:,}\PYG{l+m+mi}{2}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{}Plotting a corner plot with the outputted theta parameters}
+\PYG{n}{labels} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}H\PYGZdl{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}0\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}Omega\PYGZcb{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}matter\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}M\PYGZsq{}}\PYG{p}{]}
+\PYG{n}{fig} \PYG{o}{=} \PYG{n}{corner}\PYG{o}{.}\PYG{n}{corner}\PYG{p}{(}\PYG{n}{samples}\PYG{p}{,} \PYG{n}{show\PYGZus{}titles}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{labels}\PYG{o}{=}\PYG{n}{labels}\PYG{p}{,} \PYG{n}{truths}\PYG{o}{=}\PYG{p}{[}\PYG{n}{mean\PYGZus{}H\PYGZus{}0}\PYG{p}{,} \PYG{n}{mean\PYGZus{}omega}\PYG{p}{,} \PYG{n}{mean\PYGZus{}M}\PYG{p}{])}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Graph 4.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+
+\PYG{n}{lum} \PYG{o}{=} \PYG{p}{[]}
+\PYG{k}{for} \PYG{n}{z} \PYG{o+ow}{in} \PYG{n}{redshift}\PYG{p}{:}
+  \PYG{c+c1}{\PYGZsh{}Working out the Hubble parameter for each redshift using the mean values of the outputted theta parameters}
+  \PYG{n}{Hz} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{((}\PYG{n}{mean\PYGZus{}H\PYGZus{}0}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{n}{mean\PYGZus{}omega} \PYG{o}{*} \PYG{p}{((}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{z}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{)} \PYG{o}{+} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{mean\PYGZus{}omega}\PYG{p}{)))}
+  \PYG{c+c1}{\PYGZsh{}Working out the luminosity distance for each redshift using the mean values of the outputted theta parameters and the integrate.romberg numerical integrator}
+  \PYG{n}{dl\PYGZus{}func} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{dl}\PYG{p}{:} \PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(((}\PYG{n}{mean\PYGZus{}omega}\PYG{p}{)}\PYG{o}{*}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{z}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{3}\PYG{p}{))}\PYG{o}{+}\PYG{p}{((}\PYG{n}{Hz}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{mean\PYGZus{}omega}\PYG{p}{))))}\PYG{o}{/}\PYG{p}{((}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{p}{(}\PYG{n}{Hz}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{mean\PYGZus{}omega}\PYG{p}{)}\PYG{o}{+}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{p}{(}\PYG{n}{Hz}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{mean\PYGZus{}omega}\PYG{o}{*}\PYG{n}{z}\PYG{p}{)}\PYG{o}{+}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{o}{*}\PYG{p}{(}\PYG{n}{Hz}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{mean\PYGZus{}omega}\PYG{o}{*}\PYG{p}{(}\PYG{n}{z}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)))}
+  \PYG{n}{luminosity} \PYG{o}{=} \PYG{n}{romberg}\PYG{p}{(}\PYG{n}{dl\PYGZus{}func}\PYG{p}{,} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{),} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{))}
+  \PYG{n}{const} \PYG{o}{=} \PYG{n}{c}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{z}\PYG{p}{)}
+  \PYG{n}{lum}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{const}\PYG{o}{*}\PYG{n+nb}{float}\PYG{p}{(}\PYG{n}{luminosity}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{}Fitting the outputted theta parameters to the SN data set}
+\PYG{k}{def} \PYG{n+nf}{fit\PYGZus{}func}\PYG{p}{(}\PYG{n}{lum}\PYG{p}{,} \PYG{n}{mean\PYGZus{}M}\PYG{p}{):}
+  \PYG{k}{return} \PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{log10}\PYG{p}{(}\PYG{n}{lum}\PYG{p}{))} \PYG{o}{+} \PYG{l+m+mi}{25} \PYG{o}{+} \PYG{n}{mean\PYGZus{}M}
+
+\PYG{c+c1}{\PYGZsh{}Generating the line of best fit using curve\PYGZus{}fit}
+\PYG{n}{popt}\PYG{p}{,} \PYG{n}{pcov} \PYG{o}{=} \PYG{n}{curve\PYGZus{}fit}\PYG{p}{(}\PYG{n}{fit\PYGZus{}func}\PYG{p}{,} \PYG{n}{redshift}\PYG{p}{,} \PYG{n}{dm}\PYG{p}{)}
+\PYG{n}{trendline} \PYG{o}{=} \PYG{n}{fit\PYGZus{}func}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{,} \PYG{n}{popt}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+
+\PYG{c+c1}{\PYGZsh{}Plotting the result of the fit superimposed on the original graph of the distance modulus, and its uncertainty, against redshift of the SN data set}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mf}{7.5}\PYG{p}{,} \PYG{l+m+mf}{10.5}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.family\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}STIXGeneral\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}mathtext.fontset\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}stix\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.size\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{12}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{rcParams}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}font.weight\PYGZsq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}normal\PYGZsq{}}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{minorticks\PYGZus{}on}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}major\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n}{visible}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{which}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}minor\PYGZsq{}}\PYG{p}{,} \PYG{n}{linestyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{errorbar}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{,} \PYG{n}{dm}\PYG{p}{,} \PYG{n}{xerr}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{yerr}\PYG{o}{=}\PYG{n}{delta\PYGZus{}dm}\PYG{p}{,} \PYG{n}{fmt}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}o\PYGZsq{}}\PYG{p}{,} \PYG{n}{color}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{elinewidth}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{capthick}\PYG{o}{=}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{capsize}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{ecolor}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}grey\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{redshift}\PYG{p}{,} \PYG{n}{trendline}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZhy{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Fit\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}redshift\PYGZdl{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}SN\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}mu\PYGZcb{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}SN\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{title}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}A graph of \PYGZdl{}\PYGZbs{}mathrm\PYGZob{}\PYGZbs{}mu\PYGZcb{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}SN\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{} against redshift\PYGZdl{}\PYGZus{}}\PYG{l+s+si}{\PYGZob{}SN\PYGZcb{}}\PYG{l+s+s1}{\PYGZdl{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Graph 5.png\PYGZsq{}}\PYG{p}{,} \PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{800}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\end{Verbatim}
