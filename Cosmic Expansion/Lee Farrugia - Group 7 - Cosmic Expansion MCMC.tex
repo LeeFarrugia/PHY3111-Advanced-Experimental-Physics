@@ -14,13 +14,18 @@
 
 \section{Abstract}
 
+
 \section{Introduction \& Theoretical Background}
 
+In a binary system when one or both of the stars are white dwarves, one can observe a Supernovae type 1A. This happens when the white dwarf or in the case of two white dwarves, the larger white dwarf start to acquire matter from the other star to reach the Chandrasekhar limit. At this limit the star collapses. As the star reaches the Chandrasekhar limit, its nuclear fusion restarts and start fusing carbon into oxygen. In the las few moments of the star, its temperature reaches billions of Kelvins and due to the high energy it unbinds and releases a shock-wave that produces the supernovae. As this process can occur for any white dwarf, they all produce similar light curves, thus, we can use the supernovae type 1A as a standard candle in order to determine the distance modulus. Using this information one can determine the distance modulus of the data set provided by SN data.
 
 \section{Materials \& Methods}
     \subsection{Language and Packages}
+
         Python 3.10.8, Numpy, Sympy, Scipy.integrate, Scipy.optimize, Matplotlib.pyplot, Pandas, Batman, Emcee, Corner, SN Dataset\,.
+
     \subsection{Methodology}
+
         \begin{enumerate}
             \item In order to obtain a plot for the \(\mathrm{\Lambda}\)CDM model the P18 parameter values for \(\mathrm{\Omega}_{\mathrm{matter}}\) and H\(_0\) and their uncertainties provided, for a range of redshift between 0 and 2.3\,.
             \item By numerically solving for the luminosity distance and using the P18 parameters, plot the luminosity distance for the same redshift range as before. By calculating the distance modulus using th SN dataset, plot the distance modulus against the redshift values in the dataset.
@@ -28,27 +33,58 @@
         \end{enumerate}
 
 \section{Results \& Discussion}
-\begin{figure}[]
+
+As the core task was to determine the best fit parameters for the following equation:
+\begin{equation}
+    \mu = 5\log_{10}[d_L]+25+M\,,
+    \label{eq:mu~equation}
+\end{equation}
+The first step to determine the best fit parameters for equation~\ref{eq:mu~equation}, the P18 parameters where used for a range of redshift starting from \qty{0}{km.s^{-1}} to \qty{2.3}{km.s^{-1}} with a step of \qty{0.1}{km.s^{-1}} each time. In order to calculate \(H(z)\) the \(\mathrm{\Lambda}\)CDM mode was used which provided the following equation:
+\begin{equation}
+    H(z)^2 = H_0^2[\Omega_{\mathrm{matter_0}}(1+z)^3+(1-\Omega_{\mathrm{matter_0}})]\,,
+    \label{eq:Hz~equation}
+\end{equation}
+
+\begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{Graph 1.png}
+    \label{fig:Hz~vs~redshift}
 \end{figure}
 
-\begin{figure}[]
+where \textit{H(z)} is the Hubble parameter in terms of the redshift, z is the redshift value and \(\Omega_{\mathrm{matter_0}}\) is the density parameter of matter in the Universe. The equation used is also called the Friedmann equation. The parameters used to calculate \(H(z)\) were \(H_0^{P18} = 67.4 \pm 0.5\) \unit{km.m.s^{-1}.Mpc^{-1}} and \(\Omega_{\mathrm{matter_0}} = 0.315 \pm 0.007\). This resulted in figure~\ref{fig:Hz~vs~redshift}, where one can clearly see that with a larger redshift it results in a larger value of \(H(z)\). The observed fit correlates with the graphs observed in \parencite{hubble}. The next step was to obtain the luminosity distance for the redshift range mentioned before. The luminosity distance was obtained using the following equation:
+
+\begin{equation}
+    d_L(z_i) = c(1+z_i)\\int_{0}^{z_i} \frac{dz'}{H(z')}\,,
+    \label{eq:luminosity~distance}
+\end{equation}
+
+where \(d_L(z_i)\) is the luminosity distance, c is the speed of light taken as \qty{299792.458}{km.s^{-1}}, \(z_i\) is the redshift value. After numerically solving equation~\ref{eq:luminosity~distance}, figure \ref{fig:luminosity~vs~redshift} was obtained.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{Graph 2.png}
+    \label{fig:luminosity~vs~redhsift}
 \end{figure}
 
-\begin{figure}[]
+One should note that the luminosity distance decreases with redshift. This correlates with what is discussed in \parencite{pettiniHUBBLEDIAGRAMTYPE}, that is that the distance luminosity decreases with luminosity. Next the \(\mathrm{SN_data}\) was loaded into the program and a graph of the distance modulus against the redshift was plotted and can be seen in figure \ref{fig:distance~modulus~vs~redshift~sn}.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{Graph 3.png}
+    \label{fig:distance~modulus~vs~redshift~sn}
 \end{figure}
 
-\begin{figure}[]
+It should be noted that the date for the redshift did not have any errors where as the data for the distance modulus did have some uncertainties related to it which was duly added to the plotting parameters. It should also be noted that the distance modulus increases with the redshift. In order to obtain the best fit parameter for the \(\mathrm{SN_data}\) set the Markov Chain Monte Carlo method was used, abbreviated to MCMC. This is as the MCMC method allow for multiple iterations to obtain the best parameters to fit the data provided utilizing an initial positional value. For this experiment the initial positions were provided to be \(H_0\) = \qty{70}{km.s^{-1}.Mpc^{-1}}, \(\Omega_{\mathrm{matter_0}} = 0.3\) and \(M=-19\). Furthermore, the MCMC was set first use 100 walkers that are allowed to move randomly in the 3 dimensions. A sample of 2000 iteration was taken and using this sample the full computation of 60000 iterations was done in order to obtain the best fit parameters and the corner plot that can be seen in figure~\ref{fig:corner~plots}. 
+
+\begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{Graph 4.png}
+    \label{fig:corner~plots}
 \end{figure}
 
-\begin{figure}[]
+From the figure one can note that the best fit parameters were \(H_0\) = \num{74.99 \pm 17.02}\unit{km.s^{-1}.Mpc^{-1}}, \(\Omega_{\mathrm{matter}} = 0.5 \pm 0.27\) and \(M = -21.18\). The points of intersection showed by the blue lines on the corner plots indicate where the best fit parameters can be found. 
+
+\begin{figure}[H]
     \centering
     \includegraphics[width = 0.7\textwidth]{Graph 5.png}
 \end{figure}
