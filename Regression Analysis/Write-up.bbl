@@ -1,0 +1,193 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/global//global/global}
+    \entry{boutin2002climbing}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=3f67a73c9b348f8ae8764735f2a9fc12}{%
+           family={Boutin},
+           familyi={B\bibinitperiod},
+           given={C},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3f67a73c9b348f8ae8764735f2a9fc12}
+      \strng{fullhash}{3f67a73c9b348f8ae8764735f2a9fc12}
+      \strng{bibnamehash}{3f67a73c9b348f8ae8764735f2a9fc12}
+      \strng{authorbibnamehash}{3f67a73c9b348f8ae8764735f2a9fc12}
+      \strng{authornamehash}{3f67a73c9b348f8ae8764735f2a9fc12}
+      \strng{authorfullhash}{3f67a73c9b348f8ae8764735f2a9fc12}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{CERN Cour.}
+      \field{title}{Climbing out of the nuclear valley}
+      \field{volume}{42}
+      \field{year}{2002}
+      \field{pages}{15\bibrangedash 17}
+      \range{pages}{3}
+    \endentry
+    \entry{hoyle1955evolution}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=078470d185900f936a0890f9555e75ad}{%
+           family={Hoyle},
+           familyi={H\bibinitperiod},
+           given={Fred},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9aa9cba0d673bad650ad7f6de9a3ca13}{%
+           family={Schwarzschild},
+           familyi={S\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5f914277459a0ef1bfcd6abf823a5e24}
+      \strng{fullhash}{5f914277459a0ef1bfcd6abf823a5e24}
+      \strng{bibnamehash}{5f914277459a0ef1bfcd6abf823a5e24}
+      \strng{authorbibnamehash}{5f914277459a0ef1bfcd6abf823a5e24}
+      \strng{authornamehash}{5f914277459a0ef1bfcd6abf823a5e24}
+      \strng{authorfullhash}{5f914277459a0ef1bfcd6abf823a5e24}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The astrophysical journal supplement series}
+      \field{title}{On the Evolution of Type II Stars.}
+      \field{volume}{2}
+      \field{year}{1955}
+      \field{pages}{1}
+      \range{pages}{1}
+    \endentry
+    \entry{jaschek1990classification}{book}{}
+      \name{author}{2}{}{%
+        {{un=1,uniquepart=given,hash=26f737e195bc04c0b7a172720c7755fd}{%
+           family={Jaschek},
+           familyi={J\bibinitperiod},
+           given={Carlos},
+           giveni={C\bibinitperiod},
+           givenun=1}}%
+        {{un=1,uniquepart=given,hash=0b153f85b1db5e22357c0439a9ebbe55}{%
+           family={Jaschek},
+           familyi={J\bibinitperiod},
+           given={Mercedes},
+           giveni={M\bibinitperiod},
+           givenun=1}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge university press}%
+      }
+      \strng{namehash}{8b4a955c60ae4e820df36900dff958d6}
+      \strng{fullhash}{8b4a955c60ae4e820df36900dff958d6}
+      \strng{bibnamehash}{8b4a955c60ae4e820df36900dff958d6}
+      \strng{authorbibnamehash}{8b4a955c60ae4e820df36900dff958d6}
+      \strng{authornamehash}{8b4a955c60ae4e820df36900dff958d6}
+      \strng{authorfullhash}{8b4a955c60ae4e820df36900dff958d6}
+      \field{sortinit}{J}
+      \field{sortinithash}{b2f54a9081ace9966a7cb9413811edb4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The classification of stars}
+      \field{year}{1990}
+    \endentry
+    \entry{macintosh2001m}{misc}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=530eb2673f1566135069b31bc2faf0da}{%
+           family={Macintosh},
+           familyi={M\bibinitperiod},
+           given={R},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=79f2f50e486da807d45ee84687a3f68b}{%
+           family={Al-Khalili},
+           familyi={A\bibinithyphendelim K\bibinitperiod},
+           given={J},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=03f1820372e6bc16b89ea37391cc2dd1}{%
+           family={Jonson},
+           familyi={J\bibinitperiod},
+           given={B},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Canopus Publishing Company Limited, Bath (UK)}%
+      }
+      \strng{namehash}{571388b984169302f0334455589cf7fb}
+      \strng{fullhash}{24c89cfd1ff0f26a5b46a99c2c11a004}
+      \strng{bibnamehash}{24c89cfd1ff0f26a5b46a99c2c11a004}
+      \strng{authorbibnamehash}{24c89cfd1ff0f26a5b46a99c2c11a004}
+      \strng{authornamehash}{571388b984169302f0334455589cf7fb}
+      \strng{authorfullhash}{24c89cfd1ff0f26a5b46a99c2c11a004}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{und M.-T. Pena: NUCLEUS--A Trip into the Heart of Matter}
+      \field{year}{2001}
+    \endentry
+    \entry{muncaster}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d9b522bdcafafb49d8688ff501137ab5}{%
+           family={Muncaster},
+           familyi={M\bibinitperiod},
+           given={Roger},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{d9b522bdcafafb49d8688ff501137ab5}
+      \strng{fullhash}{d9b522bdcafafb49d8688ff501137ab5}
+      \strng{bibnamehash}{d9b522bdcafafb49d8688ff501137ab5}
+      \strng{authorbibnamehash}{d9b522bdcafafb49d8688ff501137ab5}
+      \strng{authornamehash}{d9b522bdcafafb49d8688ff501137ab5}
+      \strng{authorfullhash}{d9b522bdcafafb49d8688ff501137ab5}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{4th Edition}
+      \field{isbn}{978-0-7487-1584-8}
+      \field{title}{A-level physics}
+      \field{year}{1993}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

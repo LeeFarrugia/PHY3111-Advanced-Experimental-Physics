@@ -1,5 +1,4 @@
 import numpy as np
-import scipy as sc
 import matplotlib.pyplot as plt
 from math import sin, cos
 from sympy import *

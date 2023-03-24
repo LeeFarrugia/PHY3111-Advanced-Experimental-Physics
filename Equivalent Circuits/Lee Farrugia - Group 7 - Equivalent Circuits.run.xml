@@ -41,7 +41,7 @@
   >
 ]>
 <requests version="1.0">
-  <internal package="biblatex" priority="9" active="0">
+  <internal package="biblatex" priority="9" active="1">
     <generic>latex</generic>
     <provides type="dynamic">
       <file>"Lee Farrugia - Group 7 - Equivalent Circuits".bcf</file>
@@ -54,6 +54,7 @@
       <file>apa.dbx</file>
       <file>blx-compat.def</file>
       <file>biblatex.def</file>
+      <file>blx-natbib.def</file>
       <file>standard.bbx</file>
       <file>apa.bbx</file>
       <file>apa.cbx</file>
@@ -64,7 +65,7 @@
       <file>english-apa.lbx</file>
     </requires>
   </internal>
-  <external package="biblatex" priority="5" active="0">
+  <external package="biblatex" priority="5" active="1">
     <generic>biber</generic>
     <cmdline>
       <binary>biber</binary>
@@ -83,7 +84,7 @@
       <file>"Lee Farrugia - Group 7 - Equivalent Circuits".bcf</file>
     </requires>
     <requires type="editable">
-      <file>Bibliography.bib</file>
+      <file>biblio.bib</file>
     </requires>
   </external>
 </requests>
