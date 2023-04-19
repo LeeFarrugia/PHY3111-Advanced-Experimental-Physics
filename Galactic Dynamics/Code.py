@@ -37,14 +37,17 @@ mass_s2_s = s2.s['mass']
 mass_s2_d = s2.d['mass']
 mass_s2_g = s2.g['mass']
 
-sum = 0
+Sum = 0
 array = []
 
 def mass_sum(array):
-  sum = reduce(lambda a, b: a+b, array)
-  return(sum)
+  Sum = reduce(lambda a, b: a+b, array)
+  return(Sum)
 
 total_mass_s1 = mass_sum(mass_s1_s) + mass_sum(mass_s1_d) + mass_sum(mass_s1_g)
+
+Sum = 0
+array = []
 
 total_mass_s2 = mass_sum(mass_s2_s) + mass_sum(mass_s2_d) + mass_sum(mass_s2_g)
 
