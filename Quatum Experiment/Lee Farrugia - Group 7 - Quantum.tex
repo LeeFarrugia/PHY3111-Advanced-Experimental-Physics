@@ -13,13 +13,16 @@
 \pagestyle{mystyle}
 
 \section*{Abstract}
+This experiment was conducted in order to investigate the electromagnetically induced system, specifically the lambda system. It indicated that the transition between state 1 and state 2 is forbidden, thus they are referred to as transparent. From the experiment conducted, the Hamiltonian matrix obtained is concurrent with the observed literature, however the density matrix obtained was incorrect. Therefore, the results obtained were inherently wrong.
 
 \section{Introduction \& Theoretical Background}
-This experiment was conducted in order to compute and understand what is referred to as a Lambda system and the electromagnetically-induced transparency (EIT). The Lambda system is a system in Atomic Physics when an atom/s inside a gas can transition only between specific levels which from the greek letter \(\mathrm{\Lambda}\). The transitions allowed are between \(1 \leftrightarrow 3\) and \(2 \leftrightarrow 3\), while eliminating the \(1 \leftrightarrow 2\) transition by making stop absorbing light from a probe field. This results that many of the atoms in the gas become transparent hence EIT\,. These transitions can be seen in figure~\ref{fig:Transition_Diagram}.
+Electromagnetically induced transparency was fist theorized by Harris et al in 1990. This occurs when using a strong laser field is used to drive the system, while the probe field reduces and eliminates some of the transitions~\parencite{ijazEIT}.
+
+This experiment was conducted in order to compute and understand what is referred to as a Lambda system and the electromagnetically-induced transparency (EIT). The Lambda system is a system in Atomic Physics when an atom/s inside a gas can transition only between specific levels which from the greek letter \(\mathrm{\Lambda}\). The transitions allowed are between \(1 \leftrightarrow 3\) and \(2 \leftrightarrow 3\), while eliminating the \(1 \leftrightarrow 2\) transition by making it stop absorbing light from a probe field. This results that many of the atoms in the gas become transparent hence EIT\,. These transitions can be seen in figure~\ref{fig:Transition_Diagram}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{Transition Diagram.png}\caption{Diagram of the transitions in the lambda system}\label{fig:Transition_Diagram}
+  \includegraphics[width=0.4\textwidth]{Transition Diagram.png}\caption{Diagram of the transitions in the lambda system}\label{fig:Transition_Diagram}
 \end{figure}
 
 \section{Materials \& Methods}
@@ -38,26 +41,206 @@ This experiment was conducted in order to compute and understand what is referre
       \hat{H}_{pump} &= \hbar \varepsilon_{pump}(e^{-i\omega_{pump}t}\ket{2}\bra{3} + e^{i\omega_{pump}t}\ket{3}\bra{2})\,,\\
       \hat{H}_{probe} &= \hbar \varepsilon(e^{-i\omega_{probe}t}\ket{1}\bra{3} + e^{i\omega_{probe}t}\ket{3}\bra{1})\,. 
     \end{align}
-    By setting \(\Omega_1 = \omega_1 - \Delta_{probe}\), \(\Omega_2 = \omega_3 - \Delta_{pump}\) and \(\Omega_3 = \omega_3\) the following transformation are to be done on the Hamiltonian,
+    \(\ket{j}\) corresponds to the three different states that can be sene in figure~\ref{fig:Transition_Diagram} and their corresponding frequencies \(\omega_j\), \(\varepsilon_{pump}\) and \(\varepsilon_{probe}\) signify the strength of the pump and probe fields respectively which are a frequencies \(\omega_{pump} = \omega_(23) = \Delta_{pump}\) and \(\omega_{probe} = \omega_{13} + \Delta_{probe}\).    By setting \(\Omega_1 = \omega_1 - \Delta_{probe}\), \(\Omega_2 = \omega_3 - \Delta_{pump}\) and \(\Omega_3 = \omega_3\) the following transformation are to be done on the Hamiltonian,
     \begin{align}
       \ket{j} &\rightarrow e^{- i \Omega_j t}\ket{j}, j(=1,2,3)\,\\
       \hat{H} &\rightarrow \hat{H} - \sum_{j} \hbar \Omega_j \ket{j}\bra{j}\,.
     \end{align}
-    These transformations will result in a three dimensional matrix without time dependence. 
-    \item The density matrix that is obtained from the hamiltonian is also a three dimensional matrix.
-    \item  The Hamiltonian and Density matrices are coded and derived using python 3.10.6 and numpy to confirm that the matrices obtained by derivation on pen and paper will match. The differential equation that governs the density matrix of the system is as follows:
+    These transformations will result in a three dimensional matrix without time dependence. Furthermore taking \(\omega_{pump} = \Omega_2 - \Omega_3\) and \(\omega_{probe} = \Omega_1 - \Omega_3\) the Hamiltonian parts would become:
+    \begin{align}
+      \hat{H}_{probe} &= \hbar \varepsilon_{probe}(e^{-i \Omega_3 - \Omega_1 t}\ket{1}\bra{3} + e^{i \Omega_3 - \Omega_1}\ket{3}\bra{1})\\
+      &= \hbar \varepsilon_{probe}(e^{-i \Omega_1 t}\ket{1}e^{i \Omega_3 t}\ket{3} + e^{-i \Omega_3 t}\ket{1}e^{i \Omega_1 t}\ket{1})\\
+      &= \hbar \varepsilon_{probe}(e^{-i \Omega_1 t}e^{i \Omega_1 t}\ket{1}\bra{3} + e^{-i \Omega_3 t}e^{i \Omega_3 t}\ket{3}\bra{1})\\
+      &= \hbar \varepsilon_{probe}\ket{1}\bra{3} + \hbar \varepsilon_{probe}\ket{3}\bra{1}\\
+      \hat{H}_{pump} &= \hbar \varepsilon_{probe}(e^{-i \Omega_3 - \Omega_1 t}\ket{1}\bra{3} + e^{i \Omega_3 - \Omega_1}\ket{3}\bra{1})\\
+      &= \hbar \varepsilon_{probe}(e^{-i \Omega_2 t}\ket{2}e^{i \Omega_3 t}\ket{3} + e^{-i \Omega_2 t}\ket{2}e^{i \Omega_3 t}\ket{3})\\
+      &= \hbar \varepsilon_{pump}(e^{-i \Omega_2 t}e^{i \Omega_2 t}\ket{2}\bra{3} + e^{-i \Omega_3 t}e^{i \Omega_3 t}\ket{3}\bra{2})\\
+      &= \hbar \varepsilon_{pump}\ket{2}\bra{3} + \hbar \varepsilon_{pump}\ket{3}\bra{2}\,,\\
+    \end{align}
+    therefore the combined Hamiltonian becomes:
+    \begin{equation}
+      \begin{split}
+        \hat{H} = &\hbar(\Omega_1 + \Delta_{probe}) + \hbar(\Omega_2 + \Delta_{pump}) + \hbar\Omega_3 \\ &+ \hbar \varepsilon_{probe}\ket{1}\bra{3} + \hbar \varepsilon_{probe}\ket{3}\bra{1} \\ &+ \hbar \varepsilon_{pump}\ket{2}\bra{3} + \hbar \varepsilon_{pump}\ket{3}\bra{2} \,.
+      \end{split}
+    \end{equation}
+    Thus, the Hamiltonian matrix is:
+    \begin{gather}
+      \tilde{H} =
+      \begin{bmatrix}
+        \hbar\Delta_{probe} & 0 & \hbar\varepsilon_{probe}\ket{1}\bra{3}\\
+        0 & \hbar\Delta_{pump} & \hbar \varepsilon_{pump}\ket{2}\bra{3}\\
+        \hbar \varepsilon_{probe}\ket{3}\bra{1} & \hbar \varepsilon_{pump}\ket{3}\bra{2} & 0
+      \end{bmatrix}
+    \end{gather}
+    \item The density matrix that is obtained from the Hamiltonian by first defining the rabi frequencies as:
+    \begin{align}
+      \Omega_{probe} &= \frac{\varepsilon_{probe}\ket{1}\bra{3}}{\hbar}\\
+      \Omega_{pump} &= \frac{\varepsilon_{pump}\ket{2}\bra{3}}{\hbar}\,.
+    \end{align}
+    using these values and the fact that \(\rho = \sum_{n}P_n\ket{n}\bra{n}\) we obtain these following results:
+    \begin{align}
+      \dot{\tilde{\rho}}_{11} &= i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}(\rho_{21}-\rho_{12}) \approx 1\\
+      \dot{\tilde{\rho}}_{12} &= (-\gamma_{12} + i (\Delta_{pump}- \Delta_{probe}))\tilde{\rho}_{12} - i \frac{\varepsilon_{pump}\ket{2}\bra{3}}{2\hbar}\tilde{\rho}_{13} + i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\tilde{\rho}_{32}\\
+      \dot{\tilde{\rho}}_{13} &= (- \gamma_{13} + i\Delta_{pump})\tilde{\rho}_{13} - i \frac{\varepsilon_{pump}\ket{2}\bra{1}}{2\hbar}(\tilde{\rho}_{32}-\tilde{\rho}_{11}) - i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\tilde{\rho}_{12}\\
+      \dot{\tilde{\rho}}_{21} &= (-\gamma_{21}-i(\Delta_{pump}-\Delta_{probe}))\tilde{\rho}_{21}+i\frac{\varepsilon_{pump}\ket{2}\bra{3}}{2\hbar}\tilde{\rho}_{31}-i \frac{\varepsilon_{probe}\ket{1}\bra{1}}{2\hbar}\tilde{\rho}_{23}\\
+      \dot{\tilde{\rho}}_{22} &= - \gamma_{2} \rho_{22} - i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}(\rho_{21}- \rho_{12}) - i \frac{\varepsilon_{probe}\ket{2}\bra{1}}{2\hbar}(\rho_{23} - \rho_{22}) \approx 0\\
+      \dot{\tilde{\rho}}_{23} &= (-\gamma_{23} - i \Delta_{pump})\tilde{\rho}_{23} + i \frac{\varepsilon_{pump}\ket{2}\bra{1}}{2\hbar}(\tilde{\rho}_{33} - \tilde{\rho}_{22}) - i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\tilde{\rho}_{21}\\
+      \dot{\tilde{\rho}}_{31} &= (-\gamma_{31} - i \Delta_{pump})\tilde{\rho}_{31} + i \frac{\varepsilon_{pump}\ket{2}\bra{1}}{2\hbar}(\tilde{\rho}_{33}-\tilde{\rho}_{11}) + i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\tilde{\rho}_{21}\\
+      \dot{\tilde{\rho}}_{32} &= (-\gamma_{23} + i \Delta_{pump})\tilde{\rho}_{32} - i \frac{\varepsilon_{pump}\ket{2}\bra{1}}{2\hbar}(\tilde{\rho}_{33} - \tilde{\rho}_{22}) + i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\tilde{\rho}_{12}\\
+      \dot{\tilde{\rho}}_{33} &= - \gamma_{3} \rho_{33} + i \frac{\varepsilon_{probe}\ket{2}\bra{1}}{2\hbar}(\rho_{23}- \rho_{32}) \approx 0\,.
+    \end{align}
+    where \(\gamma\) is the decay rate of level \(\ket{3}\). Thus, the density matrix would be:
+    \begin{gather}
+      \dot{\tilde{\rho}} = 
+      \begin{bmatrix}
+        1 & \begin{split}&i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\\ &- i \frac{\varepsilon_{pump}\ket{2}\bra{3}}{2\hbar}\end{split} & \begin{split} &(- \gamma_{13} - i \Delta_{probe})\\&- i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\end{split}\\
+        \begin{split}&-i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\\ &+ i \frac{\varepsilon_{probe}\ket{2}\bra{3}}{2\hbar}\end{split} & 0 & (-\gamma_{23}-i\Delta_{pump})\\
+        \begin{split} &(- \gamma_{31} + i \Delta_{probe})\\&+ i \frac{\varepsilon_{probe}\ket{1}\bra{3}}{2\hbar}\end{split} & (-\gamma_{32}+i\Delta_{pump}) & 0 
+      \end{bmatrix}
+    \end{gather}
+    \item  The Hamiltonian and Density matrices are coded and derived using python 3.10.6 and numpy to confirm that the matrices obtained by derivation matches. The differential equation that governs the density matrix of the system is as follows:
     \begin{equation}
       \dot{\rho} = \frac{i}{\hbar}\left[\rho,\hat{H}\right] + \mathcal{L} [\rho]\,,
     \end{equation}
-    where \(\mathcal{L}[\rho] = \gamma \sum_{j = 1,2}\left[\ket{j}\ev{\rho}{3}\bra{j}-\frac{1}{2}(\ket{3}\ev{\rho+\rho}{3}\bra{3})\right]\), where \(\gamma\) is the decay rate of level \(\ket{3}\). The differential equation for each position in the density matrix can be determined and solved numerically using \lstinline{scipy.integrate.odeint}\,.
+    where \(\mathcal{L}[\rho] = \gamma \sum_{j = 1,2}\left[\ket{j}\ev{\rho}{3}\bra{j}-\frac{1}{2}(\ket{3}\ev{\rho+\rho}{3}\bra{3})\right]\). The differential equation for each position in the density matrix can be determined and solved numerically using \lstinline{scipy.integrate.odeint}\,.
+    \item This was obtained by first defining the symbols to be used through \lstinline{scipy} library, defining the different \(\Omega\) and working out the final matrix symbolically. This was done for both the Hamiltonian and density matrices. Next in order to work out the matrices numerically, we started off by first defining the bras and kets as matrices with their corresponding level. This can be clearly seen in this segment of code:
+    \begin{lstlisting}[language=iPython]
+      #Defining ket mathematically
+        def ket(a,b,c):
+        return np.array([[a],[b],[c]])
+
+      #Defining bra mathematically
+        def bra(a,b,c=None):
+        if c == None:
+          return (a.conjugate()).transpose()
+        else:
+          return np.array([[a,b,c]]).
+    \end{lstlisting}
+    Next by using the values of \(\hbar = 1.054571817 \times 10^{-34}\), \(\Delta_{probe} = 0\) and \(\Delta_{pump} = 0\) the Hamiltonian matrix can be worked out numerically, via the \lstinline{numpy} library. This was done with the following lines of code:
+    \begin{lstlisting}[language=iPython]
+      #Defining constants to be used
+      h = 1.054571817e-34   #reduced Planck's constant
+      delta_probe = 0
+      delta_pump = 0
+    
+      #Working out each element of the Hamiltonian matrix
+      H_11 = np.multiply(h, delta_probe)
+      H_12 = 0
+      H_13 = np.multiply(np.multiply(h, epsilon_probe), float(np.dot(bra(0,0,3), ket(0,0,1))))
+      H_21 = 0
+      H_22 = np.multiply(h, delta_pump)
+      H_23 = np.multiply(np.multiply(h, epsilon_pump), float(np.dot(bra(0,0,3), ket(0,0,2))))
+      H_31 = np.multiply(np.multiply(h, epsilon_probe), float(np.dot(bra(0,0,1), ket(0,0,3))))
+      H_32 = np.multiply(np.multiply(h, epsilon_pump), float(np.dot(bra(0,0,2), ket(0,0,3))))
+      H_33 = 0
+    
+      #Defining the Hamiltonian matrix
+      H_mat = np.array([[H_11, H_12, H_13], [H_21, H_22, H_23], [H_31, H_32, H_33]])
+      return H_mat
+    
+    #Defining constants to be used
+    h_2 = 2.109143634e-34   #twice the reduced Planck's constant
+    delta_probe = 0
+    delta_pump = 0
+    gamma_13 = 1
+    gamma_23 = 1
+
+    #Working out each element of the density matrix
+    bra_ket = np.dot(bra(0,0,3), ket(0,0,1))
+    bra_ket_2 = np.dot(bra(0,0,3), ket(0,0,2))
+    ep_pr_bra_ket = np.multiply(epsilon_probe, bra_ket)
+    ep_pp_bra_ket = np.multiply(epsilon_pump, bra_ket_2)
+    ep_pr_bra_ket_h_2 = ep_pr_bra_ket / h_2
+    ep_pp_bra_ket_h_2 = ep_pp_bra_ket / h_2
+
+    rho_11 = 1
+    rho_12 = complex(0, ep_pr_bra_ket_h_2) - complex(0, ep_pp_bra_ket_h_2)
+    rho_13 = - gamma_13 - complex(0, delta_probe) - complex(0, ep_pr_bra_ket_h_2)
+    rho_21 = - complex(0, ep_pr_bra_ket_h_2) + complex(0 , ep_pp_bra_ket_h_2)
+    rho_22 = 0
+    rho_23 = - gamma_23 - complex(0, delta_pump)
+    rho_31 = - gamma_13 + complex(0, delta_probe) + complex(0, ep_pr_bra_ket_h_2)
+    rho_32 = - gamma_23 + complex(0, delta_pump)
+    rho_33 = 0
+
+    #Defining the density matrix
+    density_mat = np.array([[rho_11, rho_12, rho_13], [rho_21, rho_22, rho_23], [rho_31, rho_32, rho_33]])
+    return density_mat
+    \end{lstlisting}
+    As there is an imaginary part to both the density matrix and Hamiltonian matrix they were obtained by the following lines of code:
+    \begin{lstlisting}[language=iPython]
+      y_11 = np.array(y[0,0])
+      real_y_11 = y_11.real
+      imag_y_11 = y_11.imag
+      z_11 = np.array(z[0,0])
+      real_z_11 = z_11.real
+      imag_z_11 = z_11.imag
+      real_x_11 = - imag_y_11 + real_z_11
+      imag_x_11 = real_y_11 + imag_z_11
+    \end{lstlisting}
+    this is done for every position in the density matrix in order to obtain the 9 different differential equation to be solved.
+
     \item The behavior of the system with different initial conditions, the atom population in different levels, and the \(\varepsilon_{pump}\) increasing while the \(\varepsilon_{probe}\) is either suddenly turning on or slowing turning on. In all cases \(\varepsilon_{probe} \ll \varepsilon_{pump}\).
   \end{enumerate}
 
 \section{Results \& Discussion}
+The Hamiltonian matrix obtained matches the one mentioned in \cite{erickson}, however from the graphs that can be seen below the density matrix was not correct. This is as when viewing the density matrix through the code, each differential equation was only just a number and thus when the integration was one to solve the straight lines are obtained. In figure~\ref{fig:fig1} and figure~\ref{fig:fig2} \(\varepsilon_{pump}\) is kept off while \(\varepsilon_{probe}\) is kept on, however \(j\) was varied between 2 and 1 respectively. There is no difference between the two figures, but this can be attributed to the mistake made in the density matrix.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 1.png}\caption{\(\varepsilon_{pump} = 0, \varepsilon_{probe}= 1, j=2\)}\label{fig:fig1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 2.png}\caption{\(\varepsilon_{pump} = 0, \varepsilon_{probe}= 1, j=1\)}\label{fig:fig2}
+\end{figure}
+
+Furthermore, a variation was introduced to the system in figures~\ref{fig:fig2.1.0} to~\ref{fig:fig2.1.7} show how the system behave when \(\varepsilon_{pump}\) was increasing while \(\varepsilon_{probe}\) was suddenly turned on after some time. One should note that the system changes suddenly when the probe field is turned on. However, once more due to the mistake in deriving the density matrix not further information can be obtained from the figures.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 2.1.0.png}\caption{\(\varepsilon_{pump} \text{ increasing}, \varepsilon_{probe}= \text{sudden turning on}\)}\label{fig:fig2.1.0}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 2.1.3.png}\caption{\(\varepsilon_{pump} \text{ increasing}, \varepsilon_{probe}= \text{sudden turning on}\)}\label{fig:fig2.1.3}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 2.1.5.png}\caption{\(\varepsilon_{pump} \text{ increasing}, \varepsilon_{probe}= \text{sudden turning on}\)}\label{fig:fig2.1.5}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 2.1.7.png}\caption{\(\varepsilon_{pump} \text{ increasing}, \varepsilon_{probe}= \text{sudden turning on}\)}\label{fig:fig2.1.7}
+\end{figure}
+
+The final variation is once more the pump field being increased and this time the probe field increased slowly. Once more one should note, that the system changes drastically when the probe field reaches maximum.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 4.1.0.png}\caption{\(\varepsilon_{pump} \text{increasing}, \varepsilon_{probe}=\text{slowly turning on}\)}\label{fig:fig4.1.0}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 4.1.3.png}\caption{\(\varepsilon_{pump} \text{increasing}, \varepsilon_{probe}=\text{slowly turning on}\)}\label{fig:fig4.1.3}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 4.1.5.png}\caption{\(\varepsilon_{pump} \text{increasing}, \varepsilon_{probe}=\text{slowly turning on}\)}\label{fig:fig4.1.5}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Plot 4.1.7.png}\caption{\(\varepsilon_{pump} \text{increasing}, \varepsilon_{probe}=\text{slowly turning on}\)}\label{fig:fig4.1.7}
+\end{figure}
+
+The transition from state 1 to state 2 should not be observed, however from the figures obtained in this experiment it is indicated that it might occur. However, one should keep in mind that the figures obtained are incorrect thus, there is no clear indication if this transition should occur or not.
 
 \section{Conclusion}
+In conclusion, the Hamiltonian matrix obtained correlates with what is seen in the literature. However, the density matrix that was derived was incorrect as can be seen in the figures that were obtained.
 
 \section{References}
+\printbibliography[heading=none]
 
 \section{Appendix}
 \begin{lstlisting}[language=iPython]
@@ -73,7 +256,7 @@ from sympy.physics.quantum import Bra, Ket
 ##Obtaining the Hamiltonian matrix and the density matrix of the three-dimensional lambda system, symbolically using the sympy package
 
 #Defining the symbols to be used
-Omega_1,Omega_2,Omega_3,omega_1,omega_2,omega_3,delta_probe,delta_pump,omega_probe,omega_pump,omega_13,omega_23,H_probe,H_pump,H_0,h,epsilon_probe,epsilon_pump,H,gamma_13,gamma_23,gamma = symbols('Omega_1,Omega_2,Omega_3,omega_1,omega_2,omega_3,delta_probe,delta_pump,omega_probe,omega_pump,omega_13,omega_23,H_probe,H_pump,H_0,h,epsilon_probe,epsilon_pump,H,gamma_13,gamma_23,gamma')
+Omega_1, Omega_2, Omega_3, omega_1, omega_2, omega_3, delta_probe, delta_pump, omega_probe, omega_pump, omega_13, omega_23, H_probe, H_pump, H_0,h, epsilon_probe, epsilon_pump, H, gamma_13, gamma_23, gamma = symbols('Omega_1, Omega_2, Omega_3, omega_1, omega_2, omega_3, delta_probe, delta_pump, omega_probe, omega_pump, omega_13, omega_23, H_probe, H_pump, H_0, h, epsilon_probe, epsilon_pump, H, gamma_13, gamma_23, gamma')
 
 #Defining the terms to be used
 Omega_1 = omega_1 - delta_probe   #Rabi frequency of level 1
@@ -412,8 +595,6 @@ plt.legend(['11','12','13','21','22','23','31','32','33'])
 plt.tight_layout()
 plt.savefig(f'plots/Plot 2.png', dpi=800)
 plt.show()
-
-##Question 4a
 
 #Setting the initial conditions of the lambda system
 epsilon_probe = 0   #quantification of the strength of the probe field
