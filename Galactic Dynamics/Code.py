@@ -14,13 +14,13 @@ print(f's1.g: {s1.g.loadable_keys()}') # Showing keys for gas
 
 s2 = pynbody.load('run708mainDiff.01000')
 
-print(s2.families()) # Exploring groups in simulation
-print(s2.properties) # Showing the properties of the simulation
-print(f's2.s: {s2.s.loadable_keys()}') # Showing keys for stars
-print(f's2.d: {s2.d.loadable_keys()}') # Showing keys for dark matter
-print(f's2.g: {s2.g.loadable_keys()}') # Showing keys for gas
+# print(s2.families()) # Exploring groups in simulation
+# print(s2.properties) # Showing the properties of the simulation
+# print(f's2.s: {s2.s.loadable_keys()}') # Showing keys for stars
+# print(f's2.d: {s2.d.loadable_keys()}') # Showing keys for dark matter
+# print(f's2.g: {s2.g.loadable_keys()}') # Showing keys for gas
 
-#Question 1
+# #Question 1
 s1.physical_units() # Changing units to correct units
 pynbody.analysis.angmom.faceon(s1)
 
@@ -28,66 +28,66 @@ pynbody.analysis.angmom.faceon(s1)
 s2.physical_units() # Changing units to correct units
 pynbody.analysis.angmom.faceon(s2)
 
-#Question 2
-mass_s1_s = s1.s['mass']
-mass_s1_d = s1.d['mass']
-mass_s1_g = s1.g['mass']
+# #Question 2
+# mass_s1_s = s1.s['mass']
+# mass_s1_d = s1.d['mass']
+# mass_s1_g = s1.g['mass']
 
-mass_s2_s = s2.s['mass']
-mass_s2_d = s2.d['mass']
-mass_s2_g = s2.g['mass']
+# mass_s2_s = s2.s['mass']
+# mass_s2_d = s2.d['mass']
+# mass_s2_g = s2.g['mass']
 
-Sum = 0
-array = []
+# Sum = 0
+# array = []
 
-def mass_sum(array):
-  Sum = reduce(lambda a, b: a+b, array)
-  return(Sum)
+# def mass_sum(array):
+#   Sum = reduce(lambda a, b: a+b, array)
+#   return(Sum)
 
-total_mass_s1 = mass_sum(mass_s1_s) + mass_sum(mass_s1_d) + mass_sum(mass_s1_g)
+# total_mass_s1 = mass_sum(mass_s1_s) + mass_sum(mass_s1_d) + mass_sum(mass_s1_g)
 
-Sum = 0
-array = []
+# Sum = 0
+# array = []
 
-total_mass_s2 = mass_sum(mass_s2_s) + mass_sum(mass_s2_d) + mass_sum(mass_s2_g)
+# total_mass_s2 = mass_sum(mass_s2_s) + mass_sum(mass_s2_d) + mass_sum(mass_s2_g)
 
-print(f'Total mass s1: {total_mass_s1}')
-print(f'Total mass s2: {total_mass_s2}')
+# print(f'Total mass s1: {total_mass_s1}')
+# print(f'Total mass s2: {total_mass_s2}')
 
-#Question 3
-plt.figure(figsize=(7.5,10.5))
-pynbody.plot.image(s1.s, threaded=False)
-plt.savefig(f'Plots/Figure 1.png', dpi=800)
-plt.clf
+# #Question 3
+# plt.figure(figsize=(7.5,10.5))
+# pynbody.plot.image(s1.s, threaded=False)
+# # plt.savefig(f'Plots/Figure 1.png', dpi=800)
+# # plt.clf
 
-plt.figure(figsize=(7.5,10.5))
-pynbody.plot.stars.render(s1.s)
-plt.savefig(f'Plots/Figure 2.png', dpi=800)
-plt.clf
+# plt.figure(figsize=(7.5,10.5))
+# pynbody.plot.stars.render(s1.s)
+# # plt.savefig(f'Plots/Figure 2.png', dpi=800)
+# # plt.clf
 
-plt.figure(figsize=(7.5,10.5))
-pynbody.plot.image(s2.s, threaded=False)
-plt.savefig(f'Plots/Figure 3.png', dpi=800)
-plt.clf
+# plt.figure(figsize=(7.5,10.5))
+# pynbody.plot.image(s2.s, threaded=False)
+# # plt.savefig(f'Plots/Figure 3.png', dpi=800)
+# # plt.clf
 
-plt.figure(figsize=(7.5,10.5))
-pynbody.plot.stars.render(s2.s)
-plt.savefig(f'Plots/Figure 4.png', dpi=800)
-plt.clf
+# plt.figure(figsize=(7.5,10.5))
+# pynbody.plot.stars.render(s2.s)
+# # plt.savefig(f'Plots/Figure 4.png', dpi=800)
+# # plt.clf
 
 
-#Question 4
-plt.figure(figsize=(7.5,10.5))
-pynbody.plot.image(s1.g, threaded=False)
-plt.savefig(f'Plots/Figure 5.png', dpi=800)
-plt.clf
+# #Question 4
+# plt.figure(figsize=(7.5,10.5))
+# pynbody.plot.image(s1.g, threaded=False)
+# # plt.savefig(f'Plots/Figure 5.png', dpi=800)
+# # plt.clf
 
-plt.figure(figsize=(7.5,10.5))
-pynbody.plot.image(s2.g, threaded=False)
-plt.savefig(f'Plots/Figure 6.png', dpi=800)
-plt.clf
+# plt.figure(figsize=(7.5,10.5))
+# pynbody.plot.image(s2.g, threaded=False)
+# # plt.savefig(f'Plots/Figure 6.png', dpi=800)
+# # plt.clf
 
-#Question 6
+# #Question 6
 plt.figure(figsize=(7.5,10.5))
 
 plt.rcParams['font.family'] = 'STIXGeneral'
@@ -99,13 +99,14 @@ plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
 
-p1 = pynbody.analysis.profile.Profile(s1.s)
-plt.plot(p1['rbins'], np.log(p1['rho']), color='k')
+p1 = pynbody.analysis.profile.Profile(s1.s, max=30, nbins=200, ndim=3)
+plt.plot(p1['rbins'], p1['rho'], color='k')
 plt.ylabel(r'$\log{\rho}$')
+plt.semilogy()
 plt.xlabel('Stellar Radii')
 plt.title('Stellar radial density profile of system 1')
-plt.savefig(f'Plots/Figure 7.png', dpi=800)
-plt.clf
+# plt.savefig(f'Plots/Figure 7.png', dpi=800)
+# plt.clf
 
 plt.figure(figsize=(7.5,10.5))
 
@@ -118,13 +119,15 @@ plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
 
-p2 = pynbody.analysis.profile.Profile(s2.s)
-plt.plot(p2['rbins'], np.log(p2['rho']), color='k')
+p2 = pynbody.analysis.profile.Profile(s2.s, max=40, nbins=250, ndim=3)
+plt.plot(p2['rbins'], p2['rho'], color='k')
 plt.ylabel(r'$\log{\rho}$')
+plt.semilogy()
 plt.xlabel('Stellar Radii')
 plt.title('Stellar radial density profile of system 2')
-plt.savefig(f'Plots/Figure 8.png', dpi=800)
-plt.clf
+plt.show()
+# plt.savefig(f'Plots/Figure 8.png', dpi=800)
+# plt.clf
 
 #Task2
 
