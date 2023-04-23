@@ -165,8 +165,8 @@ plt.title('Denisty Heat map of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 10.png', dpi=800)
 plt.clf
 
-plt.title('Optical image of filtered system 1, side-on view')
 pynbody.plot.stars.render(sphere1, width='8 kpc') 
+plt.title('Optical image of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 11.png', dpi=800)
 plt.clf
 
@@ -176,13 +176,13 @@ sphere2 = s2.s[pynbody.filt.Sphere(radius, centre)] # Filtering the stars accord
 pynbody.analysis.angmom.sideon(sphere2) # Aligning simulation to appear side-on
 
 # Rendering a density heat map of the side-on image of the filtered stars
-plt.title('Denisty Heat map of filtered system 2, side-on view')
 sph.image(s2.s, width='8 kpc')
+plt.title('Denisty Heat map of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 12.png', dpi=800)
 plt.clf
 
-plt.title('Optical image of filtered system 2, side-on view')
 pynbody.plot.stars.render(sphere2, width='8 kpc')
+plt.title('Optical image of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 13.png', dpi=800)
 plt.clf
 
@@ -190,26 +190,26 @@ plt.clf
 pynbody.analysis.angmom.sideon(s1) # Viewing the galaxy from the side
 
 # Rendering a density heat map and optical image of the side-on image of the galaxy
-plt.title('Denisty Heat map of filtered system 1, side-on view')
 sph.image(s1.s, width='1.5 kpc')
+plt.title('Denisty Heat map of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 14.png', dpi=800)
 plt.clf
 
-plt.title('Optical image of filtered system 1, side-on view')
 pynbody.plot.stars.render(s1.s, width='1.5 kpc')
+plt.title('Optical image of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 15.png', dpi=800)
 plt.clf
 
 pynbody.analysis.angmom.sideon(s2) # Viewing the galaxy from the side
 
 # Rendering a density heat map and optical image of the side-on image of the galaxy
-plt.title('Denisty Heat map of filtered system 2, side-on view')
 sph.image(s2.s, width='1.5 kpc')
+plt.title('Denisty Heat map of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 16.png', dpi=800)
 plt.clf
 
-plt.title('Optical image of filtered system 2, side-on view')
 pynbody.plot.stars.render(s2.s, width='1.5 kpc')
+plt.title('Optical image of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 17.png', dpi=800)
 plt.clf
 
