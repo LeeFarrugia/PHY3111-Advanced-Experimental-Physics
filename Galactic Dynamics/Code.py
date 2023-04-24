@@ -192,13 +192,11 @@ pynbody.analysis.angmom.sideon(s1) # Viewing the galaxy from the side
 # Rendering a density heat map and optical image of the side-on image of the galaxy
 sph.image(s1.s, width='1.5 kpc')
 plt.title('Density heat map of filtered system 1, side-on view')
-#plt.title('Density heat map of galaxy in system 1, side-on view')
 plt.savefig(f'Plots/Figure 14.png', dpi=800)
 plt.clf
 
 pynbody.plot.stars.render(s1.s, width='1.5 kpc')
 plt.title('Optical image of filtered system 1, side-on view')
-#plt.title('Optical image of galaxy in system 1, side-on view')
 plt.savefig(f'Plots/Figure 15.png', dpi=800)
 plt.clf
 
@@ -207,13 +205,11 @@ pynbody.analysis.angmom.sideon(s2) # Viewing the galaxy from the side
 # Rendering a density heat map and optical image of the side-on image of the galaxy
 sph.image(s2.s, width='1.5 kpc')
 plt.title('Density heat map of filtered system 2, side-on view')
-#plt.title('Density heat map of galaxy in system 2, side-on view')
 plt.savefig(f'Plots/Figure 16.png', dpi=800)
 plt.clf
 
 pynbody.plot.stars.render(s2.s, width='1.5 kpc')
 plt.title('Optical image of filtered system 2, side-on view')
-#plt.title('Optical image of galaxy in system 2, side-on view')
 plt.savefig(f'Plots/Figure 17.png', dpi=800)
 plt.clf
 
