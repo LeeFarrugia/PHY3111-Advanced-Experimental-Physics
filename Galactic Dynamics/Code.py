@@ -54,8 +54,8 @@ array = []
 # Calculating the total mass contained within the stellar, dark matter, and gas components
 total_mass_s2 = mass_sum(mass_s2_s) + mass_sum(mass_s2_d) + mass_sum(mass_s2_g)
 
-print(f'Total mass s1: {total_mass_s1}')
-print(f'Total mass s2: {total_mass_s2}')
+print(f'Total mass s1: {total_mass_s1} Msol')
+print(f'Total mass s2: {total_mass_s2} Msol')
 
 ## Question 3
 # Rendering a density heat map and optical image of the face-on image of the stellar component
@@ -85,14 +85,14 @@ plt.savefig(f'Plots/Figure 4.png', dpi=800)
 plt.clf
 
 ## Question 4
-# Generating a face-on image of the gaseous component
+# Generating a density heat map of the face-on image of the gaseous component
 plt.figure(figsize=(7.5,10.5))
 pynbody.plot.image(s1.g, threaded=False)
 plt.title('Density heat map of gaseous component of system 1, face-on view')
 plt.savefig(f'Plots/Figure 5.png', dpi=800)
 plt.clf
 
-# Generating a face-on image of the gaseous component
+# Generating a density heat map of the face-on image of the gaseous component
 plt.figure(figsize=(7.5,10.5))
 pynbody.plot.image(s2.g, threaded=False)
 plt.title('Density heat map of gaseous component of system 2, face-on view')
@@ -147,6 +147,8 @@ plt.clf
 ## Question 1
 # Rotating the barred galaxy so that its bar is aligned with the x-axis
 pynbody.analysis.angmom.sideon(s1)
+
+# Generating a density heat map of the side-on image of the barred galaxy
 pynbody.plot.image(s1.s, threaded=False)
 plt.title('Density heat map of system 1, side-on view')
 plt.savefig(f'Plots/Figure 9.png', dpi=800)
@@ -187,28 +189,28 @@ plt.savefig(f'Plots/Figure 13.png', dpi=800)
 plt.clf
 
 ## Question 3
-pynbody.analysis.angmom.sideon(s1) # Viewing the galaxy from the side
+pynbody.analysis.angmom.sideon(s1) # Aligning simulation to appear side-on
 
-# Rendering a density heat map and optical image of the side-on image of the galaxy
-sph.image(s1.s, width='1.5 kpc')
+# Rendering a density heat map and optical image of the side-on image of the filtered stars
+sph.image(s1.s, width='3 kpc')
 plt.title('Density heat map of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 14.png', dpi=800)
 plt.clf
 
-pynbody.plot.stars.render(s1.s, width='1.5 kpc')
+pynbody.plot.stars.render(s1.s, width='3 kpc')
 plt.title('Optical image of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 15.png', dpi=800)
 plt.clf
 
-pynbody.analysis.angmom.sideon(s2) # Viewing the galaxy from the side
+pynbody.analysis.angmom.sideon(s2) # Aligning simulation to appear side-on
 
-# Rendering a density heat map and optical image of the side-on image of the galaxy
-sph.image(s2.s, width='1.5 kpc')
+# Rendering a density heat map and optical image of the side-on image of the filtered stars
+sph.image(s2.s, width='3 kpc')
 plt.title('Density heat map of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 16.png', dpi=800)
 plt.clf
 
-pynbody.plot.stars.render(s2.s, width='1.5 kpc')
+pynbody.plot.stars.render(s2.s, width='3 kpc')
 plt.title('Optical image of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 17.png', dpi=800)
 plt.clf
