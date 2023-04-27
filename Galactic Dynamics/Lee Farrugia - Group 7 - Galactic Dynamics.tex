@@ -2,8 +2,8 @@
 \usepackage{import}
 \usepackage{GalacticPreamble}
 
-\title{Equivalent Circuits}
-\date{\(10^\mathrm{{th}}\) November 2022}
+\title{Galactic Dynamics}
+\date{\(23^\mathrm{{rd}}\) March 2023}
 \author{Lee Farrugia}
 
 \begin{document}
@@ -13,131 +13,358 @@
 \pagestyle{mystyle}
 
 \section*{Abstract}
+This is project is concerned about the determination of the shapes and characteristics of galaxies from the simulations given. This is done by utilising the functions available from \lstinline[language=iPython]{pynbody} python package. By utilising this package, it was noted that simulation1 provided the details of a barred spiral galaxy with a box/peanut central bulge, while simulation provided the details for an unbarred spiral galaxy. The results showed that the barred spiral galaxy was somewhat wider, while containing a higher density of stars close to its central point and showing more activity creation of stars in its spiral arms, when compared to the unbarred spiral galaxy. This correlates with the current literature. Furthermore, the results showed a minor increase in the overall total mass of the the barred galaxy when compared to the total  overall mass of the unbarred galaxy, the masses were 1351313238747.11 solar masses and 1351313238738.03 solar masses respectively. This indicated that the bar has a negligible affect on the total mass of the system. 
 
 \section{Introduction \& Theoretical Background}
+The universe is made up of many galaxies. Galaxies are very large cosmic collections of stars, gas, dust and dark matter which are held together by gravitational forces. From studies it was noted that there are multiple different types of galaxies present in the universe. These types were classified into three main groups, which are Elliptical, Spiral and Irregular~\parencite{GALAXIES2023}.
+
+If we consider the Elliptical category, these account for about one third of the galaxies that are observed in the universe, and they then vary from nearly circular to very elongated in shape. From close studies of their composition it was noted that they contain very little amounts of gas and dust, while also contained much older stars when compared to the other categories. It was further noted that these types of galaxies are no longer actively forming stars~\parencite{GALAXIES2023}. An example of this type of galaxies is ESO 325-G004 galaxy.
+
+The Spiral category galaxies are observed as flat, blue-white disks of stars. While having gas and dust with yellowish bulges that can be seen in their centers. This category is further split into 2 groups, normal spiral and barred spiral. It should be noted that the bar of the barred galaxies passes through the center of the galaxy, while the ares of the spirals tend to start at the end of the bar rather at the central bulge. Stars are being actively formed in this type of galaxies. The spiral category of galaxies account for a large portion of the galaxies in the universe~\parencite{GALAXIES2023}. An example of this galaxy is the M101 galaxy.
+
+If we consider the Irregular categories of galaxies, they are a kind of mix between the elliptical and disk-like. These types of galaxies are also referred to as Lenticular galaxies. These galaxies will contain very little dust and tend to be found deep into the universe. Their position allows us to kind of look back in time as they were abundant in the early formation of the universe before nay of the spirals and elliptical galaxies formed~\parencite{GALAXIES2023}. An example of this galaxy is the NGC 1569 galaxy. 
+
+In this experiment, the two simulations of the galaxies provided were of the spiral category. The main objective of this experiment was to determine which subcategory of the spiral category the simulation fall into. Additionally the simulation were explored in order determine if a bulges was present, the stellar density changes when the distance from the centre increases and if there are any differences between one simulation and the other. Simulation were used rather than actual data as the amount of dust and light in the inner region make it harder in order to determine the stars from other material present.
+
+\section{Materials \& Methods}
+  \subsection*{Task 1}
+    In the first task is organized in such a way that allows the user of the \lstinline[language=iPython]{pynbody}~python package become more familiar with it. This first step is to load in the simulations and convert the the units being used to the standard units. This was achieved by using the following snippet of code:
+    \begin{lstlisting}[language=iPython]
+      s1 = pynbody.load('run708main.01000')
+      s1.physical_units() 
+    \end{lstlisting}
+    This is repeated for the second simulation utilising the same code but a different variable. It should be noted that in order to further explore the data contained in the simulation the \lstinline[language=iPython]{.famlies} and the \lstinline[language=iPython]{.properties} functions of the \lstinline[language=iPython]{pynbody}~python package could be utilised to determine what families of data exist, i.e., gas, dark matter, star and the callable keys of the data in order to be utilised in future analysis. The total mass of the both simulated galaxies is found by adding the total mass of the stars, the total mass of gas and the total mass of dark matter together, this was done by utilising the following snippet of code:
+    \begin{lstlisting}[language=iPython]
+      mass_s1_s = s1.s['mass']
+      mass_s1_d = s1.d['mass']
+      mass_s1_g = s1.g['mass']
+      total_mass_s1 = mass_sum(mass_s1_s) + mass_sum(mass_s1_d) + mass_sum(mass_s1_g)
+    \end{lstlisting}
+    The simulation is rotated in such a way that the galaxy is seen top down, which is referred to a face on view. This is done by simply utilising the \lstinline[language=iPython]{pynbody.analysis.angmom.faceon} function. The density heat map images and optical images for both the stellar components and gaseous components are generated for both simulations. From the images generated beforehand, which galaxy is barred and which is not is determined. Lastly in order to generate the stellar radial density profiles the \lstinline[language=iPython]{pynbody.analysis.profile.Profile} function was utilised and additionally a logarithmic scale on y-axis is used.
+
+  \subsection*{Task 2}
+    As the two different galaxies in the the two simulation are correctly identified in such a way that one simulation is a barred spiral galaxy while the other is a spiral galaxy. The second task is done in such a way in order to investigate the effect that the bar has on the central bulge of the system. By taking the radius of 4~\unit{kpc} for both simulations, the Box/Peanut bulges is easier to determine. By considering the y-axis, it is easier to determine how older stars are higher up than younger stars. This filter was set up by using the \lstinline[language=iPython]{sphere} function. By investigating the density profile of both simulations, a comparison of the stellar component density for increasing heights is determined. This is achieved by using \lstinline[language=iPython]{pynbody.analysis.profile.Profile} function. By increasing the filter height of the simulation the density profile for the different ages of the stellar components is determined and plotted accordingly. The filters were established by utilising the \lstinline[language=iPython]{pynbody.filt.BandPass} function, which allows the user to specify the max and min radii.
 
 \section{Results \& Discussion}
+In the early stages of research in galactic weight, the techniques used determined that the milky way galaxy weighed in range of 500 billion to 3 trillion solar masses. With the improvement in techniques and instruments it was determined that our galaxy's weight is in the middle of this range, i.e., 1.5 trillion solar masses. From the analysis of other galaxies found in the universe it is determined that galaxies will have a weight in the range of 1 billion solar masses up to 30 trillion solar masses. From the basic analysis done on both simulations provided it was determined that simulation 1 had a mass of 1351313238747.11 solar masses, and simulation 2 had a mass of 1351313238738.03 solar masses, as illustrated in table~\ref{tab:table_1}. As their respective masses indicate they cannot be classified as light nor as heavy as they are in between. Furthermore, it should be noted that central bar present in simulation 1 does not have an effect on the total mass of the simulation as the difference between the masses of both simulation is fairly negligible. Additionally it should be noted that the brightness of a galaxy correlates to the total mass of the galaxy as can be seen in the Milky Way galaxy \parencite{hilleWhatDoesMilky2019}.
+
+\begin{longtable}[c]{cc}
+  Simulation   & Total Mass/Solar masses \\ \hline \hline
+  \endhead
+
+  Simulation 1 & 1351313238747.11        \\ \hline
+  Simualtion 2 & 1351313238738.03        \\
+  \caption{Total Masses of the Simulations}\label{tab:table_1}
+\end{longtable}
+
+The rendered heat map and optical images can be observed in figure~\ref{fig:Combined_simulation_1}. From these images one should note that galaxy that is simulated in simulation 1 is a spiral barred type. It should be also noted that in these images the stellar component is only considered. When compared to the images obtained from simulation 2, one can clearly see that even though the second simulated galaxy is also a spiral type it does not have the central bar going through it. The images obtained from the second simulation can be clearly seen in figure~\ref{fig:Combined_simulation_2}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Figure 1.png}
+    \label{fig:heat_map_simulation_1}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Figure 2.png}
+    \label{fig:optical_simulation_1}
+  \end{subfigure}
+  \caption{Density heat map and Optical image of the stellar component of simulation 1}
+  \label{fig:Combined_simulation_1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Figure 3.png}
+    \label{fig:heat_map_simulation_2}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Figure 4.png}
+    \label{fig:optical_simulation_2}
+  \end{subfigure}
+  \caption{Density heat map and Optical image of the stellar component of simulation 2}
+  \label{fig:Combined_simulation_2}
+\end{figure}
+
+While determining the shape of the galaxies being simulated, the gaseous distribution had to be analysed. This is done by plotting the images as before but rather for the stellar component for the gaseous component. One should note that although there not major difference in overall shape, there is a difference in how the spiral arms of the galaxies appear. It should be noted that in figure~\ref{fig:Combined_gas} the spiral arms are loosely bound, which indicates that the galaxy has rising rotation curves. If compared to the galaxy observed in simulation 2 shown in figure~\ref{fig:Combined_gas} has tightly bound spiral arms, which indicates that the galaxy has falling rotational curves \parencite{PropertiesDiskGalaxies}. The spiral arm also indicated in which way the galaxy is rotating. Additionally, it should be noted that the barred galaxy, simulation 1, has a higher concentration of molecular gas when compared to the galaxy in simulation 2. 
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Figure 5.png}
+    \label{fig:gas_simulation_1}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Figure 6.png}
+    \label{fig:gas_simulation_2}
+  \end{subfigure}
+  \caption{Density heat map of the gaseous component of both simulations}
+  \label{fig:Combined_gas}
+\end{figure}
+
+The determined stellar densities can be seen in figure~\ref{fig:Stellar_component_2sim}. It should be noted that even though that he graphs themselves are quite similar in shape there are varying peaks along the line. Additionally, it should be noted that the galaxy simulated in simulation 1 is wider than the galaxy simulated in simulation 2, this is shown by the fact that the line of the curve of simulation 1 continues on to the maximum of 30 stellar radius while the curve of simulation 2 stops at around 24 stellar radius. Another difference is the fact that although there is a corresponding peak at around 4.5 stellar radii, the simulation 1 has another peak 5.7 stellar radii, which indicated more stars in that region. Furthermore, it should be noted that the density close to the center of the first simulation is much higher for a further distance from the center compared to the second simulation, this is inline with the fact that the first galaxy is a barred spiral galaxy and the second is not. As barred spiral galaxies hav a higher concentration of stars towards the middle while the non barred have less \parencite{GALAXIES2023}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 7.png}
+    \label{fig:star_density_1}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 8.png}
+    \label{fig:star_density_2}
+  \end{subfigure}
+  \caption{Stellar densities of both simulation}
+  \label{fig:Stellar_component_2sim}
+\end{figure}
+
+In order to further analyse the bulges in both simulation it is important to view them from the side. In the case for simulation 1 the bulge is more prominent due to the presence of the bar. This bulge can be clearly seen surrounding the center point in figure~\ref{fig:side_on_bar}. The higher density at the center correlates with the fact that barred galaxies have a larger population of stars in the center. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 0.7\textwidth]{Figure 9.png}
+  \caption{Side on view of the barred simulation}\label{fig:side_on_bar}
+\end{figure}
+
+The box/peanut shaped bulge becomes very prevalent ven filtering in such a way that only the central aspect of the simulation is taken into consideration. This is achieved by filtering the stars to only that are present in 4 kpc from the center. As can be seen in figure~\ref{fig:filter_sphere_com_1} there is the peanut shape visible around the central mass and the thin disk protrusion, and even more clear in the the optical image generated for the same filtered system. The bulge is formed is theorised to from via a vertical buckling. After the stars reach the age of 1 Gyr the inner part of the bar become thicker which allows for the formation of the box/peanut shape. This is followed by a second buckling episode where the the bar thickens once more and the a further weakening of the bar is observed. This second buckling mainly occurs in strong bars, that will give a stronger box/peanut shape \parencite{BibEntry2019Aug}. Furthermore,~\cite{BibEntry2019Aug} stipulated that strong bars tend to have more flat topped vertical density distribution and have more buckling episodes.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 10.png}
+    \label{fig:filter_sphere_heat_map_1}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 11.png}
+    \label{fig:filter_sphere_optical_1}
+  \end{subfigure}
+  \caption{Density heat map and Optical images of filtered simulation 1}
+  \label{fig:filter_sphere_com_1}
+\end{figure}
+
+When the previous images are compared to the images produced from simulation 2 one can clearly see the major difference as the central bulge of the second galaxy is spherical in nature rather than box/peanut shaped. 
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 12.png}
+    \label{fig:filter_sphere_heat_map_2}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 13.png}
+    \label{fig:filter_sphere_optical_2}
+  \end{subfigure}
+  \caption{Density heat map and Optical images of filtered simulation 2}
+  \label{fig:filter_sphere_com_2}
+\end{figure}
+
+On closer inspection of both simulation one should not that the density of the stellar component decreases with an increase in the radial distance from the centre of the galaxy. This is shows that the older stars are higher up from the center when compared to the outer younger stars. This correlates with the fact that the older the star the more it as rotated with the galaxy towards the central point. Although there is the peanut shape it does not contradict the fact that the older stars are higher up than the younger stars. This is more evident in the optical images produces where one should not that the white central part is the younger stars, while the yellow haze indicated the collection of older stars orbiting closer to the central point. 
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 14.png}
+    \label{fig:filter_height_heat_map_1}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 15.png}
+    \label{fig:filter_height_optical_1}
+  \end{subfigure}
+  \caption{Density heat map and Optical images of filtered simulation 1}
+  \label{fig:filter_height_com_1}
+\end{figure}
+
+The older stars are also present above the midpoint in the second simulation showing the fact that the older the star the higher up from the midpoint they are. It should be noted that in the case of the second simulation the varying height is easier to observe as there is no box/peanut shape, thus, allowing us to clearly observe the spherical shape \parencite{GalacticBulge}. 
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 16.png}
+    \label{fig:filter_height_heat_map_2}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 17.png}
+    \label{fig:filter_height_optical_2}
+  \end{subfigure}
+  \caption{Density heat map and Optical images of filtered simulation 2}
+  \label{fig:filter_height_com_2}
+\end{figure}
+
+By taking different filters in order to inspect very close to the central point, one can obtain the different stellar densities corresponding to the respective radius. It should be noted that the density profiles generated for both the simulation are very similar in shape. However, in the case of simulation 1, the density profile in the range 0.025 kpc distance from the centre is higher than the rest, which corresponds with the fact that the simulation is of a box/peanut shaped galaxy. The main difference between the two graphs also occurs at this radius as the non box/peanut shaped galaxy has a lower density of stars. Furthermore, it should be noted that the simulation data was incomplete for certain areas or the simulation did not have and stars in that region for the radius being considered. In the case of simulation the shape of the graph closely correlates with how an unbarred galaxy should present. It shows the fact that there are more stars towards the central bulge rather in the spiral arms. Once again the simulation provided either had missing data or there were no stars in that region with respective radius taken \parencite{berghTenBillionYears2002}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 18.png}
+    \label{fig:stellar_denisty_1}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 19.png}
+    \label{fig:stellar_density_2}
+  \end{subfigure}
+  \caption{Stellar density with increasing filters}
+  \label{fig:Combined_stellar_denisty}
+\end{figure}
+
+In order to determine the density of stars with a particular age the same process was done as before, but rather than looking ad the radial distance to the density we compared the density to the age of the stars. In figure~\ref{fig:Age_denisty_combined} this can be clearly seen. In the case of the first simulation 1 one should note that the system is generating more new stars as there is a higher density of younger stars when compared to the second system. This correlated with the fact that a barred spiral galaxy has a higher production of stars when compared to the unbarred galaxy. This is due to the fact that the central bar concentrates the gas in the galaxy at the spiral arms, thus initiating more production of star. Furthermore, it should be noted that the stars found in the first simulation overall are older than the stars in the second simulation. This further confirms the fact that there is more stellar generation in the barred galaxy when compared to the unbarred \parencite{berghTenBillionYears2002}. 
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 20.png}
+    \label{fig:age_denisty_1}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width = \linewidth]{Figure 21.png}
+    \label{fig:age_denisty_2}
+  \end{subfigure}
+  \caption{Stellar age density with increasing filters}
+  \label{fig:Age_denisty_combined}
+\end{figure}
 
 \section{Conclusion}
+In conclusion the results obtained from the respective simulation are concurrent with the literature available. It should be noted that the presence of the bar does not affect the total mass of the galaxy. The results highlight the fact that there is more stellar generation in the barred galaxy when compared to the unbarred galaxy. Additionally, the results further highlight the fact that the barred galaxy gives rise to the box/peanut shaped central bulges. Furthermore, the simulations are in agreement in what is seen in the same shaped galaxies. That is in the case of the box/peanut central bulge galaxy the it shows the same properties as the Milky way, NGC 5377, NGC 6722 \parencite{BarredSpiral}. While the unbarred show the same characteristic as NGC 5457, NGC 1084, NGC 3810 \parencite{informationeso.orgNGC3810Pictureperfect}.
 
 \section{References}
+\printbibliography[heading = none]
 
 \section{Appendix}
 \begin{lstlisting}[language=iPython]
+from functools import reduce
 import numpy as np
 import matplotlib.pyplot as plt
 import pynbody
 import pynbody.plot.sph as sph
-from functools import reduce
-  
-#Question 1
-s1 = pynbody.load('run708main.01000')
-  
-print(s1.families()) # Exploring groups in simulation
-print(s1.properties) # Showing the properties of the simulation
+
+## Task 1
+
+## Question 1
+s1 = pynbody.load('run708main.01000') # Loading the first simulation file
+
+print(s1.families()) # Exploring the groups in the simulation
+print(s1.properties) # Exploring the properties of the simulation
 print(f's1.s: {s1.s.loadable_keys()}') # Showing keys for stars
 print(f's1.d: {s1.d.loadable_keys()}') # Showing keys for dark matter
 print(f's1.g: {s1.g.loadable_keys()}') # Showing keys for gas
-  
-s2 = pynbody.load('run708mainDiff.01000')
-  
-print(s2.families()) # Exploring groups in simulation
-print(s2.properties) # Showing the properties of the simulation
+
+s2 = pynbody.load('run708mainDiff.01000') # Loading the second simulation file
+
+print(s2.families()) # Exploring the groups in the simulation
+print(s2.properties) # Exploring the properties of the simulation
 print(f's2.s: {s2.s.loadable_keys()}') # Showing keys for stars
 print(f's2.d: {s2.d.loadable_keys()}') # Showing keys for dark matter
 print(f's2.g: {s2.g.loadable_keys()}') # Showing keys for gas
-  
-s1.physical_units() # Changing units to correct units
-pynbody.analysis.angmom.faceon(s1)
-  
-  
-s2.physical_units() # Changing units to correct units
-pynbody.analysis.angmom.faceon(s2)
-  
-#Question 2
+
+s1.physical_units() # Changing units of distance to kpc and velocities to km/s
+pynbody.analysis.angmom.faceon(s1) # Aligning simulation to appear face-on
+
+s2.physical_units() # Changing units of distance to kpc and velocities to km/s
+pynbody.analysis.angmom.faceon(s2) # Aligning simulation to appear face-on
+
+## Question 2
 mass_s1_s = s1.s['mass'] # Extracting the mass contained within the stellar component
 mass_s1_d = s1.d['mass'] # Extracting the mass contained within the dark matter component
 mass_s1_g = s1.g['mass'] # Extracting the mass contained within the gas component
-  
+
 mass_s2_s = s2.s['mass'] # Extracting the mass contained within the stellar component
 mass_s2_d = s2.d['mass'] # Extracting the mass contained within the dark matter component
 mass_s2_g = s2.g['mass'] # Extracting the mass contained within the gas component
-  
+
 Sum = 0
 array = []
-  
+
 def mass_sum(array):
   Sum = reduce(lambda a, b: a+b, array)
   return(Sum)
-  
+
 # Calculating the total mass contained within the stellar, dark matter, and gas components
 total_mass_s1 = mass_sum(mass_s1_s) + mass_sum(mass_s1_d) + mass_sum(mass_s1_g)
-  
+
 Sum = 0
 array = []
-  
+
 # Calculating the total mass contained within the stellar, dark matter, and gas components
 total_mass_s2 = mass_sum(mass_s2_s) + mass_sum(mass_s2_d) + mass_sum(mass_s2_g)
-  
-print(f'Total mass s1: {total_mass_s1}')
-print(f'Total mass s2: {total_mass_s2}')
-  
-#Question 3
+
+print(f'Total mass s1: {total_mass_s1} Msol')
+print(f'Total mass s2: {total_mass_s2} Msol')
+
+## Question 3
 # Rendering a density heat map and optical image of the face-on image of the stellar component
 plt.figure(figsize=(7.5,10.5))
 pynbody.plot.image(s1.s, threaded=False)
-plt.title('Denisty Heat map of system 1, face on view')
+plt.title('Density heat map of system 1, face-on view')
 plt.savefig(f'Plots/Figure 1.png', dpi=800)
 plt.clf
-  
+
 plt.figure(figsize=(7.5,10.5))
 pynbody.plot.stars.render(s1.s)
-plt.title('Optical image of system 1, face on view')
+plt.title('Optical image of system 1, face-on view')
 plt.savefig(f'Plots/Figure 2.png', dpi=800)
 plt.clf
-  
+
 # Rendering a density heat map and optical image of the face-on image of the stellar component
 plt.figure(figsize=(7.5,10.5))
 pynbody.plot.image(s2.s, threaded=False)
-plt.title('Denisty Heat map of system 2, face on view')
+plt.title('Density heat map of system 2, face-on view')
 plt.savefig(f'Plots/Figure 3.png', dpi=800)
 plt.clf
-  
+
 plt.figure(figsize=(7.5,10.5))
 pynbody.plot.stars.render(s2.s)
-plt.title('Optical image of system 2, face on view')
+plt.title('Optical image of system 2, face-on view')
 plt.savefig(f'Plots/Figure 4.png', dpi=800)
 plt.clf
-  
-  
-#Question 4
-# Generating a face-on image of the gaseous component
+
+## Question 4
+# Generating a density heat map of the face-on image of the gaseous component
 plt.figure(figsize=(7.5,10.5))
 pynbody.plot.image(s1.g, threaded=False)
-plt.title('Denisty Heat map of gaseous component of system 1, face on view')
+plt.title('Density heat map of gaseous component of system 1, face-on view')
 plt.savefig(f'Plots/Figure 5.png', dpi=800)
 plt.clf
-  
-# Generating a face-on image of the gaseous component
+
+# Generating a density heat map of the face-on image of the gaseous component
 plt.figure(figsize=(7.5,10.5))
 pynbody.plot.image(s2.g, threaded=False)
-plt.title('Denisty Heat map of gaseous component of system 2, face on view')
+plt.title('Density heat map of gaseous component of system 2, face-on view')
 plt.savefig(f'Plots/Figure 6.png', dpi=800)
 plt.clf
-  
-#Question 6
+
+## Question 6
 # Generating the stellar radial density profile using a logarithmic scale on the y-axis
 plt.figure(figsize=(7.5,10.5))
-  
+
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.weight'] = 'normal'
-  
+
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-  
+
 p1 = pynbody.analysis.profile.Profile(s1.s, max=30, nbins=200, ndim=3)
 plt.plot(p1['rbins'], p1['rho'], color='k')
 plt.ylabel(r'$\log{\rho}$')
@@ -146,19 +373,19 @@ plt.xlabel('Stellar Radii')
 plt.title('Stellar radial density profile of system 1')
 plt.savefig(f'Plots/Figure 7.png', dpi=800)
 plt.clf
-  
+
 # Generating the stellar radial density profile using a logarithmic scale on the y-axis
 plt.figure(figsize=(7.5,10.5))
-  
+
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.weight'] = 'normal'
-  
+
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-  
+
 p2 = pynbody.analysis.profile.Profile(s2.s, max=30, nbins=200, ndim=3)
 plt.plot(p2['rbins'], p2['rho'], color='k')
 plt.ylabel(r'$\log{\rho}$')
@@ -167,79 +394,81 @@ plt.xlabel('Stellar Radii')
 plt.title('Stellar radial density profile of system 2')
 plt.savefig(f'Plots/Figure 8.png', dpi=800)
 plt.clf
-  
-#Task2
-  
-#Question 1
+
+## Task2
+
+## Question 1
 # Rotating the barred galaxy so that its bar is aligned with the x-axis
 pynbody.analysis.angmom.sideon(s1)
+
+# Generating a density heat map of the side-on image of the barred galaxy
 pynbody.plot.image(s1.s, threaded=False)
-plt.title('Denisty Heat map of System 1, side-on view')
+plt.title('Density heat map of system 1, side-on view')
 plt.savefig(f'Plots/Figure 9.png', dpi=800)
 plt.clf
-  
-#Question 2
+
+## Question 2
 radius = 4 # Defining the radius to be considered 
 centre = (0,0,0) # Defining the center of the galaxy
-  
+
 sphere1 = s1.s[pynbody.filt.Sphere(radius, centre)] # Filtering the stars according to radii
-pynbody.analysis.angmom.sideon(sphere1) # Aligning simulation to appear side-on
-  
-# Rendering a density heat map of the side-on image of the filtered stars
+pynbody.analysis.angmom.sideon(sphere1) # Aligning filtered simulation to appear side-on
+
+# Rendering a density heat map and optical image of the side-on image of the filtered stars
 sph.image(s1.s, width='8 kpc') 
-plt.title('Denisty Heat map of filtered system 1, side-on view')
+plt.title('Density heat map of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 10.png', dpi=800)
 plt.clf
-  
+
 pynbody.plot.stars.render(sphere1, width='8 kpc') 
 plt.title('Optical image of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 11.png', dpi=800)
 plt.clf
-  
-pynbody.analysis.angmom.sideon(s2)
-  
+
+pynbody.analysis.angmom.sideon(s2) # Aligning simulation to appear side-on
+
 sphere2 = s2.s[pynbody.filt.Sphere(radius, centre)] # Filtering the stars according to radii
-pynbody.analysis.angmom.sideon(sphere2) # Aligning simulation to appear side-on
-  
-# Rendering a density heat map of the side-on image of the filtered stars
+pynbody.analysis.angmom.sideon(sphere2) # Aligning filtered simulation to appear side-on
+
+# Rendering a density heat map and optical image of the side-on image of the filtered stars
 sph.image(s2.s, width='8 kpc')
-plt.title('Denisty Heat map of filtered system 2, side-on view')
+plt.title('Density heat map of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 12.png', dpi=800)
 plt.clf
-  
+
 pynbody.plot.stars.render(sphere2, width='8 kpc')
 plt.title('Optical image of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 13.png', dpi=800)
 plt.clf
-  
-#Question 3
-pynbody.analysis.angmom.sideon(s1) # Viewing the galaxy from the side
-  
-# Rendering a density heat map and optical image of the side-on image of the galaxy
-sph.image(s1.s, width='1.5 kpc')
-plt.title('Denisty Heat map of filtered system 1, side-on view')
+
+## Question 3
+pynbody.analysis.angmom.sideon(s1) # Aligning simulation to appear side-on
+
+# Rendering a density heat map and optical image of the side-on image of the filtered stars
+sph.image(s1.s, width='3 kpc')
+plt.title('Density heat map of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 14.png', dpi=800)
 plt.clf
-  
-pynbody.plot.stars.render(s1.s, width='1.5 kpc')
+
+pynbody.plot.stars.render(s1.s, width='3 kpc')
 plt.title('Optical image of filtered system 1, side-on view')
 plt.savefig(f'Plots/Figure 15.png', dpi=800)
 plt.clf
-  
-pynbody.analysis.angmom.sideon(s2) # Viewing the galaxy from the side
-  
-# Rendering a density heat map and optical image of the side-on image of the galaxy
-sph.image(s2.s, width='1.5 kpc')
-plt.title('Denisty Heat map of filtered system 2, side-on view')
+
+pynbody.analysis.angmom.sideon(s2) # Aligning simulation to appear side-on
+
+# Rendering a density heat map and optical image of the side-on image of the filtered stars
+sph.image(s2.s, width='3 kpc')
+plt.title('Density heat map of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 16.png', dpi=800)
 plt.clf
-  
-pynbody.plot.stars.render(s2.s, width='1.5 kpc')
+
+pynbody.plot.stars.render(s2.s, width='3 kpc')
 plt.title('Optical image of filtered system 2, side-on view')
 plt.savefig(f'Plots/Figure 17.png', dpi=800)
 plt.clf
-  
-#Question 4
+
+## Question 4
 # Creating filters for the different radii
 radius_filter_0 = pynbody.filt.BandPass('pos', '0 kpc', '0.25 kpc')
 radius_filter_1 = pynbody.filt.BandPass('pos', '0.25 kpc', '0.5 kpc')
@@ -247,42 +476,42 @@ radius_filter_2 = pynbody.filt.BandPass('pos', '0.5 kpc', '0.75 kpc')
 radius_filter_3 = pynbody.filt.BandPass('pos', '0.75 kpc', '1 kpc')
 radius_filter_4 = pynbody.filt.BandPass('pos', '1 kpc', '1.25 kpc')
 radius_filter_5 = pynbody.filt.BandPass('pos', '1.25 kpc', '1.5 kpc')
-  
-# Filtering stars according to their radii, changing radius in steps of 0.25 from 0 to 1.5
+
+# Filtering stars according to their radii, changing radius in steps of 0.25 kpc from 0 kpc to 1.5 kpc
 s1_1_filtered = s1.s[radius_filter_0]
 s1_2_filtered = s1.s[radius_filter_1]
 s1_3_filtered = s1.s[radius_filter_2]
 s1_4_filtered = s1.s[radius_filter_3]
 s1_5_filtered = s1.s[radius_filter_4]
 s1_6_filtered = s1.s[radius_filter_5]
-  
+
 s2_1_filtered = s2.s[radius_filter_0]
 s2_2_filtered = s2.s[radius_filter_1]
 s2_3_filtered = s2.s[radius_filter_2]
 s2_4_filtered = s2.s[radius_filter_3]
 s2_5_filtered = s2.s[radius_filter_4]
 s2_6_filtered = s2.s[radius_filter_5]
-  
-# Generating profiles for each filter
+
+# Generating stellar radial density profiles for each filter
 rho_s1_1 = pynbody.analysis.profile.Profile(s1_1_filtered, ndim=3)
 rho_s1_2 = pynbody.analysis.profile.Profile(s1_2_filtered, ndim=3)
 rho_s1_3 = pynbody.analysis.profile.Profile(s1_3_filtered, ndim=3)
 rho_s1_4 = pynbody.analysis.profile.Profile(s1_4_filtered, ndim=3)
 rho_s1_5 = pynbody.analysis.profile.Profile(s1_5_filtered, ndim=3)
 rho_s1_6 = pynbody.analysis.profile.Profile(s1_6_filtered, ndim=3)
-  
-# Plotting the generated stellar radial density profile using a logarithmic scale on the y-axis
+
+# Plotting the generated stellar radial density profiles using a logarithmic scale on the y-axis
 plt.figure(figsize=(7.5,10.5))
-  
+
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.weight'] = 'normal'
-  
+
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-  
+
 plt.plot(rho_s1_1['rbins'], rho_s1_1['rho'], label='0 to 0.25') 
 plt.plot(rho_s1_2['rbins'], rho_s1_2['rho'], label='0.25 to 0.50')
 plt.plot(rho_s1_3['rbins'], rho_s1_3['rho'], label='0.50 to 0.75')
@@ -296,27 +525,27 @@ plt.title('Stellar radial density profile of system 1')
 plt.legend()
 plt.savefig(f'Plots/Figure 18.png', dpi=800)
 plt.clf
-  
-# Generating profiles for each filter
+
+# Generating stellar radial density profiles for each filter
 rho_s2_1 = pynbody.analysis.profile.Profile(s2_1_filtered, ndim=3)
 rho_s2_2 = pynbody.analysis.profile.Profile(s2_2_filtered, ndim=3)
 rho_s2_3 = pynbody.analysis.profile.Profile(s2_3_filtered, ndim=3)
 rho_s2_4 = pynbody.analysis.profile.Profile(s2_4_filtered, ndim=3)
 rho_s2_5 = pynbody.analysis.profile.Profile(s2_5_filtered, ndim=3)
 rho_s2_6 = pynbody.analysis.profile.Profile(s2_6_filtered, ndim=3)
-  
-# Plotting the generated stellar radial density profile using a logarithmic scale on the y-axis
+
+# Plotting the generated stellar radial density profiles using a logarithmic scale on the y-axis
 plt.figure(figsize=(7.5,10.5))
-  
+
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.weight'] = 'normal'
-  
+
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-  
+
 plt.plot(rho_s2_1['rbins'], rho_s2_1['rho'], label='0 to 0.25') 
 plt.plot(rho_s2_2['rbins'], rho_s2_2['rho'], label='0.25 to 0.50')
 plt.plot(rho_s2_3['rbins'], rho_s2_3['rho'], label='0.50 to 0.75')
@@ -330,53 +559,52 @@ plt.title('Stellar radial density profile of system 2')
 plt.legend()
 plt.savefig(f'Plots/Figure 19.png', dpi=800)
 plt.clf
-  
-#Question 5
+
+## Question 5
 # Creating filters for the different heights
 age_filter_1 = pynbody.filt.BandPass('pos', '0.75 kpc', '0.8 kpc')
 age_filter_2 = pynbody.filt.BandPass('pos', '0.8 kpc', '0.85 kpc')
 age_filter_3 = pynbody.filt.BandPass('pos', '0.85 kpc', '0.9 kpc')
 age_filter_4 = pynbody.filt.BandPass('pos', '0.9 kpc', '0.95 kpc')
 age_filter_5 = pynbody.filt.BandPass('pos', '0.95 kpc', '1 kpc')
-  
-# Filtering stars according to their radii, changing radius in steps of 0.05 from 0.75 to 1.00
+
+# Filtering stars according to their height above the midplane, changing height in steps of 0.05 kpc from 0.75 kpc to 1.00 kpc
 s1_1_filtered = s1.s[age_filter_1]
 s1_2_filtered = s1.s[age_filter_2]
 s1_3_filtered = s1.s[age_filter_3]
 s1_4_filtered = s1.s[age_filter_4]
 s1_5_filtered = s1.s[age_filter_5]
-  
+
 s2_1_filtered = s2.s[age_filter_1]
 s2_2_filtered = s2.s[age_filter_2]
 s2_3_filtered = s2.s[age_filter_3]
 s2_4_filtered = s2.s[age_filter_4]
 s2_5_filtered = s2.s[age_filter_5]
-  
-# Generating profiles for each filter
+
+# Generating stellar age density profiles for each filter
 s1_p_1 = pynbody.analysis.profile.Profile(s1_1_filtered, nbins=200)
 s1_p_2 = pynbody.analysis.profile.Profile(s1_2_filtered, nbins=200)
 s1_p_3 = pynbody.analysis.profile.Profile(s1_3_filtered, nbins=200)
 s1_p_4 = pynbody.analysis.profile.Profile(s1_4_filtered, nbins=200)
 s1_p_5 = pynbody.analysis.profile.Profile(s1_5_filtered, nbins=200)
-  
-# Plotting the generated stellar age density profile using a logarithmic scale on the y-axis
+
+# Plotting the generated stellar age density profiles using a logarithmic scale on the y-axis
 plt.figure(figsize=(7.5,10.5))
-  
+
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.weight'] = 'normal'
-  
+
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
-  
+
 plt.plot(s1_p_1['rbins'], s1_p_1['rho'], label='0.75 to 0.80')
 plt.plot(s1_p_2['rbins'], s1_p_2['rho'], label='0.80 to 0.85')
 plt.plot(s1_p_3['rbins'], s1_p_3['rho'], label='0.85 to 0.90')
 plt.plot(s1_p_4['rbins'], s1_p_4['rho'], label='0.90 to 0.95')
 plt.plot(s1_p_5['rbins'], s1_p_5['rho'], label='0.95 to 1.00')
-  
 plt.semilogy()
 plt.ylabel(r'$\log{\rho}$')
 plt.xlabel('Stellar Ages')
@@ -384,22 +612,22 @@ plt.title('Stellar age density profile of system 1')
 plt.legend()
 plt.savefig(f'Plots/Figure 20.png', dpi=800)
 plt.clf
-  
-# Generating profiles for each filter
+
+# Generating stellar age density profiles for each filter
 s2_p_1 = pynbody.analysis.profile.Profile(s2_1_filtered, nbins=200)
 s2_p_2 = pynbody.analysis.profile.Profile(s2_2_filtered, nbins=200)
 s2_p_3 = pynbody.analysis.profile.Profile(s2_3_filtered, nbins=200)
 s2_p_4 = pynbody.analysis.profile.Profile(s2_4_filtered, nbins=200)
 s2_p_5 = pynbody.analysis.profile.Profile(s2_5_filtered, nbins=200)
-  
-# Plotting the generated stellar age density profile using a logarithmic scale on the y-axis
+
+# Plotting the generated stellar age density profiles using a logarithmic scale on the y-axis
 plt.figure(figsize=(7.5,10.5))
-  
+
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.size'] = 12
 plt.rcParams['font.weight'] = 'normal'
-  
+
 plt.minorticks_on()
 plt.grid(visible=True, which='major', linestyle='-')
 plt.grid(visible=True, which='minor', linestyle='--')
@@ -409,7 +637,6 @@ plt.plot(s2_p_2['rbins'], s2_p_2['rho'], label='0.80 to 0.85')
 plt.plot(s2_p_3['rbins'], s2_p_3['rho'], label='0.85 to 0.90')
 plt.plot(s2_p_4['rbins'], s2_p_4['rho'], label='0.90 to 0.95')
 plt.plot(s2_p_5['rbins'], s2_p_5['rho'], label='0.95 to 1.00')
-  
 plt.semilogy()
 plt.ylabel(r'$\log{\rho}$')
 plt.xlabel('Stellar Ages')
@@ -417,7 +644,7 @@ plt.title('Stellar age density profile of system 2')
 plt.legend()
 plt.savefig(f'Plots/Figure 21.png', dpi=800)
 plt.clf
-  
+
 \end{lstlisting}
 
 \end{document}
